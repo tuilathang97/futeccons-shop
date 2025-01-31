@@ -1,68 +1,104 @@
-import { useState } from 'react';
-import { createCategory, updateCategory } from '@/lib/queries/categoryQueries';
-import { useFormState, useFormStatus } from 'react-dom';
-import { Button } from '../ui/button';
+'use client'
 
-async function createCategoryAction(prevState: any, formData: FormData) {
-  const data = {
-    name: formData.get('name'),
-    note: formData.get('note'),
-    parent_id: formData.get('parent_id')
-  }
-  try {
-    await createCategory(data.name, data.parent_id, data.note);
-    return { message: 'Successfully create new category'};
-  } catch(e: any) {
-    return { message: 'Failed to create category'};
-  }
-}
+import { useActionState, useRef } from 'react';
+import { createCategoryAction } from '@/actions/categoriesActions';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Category, CategorySchema } from '@/components/categories/categorySchema';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-function SubmitButton({ children, className }: {children: React.ReactNode, className?: string}) {
-  const { pending } =useFormStatus();
-  return(
-    <Button className={className} disabled={pending} type='submit' aria-disabled={pending}>
-      {children}
-    </Button>
+export default function CategoryForm({ categories }: { categories: Category[] }) {
+  const [state, formAction] = useActionState(createCategoryAction, {message: ""});
+  const form = useForm<Category>({
+    resolver: zodResolver(CategorySchema),
+    defaultValues: {
+      name: "",
+      parent_id: undefined,
+      level: 1,
+      note: ""
+    },
+  });
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const parentId = form.watch("parent_id");
+  console.log({parentId})
+  return (
+    <Form {...form}>
+      <form 
+        ref={formRef}
+        action={formAction}
+        onSubmit={form.handleSubmit(() => formRef?.current?.submit())} className="w-2/3 space-y-6"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tên danh mục</FormLabel>
+              <FormControl>
+                <Input placeholder="Tên" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="parent_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tên danh mục</FormLabel>
+              <Select disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger >
+                    <SelectValue placeholder="Tên danh mục" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {
+                    categories.map(category => {
+                      console.log({category})
+                      return(
+                        <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
+                      )
+                    })
+                  }
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+        {/* workaorund as dropdown does not attach data to FormData when submit */}
+        <input type="hidden" name="parent_id" id="parent_id" />
+        <FormField
+          control={form.control}
+          name="note"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ghi chú</FormLabel>
+              <FormControl>
+                <Input placeholder="Ghi chú" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Lưu</Button>
+        <FormMessage>{state?.message}</FormMessage>
+      </form>
+    </Form>
   )
 }
 
-const initialState = {
-  message: '',
-}
 
-export default function CategoryForm() {
-  const [state, formAction] = useFormState(createCategoryAction, initialState);
-  return (
-    <form action={formAction} className="mb-4">
-      <input
-        type="text"
-        id="name"
-        name='name'
-        placeholder="Category Name"
-        className="border p-2 mr-2"
-      />
-      <input
-        type="number"
-        id="parent_id"
-        name="parent_id"
-        value='parentId'
-        placeholder="Parent ID"
-        className="border p-2 mr-2"
-      />
-      <input
-        type="text"
-        id='note'
-        name="note"
-        value='note'
-        placeholder="Note"
-        className="border p-2 mr-2"
-      />
-      <SubmitButton className="bg-blue-500 text-white p-2">
-        Create
-      </SubmitButton>
-      <p aria-live='polite' className='sr-only' role='status'>
-        {state?.message}
-      </p>
-    </form>
-  );
-}
+
