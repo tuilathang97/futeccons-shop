@@ -1,0 +1,26 @@
+# Dockerfile.dev
+FROM node:20-slim
+
+# Set environment variables
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+RUN corepack disable && \
+    npm install -g corepack && \
+    corepack enable
+RUN corepack prepare pnpm@8.15.7 --activate
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml* ./
+
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+
+COPY . .
+
+RUN npx drizzle-kit push
+
+EXPOSE 3000
+
+RUN chmod +x run.sh
+CMD ["sh", "run.sh"]
