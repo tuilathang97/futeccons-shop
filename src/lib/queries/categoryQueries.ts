@@ -4,8 +4,8 @@ import { db } from '@/db/drizzle';
 import { categoriesTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export async function createCategory(name: string, parentId: number | null, level: number, note?: string) {
-  await db.insert(categoriesTable).values({ name, parentId, level, note });
+export async function createCategory(name: string, parentId: number | null, level: any, slug: string, path: string, note: string = '') {
+  await db.insert(categoriesTable).values({ name, parentId, level, note, path, slug });
 }
 
 export async function getCategories() {
@@ -14,6 +14,15 @@ export async function getCategories() {
 
 export async function getCategoryById(id: number) {
   const result = await db.select().from(categoriesTable).where(eq(categoriesTable.id, id));
+  return result[0];
+}
+
+export async function getCategoryByPath(path: string) {
+  const result = await db.select().from(categoriesTable).where(eq(categoriesTable.path, path));
+  return result[0];
+}
+export async function getCategoryBySlug(slug: string) {
+  const result = await db.select().from(categoriesTable).where(eq(categoriesTable.slug, slug));
   return result[0];
 }
 
