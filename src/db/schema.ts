@@ -7,8 +7,13 @@ export const categoriesTable = pgTable("categories", {
   name: varchar("name", { length: 255 }).notNull(),
   parentId: integer("parent_id"),
   level: integer("level").notNull().$type < 1 | 2 | 3 > (),
-  note: varchar("note", { length: 255 }),
+  note: varchar("note", { length: 255 }).default(""),
+  path: varchar("path", { length: 255 }),
+  slug: varchar("slug", { length: 255 }),
 });
+
+export type Category = typeof categoriesTable.$inferSelect;
+
 
 export const categoriesRelation = relations(categoriesTable, ({one}) => ({
   parent: one(categoriesTable, {

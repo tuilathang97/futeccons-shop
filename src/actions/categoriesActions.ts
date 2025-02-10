@@ -1,15 +1,31 @@
 'use server'
-
 import { Category, CategorySchema } from "@/components/categories/categorySchema";
 import { createCategory, getCategoryById } from "@/lib/queries/categoryQueries";
 import { revalidatePath } from "next/cache";
 
+function generatePath(slug: string, level: number, parentSlug?: string) {
+  // 1 la parent path ko ton tai => path van bang path
+  slug = slug.charAt(0) !== "/" ? `/${slug}` : `${slug}`
+  parentSlug = parentSlug?.charAt(0) !== "/" ? `/${parentSlug}` : `${parentSlug}`
+  switch (level) {
+    case 1:
+      return slug
+    case 2:
+    case 3: {
+      if (!parentSlug) {
+        throw Error("khong co parent slug")
+      }
+      return `${parentSlug}${slug}`
+    }
+    default:
+      return ""
+  }
+}
+
+
 export async function createCategoryAction(prevState: any, formData: FormData) {
-  console.log("parsing data", {formData}, formData.get('parent_id'), formData.get('name'));
   const data = Object.fromEntries(formData);
   const parsedData = CategorySchema.safeParse(data);
-
-  console.log("parsing done: ", parsedData);
   if (parsedData.error || !parsedData.success) {
     console.error("invalid form data", formData);
     return {
@@ -17,24 +33,22 @@ export async function createCategoryAction(prevState: any, formData: FormData) {
     }
   }
 
-  let level = 1;
-  console.log("looking for parent id: ", parsedData.data.parent_id);
-  const parent = await findParentCategory(parsedData.data.parent_id);
-  console.log("parent: ", parent);
-
-  if (parent && parent.level !== 3) {
-    console.log("has parent!!!")
-    level++;
+  let level = 1
+  const parent = await findParentCategory(parsedData.data.parentId);
+  console.log("parent level : " + parent.level)
+  if (parent && parent.level && parent.level !== 3) {
+    console.log("has parent!!!");
+    level = parent.level + 1;
   }
 
-  const { name, parent_id, note } = parsedData.data;
-
+  const { name, parentId,slug,path,note } = parsedData.data;
+  const editedPath = generatePath(slug,level,parent.slug)
   try {
     console.info("Creating new category");
-    const parentId = typeof parent_id === 'string' && !isNaN(Number(parent_id)) 
-      ? Number(parent_id) 
+    const parsedParentId = typeof parentId === 'string' && !isNaN(Number(parentId)) 
+      ? Number(parentId)
       : null;
-    await createCategory(name, parentId, level, note);
+    await createCategory(name, parsedParentId, level, editedPath, path, note);
     return { message: 'Tạo thành công' }
   } catch(e: any) {
     return { message: 'Tạo thất bại'};

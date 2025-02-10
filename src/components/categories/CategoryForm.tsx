@@ -14,27 +14,29 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Category, CategorySchema } from '@/components/categories/categorySchema';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CategorySchema } from './categorySchema';
+import { Category } from '@/db/schema';
 
 export default function CategoryForm({ categories }: { categories: Category[] }) {
-  const [state, formAction] = useActionState(createCategoryAction, {message: ""});
+  const [state, formAction] = useActionState(createCategoryAction, { message: "" });
   const form = useForm<Category>({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
       name: "",
-      parent_id: undefined,
+      parentId: undefined,
       level: 1,
-      note: ""
+      note: "",
+      slug: ""
     },
   });
   const formRef = useRef<HTMLFormElement>(null);
 
-  const parentId = form.watch("parent_id");
-  console.log({parentId})
+  const parentId = form.watch("parentId");
+  console.log("parentId " + parentId)
   return (
     <Form {...form}>
-      <form 
+      <form
         ref={formRef}
         action={formAction}
         onSubmit={form.handleSubmit(() => formRef?.current?.submit())} className="w-2/3 space-y-6"
@@ -46,7 +48,7 @@ export default function CategoryForm({ categories }: { categories: Category[] })
             <FormItem>
               <FormLabel>Tên danh mục</FormLabel>
               <FormControl>
-                <Input placeholder="Tên" {...field} />
+                <Input required placeholder="Tên" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -54,32 +56,34 @@ export default function CategoryForm({ categories }: { categories: Category[] })
         />
         <FormField
           control={form.control}
-          name="parent_id"
+          name="parentId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Tên danh mục</FormLabel>
-              <Select disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value}>
+              <Select {...field} disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger >
+                  <SelectTrigger>
                     <SelectValue placeholder="Tên danh mục" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {
-                    categories.map(category => {
-                      console.log({category})
-                      return(
-                        <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
-                      )
-                    })
+                    categories
+                      .filter(category => category.level && category.level < 3)
+                      .map(category => {
+                        return(
+                          <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
+                        )
+                      })
                   }
                 </SelectContent>
               </Select>
+              <FormMessage />
             </FormItem>
           )}
         />
         {/* workaorund as dropdown does not attach data to FormData when submit */}
-        <input type="hidden" name="parent_id" id="parent_id" />
+        {/* <input type="hidden" name="parent_id" id="parent_id" value={parentId}/> */}
         <FormField
           control={form.control}
           name="note"
@@ -93,7 +97,20 @@ export default function CategoryForm({ categories }: { categories: Category[] })
             </FormItem>
           )}
         />
-        <Button type="submit">Lưu</Button>
+        <FormField
+          control={form.control}
+          name="slug"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Slug</FormLabel>
+              <FormControl>
+                <Input required placeholder="slug" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className='w-full'>Lưu</Button>
         <FormMessage>{state?.message}</FormMessage>
       </form>
     </Form>
