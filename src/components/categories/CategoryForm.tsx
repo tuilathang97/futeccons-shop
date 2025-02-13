@@ -19,7 +19,7 @@ import { CategorySchema } from './categorySchema';
 import { Category } from '@/db/schema';
 
 export default function CategoryForm({ categories }: { categories: Category[] }) {
-  const [state, formAction] = useActionState(createCategoryAction, { message: "" });
+  const [state, formAction] = useActionState(createCategoryAction,{ message: "" });
   const form = useForm<Category>({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
@@ -48,7 +48,7 @@ export default function CategoryForm({ categories }: { categories: Category[] })
             <FormItem>
               <FormLabel>Tên danh mục</FormLabel>
               <FormControl>
-                <Input required placeholder="Tên" {...field} />
+                <Input placeholder="Tên" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
