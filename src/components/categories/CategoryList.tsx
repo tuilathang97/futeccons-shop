@@ -1,7 +1,8 @@
-import Link from "next/link";
-import { Category } from "@/db/schema";
+import { getCategories } from "@/lib/queries/categoryQueries";
 
-export default function CategoryList({ categories }: { categories: Category[]}) {
+export default async function CategoryList({ }) {
+  const categories = await getCategories({page: 2});
+  await sleep(2000);
   return (
     <div>
       <h2 className="text-xl font-bold mb-2">Categories</h2>
@@ -19,4 +20,8 @@ export default function CategoryList({ categories }: { categories: Category[]}) 
       </ul>
     </div>
   );
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

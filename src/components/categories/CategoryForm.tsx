@@ -60,7 +60,7 @@ export default function CategoryForm({ categories }: { categories: Category[] })
           render={({ field }) => (
             <FormItem>
               <FormLabel>Tên danh mục</FormLabel>
-              <Select {...field} disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value}>
+              <Select disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value} {...field}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Tên danh mục" />
@@ -68,8 +68,7 @@ export default function CategoryForm({ categories }: { categories: Category[] })
                 </FormControl>
                 <SelectContent>
                   {
-                    categories
-                      .filter(category => category.level && category.level < 3)
+                    categories?.filter(category => category.level && category.level < 3)
                       .map(category => {
                         return(
                           <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
@@ -82,8 +81,6 @@ export default function CategoryForm({ categories }: { categories: Category[] })
             </FormItem>
           )}
         />
-        {/* workaorund as dropdown does not attach data to FormData when submit */}
-        {/* <input type="hidden" name="parent_id" id="parent_id" value={parentId}/> */}
         <FormField
           control={form.control}
           name="note"
