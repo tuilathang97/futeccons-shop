@@ -1,13 +1,24 @@
+"use client"
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { AxeIcon, Menu, ToyBrick } from "lucide-react"
-import { NavigationMenu, NavigationMenuLink, NavigationMenuList } from "../ui/navigation-menu"
+import { ArrowDownIcon, Home, Menu, SquarePen } from "lucide-react"
+import { NavigationMenu } from "../ui/navigation-menu"
 import SearchBar from "./SearchBar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu"
+import { optionI, OPTIONS } from "@/app/post/page"
+import RegisterButtonGroup from "./registerButtonGroup"
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
+
 
 export default function Header() {
     return (
-        <header className="fixed border-b-[0.1px] gap-4 border-gray-500 top-0 left-0 flex h-16 min-w-full shrink-0 items-center px-4 md:px-6">
+        <header className="fixed border-b-[0.1px] gap-4 border-gray-500 top-0 left-0 flex justify-between md:justify-around h-16 min-w-full shrink-0 items-center px-4 md:px-6">
             <Sheet>
                 <SheetTrigger asChild>
                     <Button variant="outline" size="icon" className="lg:hidden">
@@ -15,86 +26,94 @@ export default function Header() {
                         <span className="sr-only">Toggle navigation menu</span>
                     </Button>
                 </SheetTrigger>
+                {/* đây là mobile nav */}
                 <SheetContent side="left">
                     <Link href="#" className="!max-w-8" prefetch={false}>
-                        <AxeIcon className="h-6 w-6" />
+                        <Home className="h-6 w-6" />
                     </Link>
                     <div className="grid gap-2 py-6">
-                        <Link href="#" className="flex w-full items-center py-2 text-base font-semibold" prefetch={false}>
-                            Home
-                        </Link>
-                        <Link href="#" className="flex w-full items-center py-2 text-base font-semibold" prefetch={false}>
-                            About
-                        </Link>
-                        <Link href="#" className="flex w-full items-center py-2 text-base font-semibold" prefetch={false}>
-                            Services
-                        </Link>
-                        <Link href="#" className="flex w-full items-center py-2 text-base font-semibold" prefetch={false}>
-                            Portfolio
-                        </Link>
-                        <Link href="#" className="flex w-full items-center py-2 text-base font-semibold" prefetch={false}>
-                            Contact
-                        </Link>
+                        {OPTIONS.categories.map((category,index) => (
+                            <Accordion key={index} type="single" collapsible className="w-full">
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>{category.label}</AccordionTrigger>
+                                    {category.options.map((option,index) => {
+                                        {
+                                            return (
+                                                <AccordionContent key={index} className="pl-4">
+                                                    <Link className="hover:underline" href={`${category.slug}${option.slug}`}>{option.label}</Link>
+                                                </AccordionContent>
+                                            )
+                                        }
+                                    })}
+                                </AccordionItem>
+                            </Accordion>
+
+                        ))}
                     </div>
                 </SheetContent>
             </Sheet>
             <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-                <ToyBrick className="h-6 w-6" />
-                <span className="sr-only">ShadCN</span>
+                <Home className="h-6 w-6" />
+                <span className="sr-only">Futeccons</span>
             </Link>
             <NavigationMenu className="hidden lg:flex">
-                <NavigationMenuList>
-                    <NavigationMenuLink asChild>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
                         <Link
                             href="#"
-                            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
                             prefetch={false}
                         >
-                            Home
+                            <Button variant={"outline"} className="flex gap-2">
+                                <p>Danh mục</p>
+                                <ArrowDownIcon size={16} />
+                            </Button>
                         </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                        <Link
-                            href="#"
-                            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-                            prefetch={false}
-                        >
-                            About
-                        </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                        <Link
-                            href="#"
-                            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-                            prefetch={false}
-                        >
-                            Services
-                        </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                        <Link
-                            href="#"
-                            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-                            prefetch={false}
-                        >
-                            Portfolio
-                        </Link>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink asChild>
-                        <Link
-                            href="#"
-                            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-                            prefetch={false}
-                        >
-                            Contact
-                        </Link>
-                    </NavigationMenuLink>
-                </NavigationMenuList>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Bất Động Sản</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            {
+                                OPTIONS.categories.map((category, index) => {
+                                    return (
+                                        <DropdownMenuSub key={index}>
+                                            <DropdownMenuSubTrigger>
+                                                <Link href={category.slug}>
+                                                    {category.label}
+                                                </Link>
+                                            </DropdownMenuSubTrigger>
+                                            <DropdownMenuPortal>
+                                                <DropdownMenuSubContent>
+                                                    {category.options.map((option: optionI, index: number) => {
+                                                        return (
+                                                            <DropdownMenuItem
+                                                                key={`${index}`} // Key unique
+                                                            >
+                                                                <Link href={`${category.slug}${option.slug}`}>{option.label}</Link>
+                                                            </DropdownMenuItem>
+                                                        )
+                                                    })}
+                                                </DropdownMenuSubContent>
+                                            </DropdownMenuPortal>
+                                        </DropdownMenuSub>
+                                    )
+                                })
+                            }
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </NavigationMenu>
-            <SearchBar/>
-            <div className="ml-auto flex gap-2">
-                <Button variant="outline">Sign in</Button>
-                <Button>Sign Up</Button>
+            <SearchBar />
+            <div className="flex gap-4">
+                <RegisterButtonGroup />
+                <Link
+                    href="/post"
+                >
+                    <Button variant={"destructive"} className="flex gap-2">
+                        <p>Đăng tin</p>
+                        <SquarePen size={16} />
+                    </Button>
+                </Link>
             </div>
         </header>
     )

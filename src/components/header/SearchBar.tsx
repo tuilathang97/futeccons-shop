@@ -21,7 +21,7 @@ function SearchBar() {
     }, [inputValue]);
 
     return (
-        <div className="fixed top-16 h-12 w-full left-0 flex items-center md:static md:min-w-[300px] space-y-2">
+        <div className="fixed top-14 h-12 w-full max-w-[900px] left-0 flex items-center md:static md:min-w-[300px] space-y-2">
             <div className="relative min-w-full">
                 <Input
                     id={id}

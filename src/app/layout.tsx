@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
+    <html lang="vi" className="h-svh">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased pt-[7rem] md:pt-[5rem]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased !pt-[7rem] !px-4 lg:!px-8 md:!pt-[5rem] container`}
       >
         <Header/>
         <Toaster />

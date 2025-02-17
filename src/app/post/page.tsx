@@ -14,24 +14,58 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+export interface optionI {
+    label: string
+    slug: string
+}
+export interface SubOptionI {
+    label: string;
+    slug: string;
+    options: Array<optionI>;
+}
 
-const OPTIONS = {
-    "Bán nhà đất": ["Bán nhà", "Bán căn hộ", "Bán đất"],
-    "Cho Thuê": [
-        "Căn hộ, chung cư, ks",
-        "Nhà trọ, phòng trọ",
-        "Văn phòng, mặt bằng",
-        "Nhà xưởng, kho đất",
-    ],
-    "Sang Nhượng": [
-        "Kiốt, Sạp chợ",
-        "Quán ăn, Nhà hàng, Khách sạn",
-        "Quán cà phê, Đồ uống",
-        "Shop thời trang, Tiệm tóc, Spa",
-        "Shophouse",
-        "Sang nhượng khác",
-    ],
-    "Dịch vụ": [],
+export interface OptionsI {
+    categories: SubOptionI[];
+}
+
+export const OPTIONS: OptionsI = {
+    categories: [
+        {
+            label: "Bán nhà đất",
+            slug: "/ban-nha-dat",
+            options: [
+                { label: "Bán nhà", slug: "/ban-nha" },
+                { label: "Bán căn hộ", slug: "/ban-can-ho" },
+                { label: "Bán đất", slug: "/ban-dat" }
+            ]
+        },
+        {
+            label: "Cho Thuê",
+            slug: "/cho-thue",
+            options: [
+                { label: "Căn hộ, chung cư, ks", slug: "/can-ho-chung-cu-khach-san" },
+                { label: "Nhà trọ, phòng trọ", slug: "/can-ho-chung-cu-khach-san" },
+                { label: "Văn phòng, mặt bằng", slug: "/van-phong-mat-bang" },
+                { label: "Nhà xưởng, kho đất", slug: "/nha-xuong-kho-dat" }
+            ]
+        },
+        {
+            label: "Sang Nhượng",
+            slug: "/sang-nhuong",
+            options: [
+                { label: "Kiốt, Sạp chợ", slug: "/kiot-sap-cho" },
+                { label: "Quán ăn, Nhà hàng, Khách sạn", slug: "/quan-an-nha-hang-khach-san" },
+                { label: "Quán cà phê, Đồ uống", slug: "/quan-ca-phe" },
+                { label: "Shop thời trang, Tiệm tóc, Spa", slug: "/shop-thoi-trang-tiem-toc" },
+                { label: "Shophouse", slug: "/shophouse" }
+            ]
+        },
+        {
+            label: "Dịch vụ",
+            slug: "/dich-vu",
+            options: [] // Giữ nguyên array rỗng
+        }
+    ]
 };
 
 const formSchema = z.object({
@@ -47,9 +81,8 @@ function Page() {
             danhMucPhu: "",
         },
     })
-    const { setError, watch,resetField } = form
+    const { setError, watch, resetField } = form
     const parent = watch("danhMuc")
-    console.log(parent)
     function onSubmit(values: z.infer<typeof formSchema>) {
         if (values.danhMuc !== "Dịch vụ" && !values.danhMucPhu) {
             setError("danhMucPhu", { message: "Danh mục phụ là bắt buộc" })
@@ -81,9 +114,9 @@ function Page() {
                                                 <SelectValue placeholder="Chọn danh mục chính" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {Object.keys(OPTIONS).map((key) => (
-                                                    <SelectItem key={key} value={key}>
-                                                        {key}
+                                                {OPTIONS.categories.map((op: SubOptionI, key: number) => (
+                                                    <SelectItem key={key} value={op.label}>
+                                                        {op.label}
                                                     </SelectItem>
                                                 ))}
                                             </SelectContent>
@@ -107,16 +140,17 @@ function Page() {
                                                         <SelectValue placeholder="Chọn danh mục phụ" />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        {OPTIONS[parent as keyof typeof OPTIONS].map((option) => (
-                                                            <SelectItem key={option} value={option}>
-                                                                {option}
-                                                            </SelectItem>
-                                                        ))}
+                                                        {OPTIONS.categories
+                                                            .find(category => category.label === parent)
+                                                            ?.options.map((option, index: number) => (
+                                                                <SelectItem key={index} value={option.slug}>
+                                                                    {option.label}
+                                                                </SelectItem>
+                                                            ))}
                                                     </SelectContent>
                                                 </Select>
                                             </div>
                                         )}
-
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
