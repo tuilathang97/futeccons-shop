@@ -20,7 +20,7 @@ import { signUp } from "@/actions/authActions"
 
 
 export function SignUpForm() {
-  const [state, formAction] = useActionState(signUp, {message: ""});
+  // const [state, formAction] = useActionState(signUp, {message: ""});
   const formRef = useRef<HTMLFormElement>(null);
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -29,7 +29,7 @@ export function SignUpForm() {
       email: "",
       password: ""
     },
-  })
+  });
 
   return (
     <Form {...form}>
@@ -77,7 +77,7 @@ export function SignUpForm() {
           )}
         />
         <Button className="mt-14" type="submit">Lưu</Button>
-        <FormMessage>{state?.message}</FormMessage>
+        {/* <FormMessage>{state?.message}</FormMessage> */}
       </form>
     </Form>
   )

@@ -31,9 +31,6 @@ export default function CategoryForm({ categories }: { categories: Category[] })
     },
   });
   const formRef = useRef<HTMLFormElement>(null);
-
-  const parentId = form.watch("parentId");
-  console.log("parentId " + parentId)
   return (
     <Form {...form}>
       <form

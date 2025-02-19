@@ -49,7 +49,6 @@ export async function signUp(formData: FormData) {
   const data = Object.fromEntries(formData);
   const parsedData = signUpSchema.safeParse(data);
   if (parsedData.error || !parsedData.success) {
-    console.log(parsedData.error.message)
     return {
       message: "Lỗi tạo tài khoản"
     }
