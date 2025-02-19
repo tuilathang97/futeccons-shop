@@ -22,8 +22,9 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
   const {user,session} = await getCurrentSession();
+  
   return (
-    <html lang="vi" className="h-svh">
+    <html lang="vi" className="h-svh bg-[#f5f7f9]">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased !pt-[7rem] !px-4 lg:!px-8 md:!pt-[5rem] container`}
       >

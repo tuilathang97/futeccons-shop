@@ -7,6 +7,7 @@ export interface RealEstateCardProps {
     area: string;
     bedrooms: number;
     bathrooms: number;
+    datePost:string;
     imageUrl: string;
     variant?:"vertical" | "horizontal"
     badge?:"Nổi bật" | "Tin thường" | "Vip1" | "Vip2" | "Vip3"
@@ -23,7 +24,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 4,
         bathrooms: 3,
         imageUrl: "/lorem.png",
-        badge:"Tin thường"
+        badge:"Tin thường",
+        datePost:"hôm nay"
     },
     {
         title: "Căn hộ cao cấp Quận 2",
@@ -35,7 +37,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 2,
         bathrooms: 2,
         imageUrl: "/lorem.png",
-        badge:"Tin thường"
+        badge:"Tin thường",
+        datePost:"hôm nay"
     },
     {
         title: "Biệt thự sân vườn Quận 7",
@@ -47,7 +50,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 5,
         bathrooms: 4,
         imageUrl: "/lorem.png",
-        badge:"Tin thường"
+        badge:"Tin thường",
+        datePost:"hôm nay"
     },
     {
         title: "Nhà phố Quận 5",
@@ -59,7 +63,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 3,
         bathrooms: 2,
         imageUrl: "/lorem.png",
-        badge:"Nổi bật"
+        badge:"Nổi bật",
+        datePost:"hôm nay"
     },
     {
         title: "Căn hộ view sông Quận 4",
@@ -71,7 +76,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 2,
         bathrooms: 2,
         imageUrl: "/lorem.png",
-        badge:"Vip1"
+        badge:"Vip1",
+        datePost:"hôm nay"
     },
     {
         title: "Nhà mặt tiền Quận Bình Thạnh",
@@ -83,7 +89,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 4,
         bathrooms: 3,
         imageUrl: "/lorem.png",
-        badge:"Vip2"
+        badge:"Vip2",
+        datePost:"hôm nay"
     },
     {
         title: "Căn hộ mini Quận 10",
@@ -95,7 +102,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 1,
         bathrooms: 1,
         imageUrl: "/lorem.png",
-        badge:"Vip3"
+        badge:"Vip3",
+        datePost:"hôm nay"
     },
     {
         title: "Biệt thự nghỉ dưỡng Quận 9",
@@ -107,7 +115,8 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 6,
         bathrooms: 5,
         imageUrl: "/lorem.png",
-        badge:"Vip1"
+        badge:"Vip1",
+        datePost:"hôm nay"
     },
     {
         title: "Nhà cấp 4 Quận Tân Bình",
@@ -119,6 +128,7 @@ export const postsData: RealEstateCardProps[] = [
         bedrooms: 2,
         bathrooms: 1,
         imageUrl: "/lorem.png",
-        badge:"Vip1"
+        badge:"Vip1",
+        datePost:"hôm nay"
     }
 ];
