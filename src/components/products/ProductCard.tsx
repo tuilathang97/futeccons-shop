@@ -19,6 +19,7 @@ const ProductCard: React.FC<RealEstateCardProps> = ({
     bedrooms,
     bathrooms,
     imageUrl,
+    datePost,
     variant="vertical",
     badge="Tin thường"
 }) => {
@@ -61,8 +62,8 @@ const ProductCard: React.FC<RealEstateCardProps> = ({
     };
 
     return (
-        <Link href={`post/${id}`} className={`${variant !== "horizontal" ? "min-h-[15rem] border-gray-300 max-w-[20rem]" : "w-full border-gray-200"} group border  rounded-md hover:shadow-lg overflow-hidden`}>
-            <Card className={`w-full shadow-md ${variant !== "horizontal" ? "flex flex-col" : "flex"} gap-2`}>
+        <Link href={`/post/${id}`} className={`${variant !== "horizontal" ? "min-h-[15rem] border-gray-300 max-w-[20rem]" : "w-full border-gray-200"} block max-h-fit group border  rounded-lg hover:shadow-lg overflow-hidden`}>
+            <Card className={`w-full shadow-md ${variant !== "horizontal" ? "flex flex-col" : "flex flex-col md:flex-row"} gap-2 `}>
                 <CardHeader className="p-0">
                     <div className={cn("relative",variant === "vertical" ? "p-0" : "p-4")}>
                         <Image
@@ -97,7 +98,7 @@ const ProductCard: React.FC<RealEstateCardProps> = ({
                     <span className="text-lg font-bold text-red-600">{price}</span>
                     <div className="flex items-center gap-2 text-gray-600 text-sm">
                         <Clock className="h-4 w-4" />
-                        <span>Hôm nay</span>
+                        <span>{datePost}</span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-600 text-sm">
                         <MapPin className="h-4 w-4" />
