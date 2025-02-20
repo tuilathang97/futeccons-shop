@@ -33,3 +33,30 @@ export interface FooterItem {
 export type MainNavItem = NavItemWithOptionalChildren;
 
 export type SidebarNavItem = NavItemWithChildren;
+
+export type UploadState = {
+  error?: string;
+  paths?: string[];
+} | null;
+
+interface BaseProvince {
+  code: number;
+  codename: string;
+  division_type: string;
+  name: string;
+}
+
+/* https://provinces.open-api.vn/redoc#operation/show_all_divisions_api__get */
+export interface Province extends BaseProvince {
+  districts: District[];
+  phone_code: number;
+}
+
+export interface District extends BaseProvince {
+  province_code: number;
+  wards: Ward[];
+}
+
+export interface Ward extends BaseProvince {
+  district_code: number;
+}

@@ -19,3 +19,7 @@ export function numberEnum<T extends number>(values: readonly T[]) {
     return z.NEVER;
   };
 }
+
+export function hasValue(arg0: string): boolean {
+  return Boolean(arg0) ? true : false;
+}
