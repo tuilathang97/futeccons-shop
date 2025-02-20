@@ -1,7 +1,8 @@
 import { getCategories } from "@/lib/queries/categoryQueries";
+import Link from "next/link";
 
 export default async function CategoryList({ }) {
-  const categories = await getCategories({page: 2});
+  const categories = await getCategories();
   await sleep(2000);
   return (
     <div>
