@@ -31,7 +31,7 @@ export default function Header({ user, session }: { user: User | null, session: 
     return (
         <header className="fixed z-50 bg-gray-50 border-b-[0.1px] gap-4 border-gray-500 top-0 left-0 flex justify-between md:justify-around h-16 min-w-full shrink-0 items-center px-4 md:px-6">
             <NavigationSubMenu></NavigationSubMenu>
-            <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+            <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
                 <Home className="h-6 w-6" />
                 <span className="sr-only">Futeccons</span>
             </Link>
