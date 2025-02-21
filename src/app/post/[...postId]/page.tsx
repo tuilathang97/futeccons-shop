@@ -1,5 +1,4 @@
 "use client"
-import { postsData } from '@/db/Data'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React from 'react'
@@ -8,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import PostDetail from '@/components/products/PostDetail'
 import { Phone } from 'lucide-react'
+import { postsData } from '@/constants/data'
 
 function Page() {
     const { postId } = useParams()

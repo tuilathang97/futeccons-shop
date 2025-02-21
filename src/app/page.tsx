@@ -1,5 +1,5 @@
 import ProductsContainer from "@/components/products/ProductsContainer";
-import { postsData } from "@/db/Data";
+import { postsData } from "@/constants/data";
 import { getCurrentSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 

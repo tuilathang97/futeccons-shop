@@ -1,10 +1,10 @@
 import React from 'react'
 import PostSectionWrapper from '@/components/postSectionWrapper'
-import { postsData, RealEstateCardProps } from '@/db/Data'
 import { Bed, Clock, Compass, LandPlot, Layers, MapPin, Toilet } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { MediaCarousel } from './MediaRenderer'
+import { postsData, RealEstateCardProps } from '@/constants/data'
 
 function PostDetail({postId}:{postId:string}) {
     const foundPost = postsData.filter(p => p.id === postId?.toString());

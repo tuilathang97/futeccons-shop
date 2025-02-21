@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
-import { postsData, RealEstateCardProps } from '@/db/Data'
+import { RealEstateCardProps } from '@/constants/data'
 
 interface Container {
     title: string
@@ -26,7 +26,7 @@ function ProductsContainer({ title,posts }: Container) {
                 max-w-[1200px]
                 mx-auto'
             >
-                {postsData.map((post,index) => {
+                {posts?.map((post,index) => {
                     const productWithFilter = post.mediaItems.filter((post) => post.type === "image")
                     if(productWithFilter.length > 0){
                         return (
