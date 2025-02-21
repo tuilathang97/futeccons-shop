@@ -9,8 +9,7 @@ interface Container {
     posts?:RealEstateCardProps[]
 }
 
-function ProductsContainer({ title }: Container) {
-    const postLength = 13
+function ProductsContainer({ title,posts }: Container) {
     return (
         <div className='min-h-[5rem] flex flex-col gap-4 w-full max-w-[100rem] bg-gray-50 border border-gray-50 rounded-md p-4'>
             <div className='flex justify-center'>
@@ -28,16 +27,19 @@ function ProductsContainer({ title }: Container) {
                 mx-auto'
             >
                 {postsData.map((post,index) => {
-                    return (
-                        <ProductCard key={index} {...post} />
-                    )
+                    const productWithFilter = post.mediaItems.filter((post) => post.type === "image")
+                    if(productWithFilter.length > 0){
+                        return (
+                            <ProductCard key={index} {...post} />
+                        )
+                    }
                 })}
             </div>
             <div className='flex justify-center'>
                 <Button className='max-w-[15rem]'>
-                    {postLength < 100 ?
+                    {posts?.length && posts.length  < 100 ?
                         <span className='flex items-center gap-4'>Xem thêm <ArrowDown /></span> :
-                        <span className='flex items-center gap-4'>Xem thêm {postLength} tin <ArrowRight size={150} /></span>
+                        <span className='flex items-center gap-4'>Xem thêm {posts?.length} tin <ArrowRight size={150} /></span>
                     }
                 </Button>
             </div>

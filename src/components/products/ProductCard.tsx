@@ -18,7 +18,7 @@ const ProductCard: React.FC<RealEstateCardProps> = ({
     area,
     bedrooms,
     bathrooms,
-    imageUrl,
+    mediaItems,
     datePost,
     variant="vertical",
     badge="Tin thường"
@@ -60,14 +60,13 @@ const ProductCard: React.FC<RealEstateCardProps> = ({
             console.error('Error toggling like:', error);
         }
     };
-
     return (
         <Link href={`/post/${id}`} className={`${variant !== "horizontal" ? "min-h-[15rem] border-gray-300 max-w-[20rem]" : "w-full border-gray-200"} block max-h-fit group border  rounded-lg hover:shadow-lg overflow-hidden`}>
             <Card className={`w-full shadow-md ${variant !== "horizontal" ? "flex flex-col" : "flex flex-col md:flex-row"} gap-2 `}>
                 <CardHeader className="p-0">
                     <div className={cn("relative",variant === "vertical" ? "p-0" : "p-4")}>
                         <Image
-                            src={imageUrl}
+                            src={mediaItems[0].url ? mediaItems[0].url : "https://picsum.photos/200/300.jpg"}
                             height={250}
                             width={250}
                             alt={title}
