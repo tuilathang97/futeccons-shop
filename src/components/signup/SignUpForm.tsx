@@ -33,9 +33,9 @@ export function SignUpForm() {
 
   return (
     <Form {...form}>
-      <form 
+      <form
         ref={formRef}
-        action={(formData) => signUp(formData)}
+        action={(formData) => {signUp(formData)}}
         className="w-2/3 space-y-6">
         <FormField
           control={form.control}

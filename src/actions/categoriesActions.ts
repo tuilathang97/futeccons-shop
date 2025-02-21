@@ -35,7 +35,6 @@ export async function createCategoryAction(prevState: any, formData: FormData) {
 
   let level = 1
   const parent = await findParentCategory(parsedData.data.parentId);
-  console.log("parent level : " + parent.level)
   if (parent && parent.level && parent.level !== 3) {
     console.log("has parent!!!");
     level = parent.level + 1;

@@ -16,6 +16,14 @@ export async function login(formData: FormData) {
     }
   }
   const { data: {password, email}} = parsedData;
+  internalLogin(email, password);
+  redirect("/signup");
+}
+
+async function internalLogin(email: string, password: string) {
+  if (!email || !password) {
+    return { message: "Người dùng không tồn tại"}
+  }
   const [user] = await db.select().from(usersTable)
     .where(
       and(
@@ -33,7 +41,6 @@ export async function login(formData: FormData) {
   const token = generateSessionToken();
   const session = await createSession(token, user.id);
   await setSessionTokenCookie(token, session.expiresAt);
-  redirect("/signup");
 }
 
 export async function logout() {
@@ -46,6 +53,7 @@ export async function logout() {
 }
 
 export async function signUp(formData: FormData) {
+  console.log("dang dang ky")
   const data = Object.fromEntries(formData);
   const parsedData = signUpSchema.safeParse(data);
   if (parsedData.error || !parsedData.success) {
@@ -62,6 +70,8 @@ export async function signUp(formData: FormData) {
     parallelism: 1,
     hashLength: 32,
   });
+
+  let createdUserEmail, createdUserPassword;
   await db.transaction(async (tx) => {
     const [newUser] = await tx
       .insert(usersTable)
@@ -73,12 +83,21 @@ export async function signUp(formData: FormData) {
       .returning();
     const [userRole] = await tx.select().from(rolesTable).where(eq(rolesTable.name, 'user')).limit(1);
     if (!userRole) {
+      console.log("tao that bai")
       return { message: 'Tạo tài thất bại' }
     }
     await tx.insert(usersToRoles).values({
       userId: newUser.id,
       roleId: userRole.id,
     });
+    createdUserEmail = email;
+    createdUserPassword = password;
   });
+
+  if (createdUserEmail && createdUserPassword) {
+    console.log("tao tai khoan thanh cong, bât đầu đăng nhập");
+    await internalLogin(createdUserEmail, createdUserPassword);
+  }
+
   return { message: 'Tạo tài khoản thành công' }
 }

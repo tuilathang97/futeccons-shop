@@ -33,7 +33,8 @@ export function SignInForm() {
     <Form {...form}>
       <form 
         ref={formRef}
-        action={(formData) => login(formData)}
+        action={(formData) => {login(formData)}}
+        onSubmit={form.handleSubmit(() => {formRef?.current?.submit()})}
         className="w-2/3 space-y-6">
         <FormField
           control={form.control}
