@@ -11,7 +11,7 @@ interface Container {
 
 function ProductsContainer({ title,posts }: Container) {
     return (
-        <div className='min-h-[5rem] flex flex-col gap-4 w-full max-w-[100rem] bg-gray-50 border border-gray-50 rounded-md p-4'>
+        <div className='min-h-[5rem] flex flex-col bg-white gap-4 w-full max-w-[100rem] border border-gray-100 rounded-md p-4'>
             <div className='flex justify-center'>
                 <h1 className='text-xl md:text-2xl font-semibold'>{title}</h1>
             </div>
