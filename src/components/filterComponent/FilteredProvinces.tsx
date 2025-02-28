@@ -1,7 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-// import { usePathname } from "next/navigation"
-import {  useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { Province } from 'types'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -24,7 +23,6 @@ type FormValues = z.infer<typeof formSchema>
 function FilteredProvinces({ provinces }: { provinces: Province[] }) {
     const router = useRouter()
     const [displayText, setDisplayText] = useState("Khu vực")
-    // const path = usePathname()
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -37,51 +35,53 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
     const { thanhPho, quan, phuong } = form.watch()
 
     const districts = provinces.find(
-        province => province.name === thanhPho
+        province => province.codename === thanhPho.replace(/-/g, '_') // Sử dụng codename đã được định dạng cho thành phố
     )?.districts || []
 
     const wards = districts.find(
-        district => district.name === quan
+        district => district.codename === quan.replace(/-/g, '_') // Sử dụng codename đã được định dạng cho quận
     )?.wards || []
 
     const handleProvinceSelect = (value: string) => {
-        const province = provinces.find(p => p.name === value)
+        const province = provinces.find(p => p.codename === value)
         if (province) {
-            form.setValue("thanhPho", value)
+            form.setValue("thanhPho", province.codename) // Lưu codename cho thành phố
             form.setValue("quan", "")
             form.setValue("phuong", "")
-            setDisplayText(value)
+            setDisplayText(province.name) // Hiển thị tên thành phố
+            updateQueryParams(province.codename, "", "") // Cập nhật query params với codename
             console.log("Selected province:", {
-                name: value,
+                name: province.name,
                 codename: province.codename
             })
-            // router.push(`${path}/${province.codename}`)
         }
     }
 
     const handleDistrictSelect = (value: string) => {
-        const district = districts.find(d => d.name === value)
-        const province = provinces.find(p => p.name === thanhPho)
+        const district = districts.find(d => d.codename === value)
+        const province = provinces.find(p => p.codename === thanhPho.replace(/-/g, '_'))
         if (district && province) {
-            form.setValue("quan", value)
+            form.setValue("quan", district.codename) // Lưu codename cho quận
             form.setValue("phuong", "")
-            setDisplayText(value)
+            setDisplayText(district.name) // Hiển thị tên quận
+            updateQueryParams(thanhPho, district.codename, "") // Cập nhật query params với codename
             console.log("Selected district:", {
-                name: value,
+                name: district.name,
                 codename: district.codename
             })
         }
     }
 
     const handleWardSelect = (value: string) => {
-        const ward = wards.find(w => w.name === value)
-        const province = provinces.find(p => p.name === thanhPho)
-        const district = districts.find(d => d.name === quan)
+        const ward = wards.find(w => w.codename === value)
+        const province = provinces.find(p => p.codename === thanhPho.replace(/-/g, '_'))
+        const district = districts.find(d => d.codename === quan.replace(/-/g, '_'))
         if (ward && province && district) {
-            form.setValue("phuong", value)
-            setDisplayText(value)
+            form.setValue("phuong", ward.codename) // Lưu codename cho phường
+            setDisplayText(ward.name) // Hiển thị tên phường
+            updateQueryParams(thanhPho, quan, ward.codename) // Cập nhật query params với codename
             console.log("Selected ward:", {
-                name: value,
+                name: ward.name,
                 codename: ward.codename
             })
         }
@@ -90,7 +90,21 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
     const handleReset = () => {
         form.reset()
         setDisplayText("Khu vực")
-        router.push("/")
+        router.push('/') // Đưa về trang chủ hoặc một trang mặc định nào đó
+    }
+
+    const updateQueryParams = (thanhPho: string, quan: string, phuong: string) => {
+        const params = new URLSearchParams()
+        if (thanhPho) {
+            params.append('thanhPho', thanhPho) // Sử dụng codename cho thành phố
+        }
+        if (quan) {
+            params.append('quan', quan) // Sử dụng codename cho quận
+        }
+        if (phuong) {
+            params.append('phuong', phuong) // Sử dụng codename cho phường
+        }
+        router.push(`?${params.toString()}`) // Cập nhật URL với các query params mới
     }
 
     return (
@@ -99,7 +113,7 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                 <form className="w-full flex">
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button variant="outline" className="w-full md:w-[200px] justify-between">
+                            <Button variant="outline" className={`${displayText ? "border border-red-500 text-red-500 hover:text-red-600 " : ""} w-full md:w-[200px] justify-between`}>
                                 {displayText} <ArrowDownIcon />
                             </Button>
                         </DialogTrigger>
@@ -134,7 +148,7 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                                     {provinces.map((province) => (
                                                         <SelectItem
                                                             key={province.code}
-                                                            value={province.name}
+                                                            value={province.codename} // Sử dụng codename trong SelectItem
                                                         >
                                                             {province.name}
                                                         </SelectItem>
@@ -169,7 +183,7 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                                     {districts.map((district) => (
                                                         <SelectItem
                                                             key={district.code}
-                                                            value={district.name}
+                                                            value={district.codename} // Sử dụng codename trong SelectItem
                                                         >
                                                             {district.name}
                                                         </SelectItem>
@@ -204,7 +218,7 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                                     {wards.map((ward) => (
                                                         <SelectItem
                                                             key={ward.code}
-                                                            value={ward.name}
+                                                            value={ward.codename} // Sử dụng codename trong SelectItem
                                                         >
                                                             {ward.name}
                                                         </SelectItem>

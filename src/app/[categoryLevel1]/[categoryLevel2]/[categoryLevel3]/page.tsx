@@ -1,6 +1,9 @@
+import FilterArea from '@/components/filterComponent/FilterArea'
+import FilterBedrooms from '@/components/filterComponent/FilterBedrooms'
 import FilterEstateKind from '@/components/filterComponent/FilterEstateKind'
 import FilterEstateTransaction from '@/components/filterComponent/FilterEstateTransaction'
 import FilterEstateType from '@/components/filterComponent/FilterEstateType'
+import FilterPrice from '@/components/filterComponent/FilterPrice'
 import ProductsListWithFilter from '@/components/filterComponent/ProductsListWithFilter'
 import { getCategories, getCategoryBySlug } from '@/lib/queries/categoryQueries'
 import Link from 'next/link'
@@ -24,6 +27,9 @@ async function page({ params }: { params: Promise<{categoryLevel1: string, categ
             <FilterEstateTransaction currentCategory={parentCategory} categories={filteredCategories}/>
             <FilterEstateType childCategories={filteredChildCategories} currentChildCategory={currentCategory}/>
             {filteredSubChildCategories && <FilterEstateKind childSubCategories={filteredSubChildCategories} CurrentSubCategory={currentSubChildCategory} />}
+            <FilterPrice priceType="sale" />
+            <FilterArea/>
+            <FilterBedrooms/>
         </div>
     )
 }

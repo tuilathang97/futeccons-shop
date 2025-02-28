@@ -11,7 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { getCategoryById } from '@/lib/queries/categoryQueries'
 
 function FilterEstateKind({
@@ -22,19 +22,28 @@ function FilterEstateKind({
     categories: Category[]
 }) {
     const router = useRouter()
+    const searchParams = useSearchParams();
     const [selectedValue, setSelectedValue] = useState<string>('')
     const [isChanged, setIsChanged] = useState(false)
+
     useEffect(() => {
         if (currentCategory) {
             setSelectedValue(currentCategory.id.toString())
         }
     }, [currentCategory])
 
-    async function getCategoryBySelectedId(value:string){
+    async function getCategoryBySelectedId(value: string) {
         const afterChangeSelected = await getCategoryById(Number(value))
-        if(afterChangeSelected.slug){
-            router.prefetch(afterChangeSelected.slug);
-            router.push(afterChangeSelected.slug);
+
+        if (afterChangeSelected.slug) {
+            const currentParams = new URLSearchParams(searchParams.toString());
+
+            const newUrl = currentParams.toString()
+                ? `${afterChangeSelected.slug}?${currentParams.toString()}`
+                : afterChangeSelected.slug;
+
+            router.prefetch(newUrl);
+            router.push(newUrl);
         }
     }
 
@@ -47,11 +56,11 @@ function FilterEstateKind({
 
     return (
         <div>
-            <Select 
+            <Select
                 value={selectedValue}
                 onValueChange={handleValueChange}
             >
-                <SelectTrigger 
+                <SelectTrigger
                     className={cn(
                         "w-full sm:w-[200px]",
                         (isChanged || selectedValue) && "border-red-500 text-red-500 hover:text-red-600 target:border-red-600"
@@ -63,8 +72,8 @@ function FilterEstateKind({
                     <SelectGroup>
                         <SelectLabel>Chọn loại giao dịch</SelectLabel>
                         {categories.map((cate: Category) => (
-                            <SelectItem 
-                                key={cate.id} 
+                            <SelectItem
+                                key={cate.id}
                                 value={cate.id.toString()}
                             >
                                 {cate.name}
