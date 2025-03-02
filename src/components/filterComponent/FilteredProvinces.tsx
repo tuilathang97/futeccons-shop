@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { Province } from 'types'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,6 +21,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 function FilteredProvinces({ provinces }: { provinces: Province[] }) {
+    const path = usePathname()
     const router = useRouter()
     const [displayText, setDisplayText] = useState("Khu vực")
     const form = useForm<FormValues>({
@@ -34,12 +35,10 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
 
     const { thanhPho, quan, phuong } = form.watch()
 
-    const districts = provinces.find(
-        province => province.codename === thanhPho.replace(/-/g, '_') // Sử dụng codename đã được định dạng cho thành phố
-    )?.districts || []
+    const districts = provinces.find(province => province.codename === thanhPho?.replace(/-/g, '_'))?.districts || []
 
     const wards = districts.find(
-        district => district.codename === quan.replace(/-/g, '_') // Sử dụng codename đã được định dạng cho quận
+        district => district.codename === quan?.replace(/-/g, '_') // Sử dụng codename đã được định dạng cho quận
     )?.wards || []
 
     const handleProvinceSelect = (value: string) => {
@@ -59,61 +58,54 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
 
     const handleDistrictSelect = (value: string) => {
         const district = districts.find(d => d.codename === value)
-        const province = provinces.find(p => p.codename === thanhPho.replace(/-/g, '_'))
+        const province = provinces.find(p => p.codename === thanhPho?.replace(/-/g, '_'))
         if (district && province) {
             form.setValue("quan", district.codename) // Lưu codename cho quận
             form.setValue("phuong", "")
             setDisplayText(district.name) // Hiển thị tên quận
+            if(thanhPho)
             updateQueryParams(thanhPho, district.codename, "") // Cập nhật query params với codename
-            console.log("Selected district:", {
-                name: district.name,
-                codename: district.codename
-            })
         }
     }
 
     const handleWardSelect = (value: string) => {
         const ward = wards.find(w => w.codename === value)
-        const province = provinces.find(p => p.codename === thanhPho.replace(/-/g, '_'))
-        const district = districts.find(d => d.codename === quan.replace(/-/g, '_'))
+        const province = provinces.find(p => p.codename === thanhPho?.replace(/-/g, '_'))
+        const district = districts.find(d => d.codename === quan?.replace(/-/g, '_'))
         if (ward && province && district) {
             form.setValue("phuong", ward.codename) // Lưu codename cho phường
             setDisplayText(ward.name) // Hiển thị tên phường
+            if(thanhPho && quan)
             updateQueryParams(thanhPho, quan, ward.codename) // Cập nhật query params với codename
-            console.log("Selected ward:", {
-                name: ward.name,
-                codename: ward.codename
-            })
         }
     }
 
     const handleReset = () => {
         form.reset()
         setDisplayText("Khu vực")
-        router.push('/') // Đưa về trang chủ hoặc một trang mặc định nào đó
+        router.push(path)
     }
 
     const updateQueryParams = (thanhPho: string, quan: string, phuong: string) => {
         const params = new URLSearchParams()
         if (thanhPho) {
-            params.append('thanhPho', thanhPho) // Sử dụng codename cho thành phố
+            params.append('thanhPho', thanhPho)
         }
         if (quan) {
-            params.append('quan', quan) // Sử dụng codename cho quận
+            params.append('quan', quan)
         }
         if (phuong) {
-            params.append('phuong', phuong) // Sử dụng codename cho phường
+            params.append('phuong', phuong)
         }
-        router.push(`?${params.toString()}`) // Cập nhật URL với các query params mới
+        router.push(`?${params.toString()}`)
     }
-
     return (
         <div>
             <Form {...form}>
                 <form className="w-full flex">
                     <Dialog>
                         <DialogTrigger asChild>
-                            <Button variant="outline" className={`${displayText ? "border border-red-500 text-red-500 hover:text-red-600 " : ""} w-full md:w-[200px] justify-between`}>
+                            <Button variant="outline" className={`${displayText !== "Khu vực" ? "border border-red-500 text-red-500 hover:text-red-600 " : "khu vực"} w-full md:w-[200px] justify-between`}>
                                 {displayText} <ArrowDownIcon />
                             </Button>
                         </DialogTrigger>
