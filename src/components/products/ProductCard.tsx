@@ -6,7 +6,7 @@ import { Clock, Heart, MapPin } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { RealEstateCardProps } from '@/db/Data';
+import { RealEstateCardProps } from '@/constants/data';
 
 
 const ProductCard: React.FC<RealEstateCardProps> = ({
