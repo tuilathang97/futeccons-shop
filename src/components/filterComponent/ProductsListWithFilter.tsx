@@ -9,7 +9,7 @@ async function ProductsListWithFilter() {
   const provinces = JSON.parse(jsonData);
   return (
     <div>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:flex items-center gap-4'>
+      <div className='flex items-center'>
         <Suspense fallback={<div>Đang tải...</div>}>
           <FilteredProvinces provinces={provinces} />
         </Suspense>
