@@ -44,7 +44,7 @@ export const OPTIONS: OptionsI = {
             slug: "/cho-thue",
             options: [
                 { label: "Căn hộ, chung cư, ks", slug: "/can-ho-chung-cu-khach-san" },
-                { label: "Nhà trọ, phòng trọ", slug: "/can-ho-chung-cu-khach-san" },
+                { label: "Nhà trọ, phòng trọ", slug: "/nha-tro-phong-tro" },
                 { label: "Văn phòng, mặt bằng", slug: "/van-phong-mat-bang" },
                 { label: "Nhà xưởng, kho đất", slug: "/nha-xuong-kho-dat" }
             ]
