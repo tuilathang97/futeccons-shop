@@ -52,6 +52,15 @@ export async function logout() {
   }
 }
 
+export async function createPost(prevState: any, formData: FormData) {
+  console.log("tao post")
+  const data = Object.fromEntries(formData);
+  console.log({data});
+  return {
+    message: "Post created"
+  }
+}
+
 export async function signUp(formData: FormData) {
   console.log("dang dang ky")
   const data = Object.fromEntries(formData);

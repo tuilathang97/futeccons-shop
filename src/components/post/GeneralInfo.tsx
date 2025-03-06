@@ -61,12 +61,12 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
       index={0}
       isFinish={Boolean(level1Category) && Boolean(level2Category) && Boolean(level3Category)}
     >
-      <div className="flex flex-col md:flex-nowrap md:flex-row md:items-center gap-2">
+      <div className="flex flex-col justify-between md:flex-nowrap md:flex-row md:items-center gap-2">
         <FormField
           control={form.control}
           name="level1Category"
           render={({ field }) => (
-            <FormItem className="flex">
+            <FormItem className="flex flex-col">
               <Select disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value} {...field}>
                 <FormControl>
                   <SelectTrigger className="flex-1 basis-full md:w-[180px]">
@@ -88,12 +88,11 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
-        <div className="hidden md:block">/</div>
         <FormField
           control={form.control}
           name="level2Category"
           render={({ field }) => (
-            <FormItem className="flex">
+            <FormItem className="flex flex-col">
               <Select 
                 disabled={!hasValue(form.getValues("level1Category"))}
                 onValueChange={field.onChange}
@@ -117,12 +116,11 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
-        <div className="hidden md:block">/</div>
         <FormField
           control={form.control}
           name="level3Category"
           render={({ field }) => (
-            <FormItem className="flex">
+            <FormItem className="flex flex-col">
               <Select 
                   disabled={!hasValue(form.getValues("level2Category"))}
                   onValueChange={field.onChange} {...field}>
