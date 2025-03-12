@@ -12,7 +12,6 @@ export default async function Home() {
     console.log("not login - redirect to auth")
 		return redirect("/signup");
 	}
-  console.log("user logged in")
   return (
     <div className="flex flex-col justify-center gap-4">
       <CategoryPicker categories={categories}/>
