@@ -56,16 +56,22 @@ export async function logout() {
 export async function createPost(prevState: any, formData: FormData) {
   try {
     const data = Object.fromEntries(formData);
+    
     if(!data.userId){
       return {message: "Post failed : no user found"}
     }
-    console.log(data)
-    createPostToDb(data)
+    if (data.giaTien) {
+      const currency = data.giaTien as string;
+      const number = Number(currency.replace(/[.,]/g, ''));
+      data.giaTien = number;
+    }
+    createPostToDb(data);
     return {message: "Post created"}
   } catch (error) {
-    return error
+    return error;
   }
 }
+
 
 export async function signUp(formData: FormData) {
   console.log("dang dang ky")

@@ -17,46 +17,17 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
   const districts = provinces.find(province => province.name === selectedProvince)?.districts || [];
   const wards = districts.find(district => district.name === selectedDistrict)?.wards || [];
   const price = form.watch("giaTien")
-  function currencyStringToNumber(currencyString:string) {
-    // Define the Vietnamese locale
-    const userLocale = 'vi-VN';
-
-    // Remove any currency symbols and whitespace
-    const cleanedString = currencyString.trim().replace(/^[^\d-]+/, '').replace(/[^\d.,\-]+$/, '');
-
-    // Create a NumberFormat instance for parsing
-    const numberFormat = new Intl.NumberFormat(userLocale);
-
-    // Get the formatting options to determine decimal and group separators
-    const formatParts = numberFormat.formatToParts(1234.5);
-    const decimalSeparator = formatParts.find(part => part.type === 'decimal')?.value || ',';
-    const groupSeparator = formatParts.find(part => part.type === 'group')?.value || '.';
-
-    // Replace group separators (.) and normalize decimal separator (,)
-    const normalizedString = cleanedString
-      .replace(new RegExp(`\\${groupSeparator}`, 'g'), '') // Remove thousand separators
-      .replace(decimalSeparator, '.'); // Replace the decimal separator with a dot for parsing
-
-    // Parse the string to a number
-    const number = parseFloat(normalizedString);
-
-    // Check if the result is a valid number
-    if (isNaN(number)) {
-      throw new Error('Invalid number format');
+  function handleCurrency(currencyString: string) {
+    const withoutSeparators = currencyString.replace(/\./g, '');
+    const normalizedString = withoutSeparators.replace(',', '.');
+    const numValue = Number(normalizedString);
+    if(!isNaN(numValue)){
+      return new Intl.NumberFormat("vi-VN").format(numValue)
     }
-
-    return number;
+    form.setError("giaTien",{message:"giá tiền không được bao gồm chữ"})
+    return ""
   }
-
-  // Example usage
-  try {
-    const result = currencyStringToNumber("1.234.567,89"); // Input in Vietnamese format
-    console.log(result); // Output: 1234567.89
-  } catch (error) {
-    console.error(error);
-  }
-
-
+  
   useEffect(() => {
     if (selectedProvince) {
       const province = provinces.find(p => p.name === selectedProvince);
@@ -80,8 +51,8 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
         form.setValue("phuongCodeName", ward.codename);
       }
     }
-
-  }, [selectedProvince, selectedDistrict, selectedWard, price]);
+    
+  }, [selectedProvince, selectedDistrict, selectedWard,price]);
   return (
     <FaqItem
       question="Thông tin cơ bản"
@@ -406,24 +377,6 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
           </div>
         </div>
 
-        {/* Nội dung bài viết - chiếm toàn bộ chiều rộng */}
-        <FormField
-          control={form.control}
-          name="noiDung"
-          render={({ field }) => (
-            <FormItem className="md:col-span-3 mt-4 w-full">
-              <FormLabel>Nội dung bài viết <span className="text-red-500">*</span></FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Mô tả chi tiết về bất động sản của bạn..."
-                  className="resize-none min-h-[150px]"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
       </div>
     </FaqItem>
   )

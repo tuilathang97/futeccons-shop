@@ -6,7 +6,7 @@ export const PostSchema = z.object({
   level2Category: z.string().min(1,{message: "Vui lòng loại bất động sản"} ),
   level3Category: z.string().min(1,{message: "Vui lòng kiểu bất động sản"} ),
   path: z.string().optional(),
-  giaTien: z.string({message: "Vui lòng nhập giá tiền"}).length(8,{message:"chưa đạt giá tối thiểu"}),
+  giaTien: z.string({message: "Vui lòng nhập giá tiền"}),
   duong: z.string().min(1,{message: "Vui lòng nhập tên đường"}),
   phuong: z.string().min(1,{message: "Vui lòng nhập phường ( phải nhập quận trước )"}),
   quan: z.string().min(1,{message: "Vui lòng nhập tên quận ( phải nhập tp trước )"}),
