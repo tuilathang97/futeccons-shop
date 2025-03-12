@@ -3,31 +3,106 @@
 import { FaqItem } from "../blocks/faq";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import { useFormContext } from "react-hook-form";
 import { Province } from "types";
 import { Post } from "./postSchema";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { useEffect } from "react";
-
+import { useEffect, useMemo } from "react";
 
 const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: string }) => {
   const form = useFormContext<Post>();
-  const [selectedProvince, selectedDistrict, selectedWard] = form.watch(["thanhPho", "quan", "phuong"]);
+
+  // Watch all required fields to determine section completion status
+  const [
+    selectedProvince,
+    selectedDistrict,
+    selectedWard,
+    duong,
+    loaiHinhNhaO,
+    giayToPhapLy,
+    giaTien,
+    dienTichDat,
+    soTang,
+    soPhongNgu,
+    soPhongVeSinh
+  ] = form.watch([
+    "thanhPho",
+    "quan",
+    "phuong",
+    "duong",
+    "loaiHinhNhaO",
+    "giayToPhapLy",
+    "giaTien",
+    "dienTichDat",
+    "soTang",
+    "soPhongNgu",
+    "soPhongVeSinh"
+  ]);
+
   const districts = provinces.find(province => province.name === selectedProvince)?.districts || [];
   const wards = districts.find(district => district.name === selectedDistrict)?.wards || [];
-  const price = form.watch("giaTien")
+
+  // Check if the section is complete
+  const isSectionComplete = useMemo(() => {
+    // Check required string fields
+    const isStringFieldsValid =
+      Boolean(selectedProvince) &&
+      Boolean(selectedDistrict) &&
+      Boolean(selectedWard) &&
+      Boolean(duong) &&
+      Boolean(loaiHinhNhaO) &&
+      Boolean(giayToPhapLy) &&
+      Boolean(giaTien);
+
+    // Check number fields with specific requirements
+    const isDienTichDatValid =
+      typeof dienTichDat === 'number' &&
+      dienTichDat >= 10 &&
+      dienTichDat <= 1000000;
+
+    const isSoTangValid =
+      typeof soTang === 'number' &&
+      soTang <= 20;
+
+    const isSoPhongNguValid =
+      typeof soPhongNgu === 'number' &&
+      soPhongNgu >= 1;
+
+    const isSoPhongVeSinhValid =
+      typeof soPhongVeSinh === 'number' &&
+      soPhongVeSinh >= 1;
+
+    // Return true only if all validations pass
+    return isStringFieldsValid &&
+      isDienTichDatValid &&
+      isSoTangValid &&
+      isSoPhongNguValid &&
+      isSoPhongVeSinhValid;
+  }, [
+    selectedProvince,
+    selectedDistrict,
+    selectedWard,
+    duong,
+    loaiHinhNhaO,
+    giayToPhapLy,
+    giaTien,
+    dienTichDat,
+    soTang,
+    soPhongNgu,
+    soPhongVeSinh
+  ]);
+
   function handleCurrency(currencyString: string) {
     const withoutSeparators = currencyString.replace(/\./g, '');
     const normalizedString = withoutSeparators.replace(',', '.');
     const numValue = Number(normalizedString);
-    if(!isNaN(numValue)){
+    if (!isNaN(numValue)) {
       return new Intl.NumberFormat("vi-VN").format(numValue)
     }
-    form.setError("giaTien",{message:"giá tiền không được bao gồm chữ"})
+    form.setError("giaTien", { message: "giá tiền không được bao gồm chữ" })
     return ""
   }
-  
+
   useEffect(() => {
     if (selectedProvince) {
       const province = provinces.find(p => p.name === selectedProvince);
@@ -51,13 +126,14 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
         form.setValue("phuongCodeName", ward.codename);
       }
     }
-    
-  }, [selectedProvince, selectedDistrict, selectedWard,price]);
+
+  }, [selectedProvince, selectedDistrict, selectedWard, provinces, form]);
+
   return (
     <FaqItem
       question="Thông tin cơ bản"
       index={0}
-      isFinish={false}
+      isFinish={isSectionComplete}
     >
       <div className="flex flex-col items-center justify-center md:grid md:grid-cols-3 gap-4">
         <FormField
@@ -73,7 +149,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
           )}
         />
 
-        {/* Phần địa chỉ */}
+        {/* Address Section */}
         <div className="col-span-3 w-full">
           <h3 className="text-lg font-medium mb-2">Thông tin địa chỉ</h3>
           <div className="grid md:grid-cols-3 gap-4">
@@ -83,7 +159,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Thành phố <span className="text-red-500">*</span></FormLabel>
-                  <Select {...field} onValueChange={field.onChange} >
+                  <Select {...field} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn thành phố" />
@@ -122,7 +198,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Quận/Huyện <span className="text-red-500">*</span></FormLabel>
-                  <Select disabled={selectedProvince ? false : true} {...field} onValueChange={field.onChange} value={field.value}>
+                  <Select disabled={!selectedProvince} {...field} onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn quận/huyện" />
@@ -139,7 +215,6 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
                     </SelectContent>
                   </Select>
                   <FormMessage />
-
                   {/* Hidden field for quanCodeName */}
                   <FormField
                     control={form.control}
@@ -162,7 +237,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phường/Xã <span className="text-red-500">*</span></FormLabel>
-                  <Select disabled={selectedDistrict ? false : true} {...field} onValueChange={field.onChange} value={field.value}>
+                  <Select disabled={!selectedDistrict} {...field} onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Chọn phường/xã" />
@@ -179,7 +254,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
                     </SelectContent>
                   </Select>
                   <FormMessage />
-
+                  {/* Hidden field for phuongCodeName */}
                   <FormField
                     control={form.control}
                     name="phuongCodeName"
@@ -197,6 +272,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
           </div>
         </div>
 
+        {/* Additional Fields */}
         <FormField
           control={form.control}
           name="duong"
@@ -272,7 +348,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
           )}
         />
 
-        {/* Nhóm các trường số */}
+        {/* Detailed Information Section */}
         <div className="col-span-3 w-full mt-4">
           <h3 className="text-lg font-medium mb-2">Thông tin chi tiết</h3>
           <div className="grid md:grid-cols-3 gap-4">
@@ -376,7 +452,6 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
             />
           </div>
         </div>
-
       </div>
     </FaqItem>
   )

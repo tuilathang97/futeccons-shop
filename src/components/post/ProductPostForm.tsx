@@ -32,6 +32,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
       soPhongVeSinh: 0,
       giayToPhapLy: "",
       noiDung: "",
+      tieuDeBaiViet:""
     },
   });
   return (
