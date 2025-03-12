@@ -8,6 +8,7 @@ import { Category } from "@/db/schema";
 import { hasValue } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Post } from "./postSchema";
+import { ArrowRightIcon } from "lucide-react";
 
 type FormStateType = {
   level1Categories: Category[],
@@ -70,7 +71,10 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
               <Select disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value} {...field}>
                 <FormControl>
                   <SelectTrigger className="flex-1 basis-full md:w-[180px]">
-                    <SelectValue placeholder="Loại giao dịch" />
+                    <div>
+                      <SelectValue placeholder="Loại giao dịch" />
+                      <span className="text-red-500">*</span>
+                    </div>
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -88,18 +92,24 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
+        <div className="flex flex-col justify-center items-center">
+          <ArrowRightIcon/>
+        </div>
         <FormField
           control={form.control}
           name="level2Category"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <Select 
+              <Select
                 disabled={!hasValue(form.getValues("level1Category"))}
                 onValueChange={field.onChange}
                 {...field}>
                 <FormControl>
                   <SelectTrigger className="flex-1 basis-full md:w-[180px]">
-                    <SelectValue placeholder="Loại bất động sản" />
+                    <div>
+                      <SelectValue placeholder="Loại bất động sản" />
+                      <span className="text-red-500">*</span>
+                    </div>
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -116,6 +126,9 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
+        <div className="flex flex-col justify-center items-center">
+          <ArrowRightIcon/>
+        </div>
         <FormField
           control={form.control}
           name="level3Category"
@@ -126,7 +139,10 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
                   onValueChange={field.onChange} {...field}>
                 <FormControl>
                   <SelectTrigger className="flex-1 basis-full md:w-[180px]">
-                    <SelectValue placeholder="Kiểu bất động sản" />
+                    <div>
+                      <SelectValue placeholder="Kiểu bất động sản" />
+                      <span className="text-red-500">*</span>
+                    </div>
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

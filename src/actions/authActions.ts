@@ -6,6 +6,7 @@ import { eq, and } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import * as argon2 from "argon2";
 import { signInSchema, signUpSchema } from "@/components/signup/authSchema";
+import { createPostToDb } from "@/lib/queries/categoryQueries";
 
 export async function login(formData: FormData) {
   const data = Object.fromEntries(formData);
@@ -53,11 +54,16 @@ export async function logout() {
 }
 
 export async function createPost(prevState: any, formData: FormData) {
-  console.log("tao post")
-  const data = Object.fromEntries(formData);
-  console.log({data});
-  return {
-    message: "Post created"
+  try {
+    const data = Object.fromEntries(formData);
+    if(!data.userId){
+      return {message: "Post failed : no user found"}
+    }
+    console.log(data)
+    createPostToDb(data)
+    return {message: "Post created"}
+  } catch (error) {
+    return error
   }
 }
 
