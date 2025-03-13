@@ -76,7 +76,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             console.error('Error toggling like:', error);
         }
     };
-
     // Format price from raw number to formatted string
     const formatPrice = () => {
         const numPrice = parseInt(giaTien);
@@ -93,12 +92,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
         return `${duong}, ${phuong}, ${quan}, ${thanhPho}`;
     };
 
-    const formatDate = () => {
-        if (!createdAt) return "";
-        // Use a method that's consistent between server and client
-        const date = new Date(createdAt);
-        return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
-    };
 
     // Handle media items which can be string or array
     const getImageUrl = () => {
@@ -109,7 +102,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
         }
         return "https://picsum.photos/200/300.jpg"; // Fallback image
     };
-
     return (
         <Link href={`/post/${id}`} className={`${variant !== "horizontal" ? "min-h-[15rem] border-gray-300 max-w-[20rem]" : "w-full border-gray-200"} block max-h-fit group border rounded-lg hover:shadow-lg overflow-hidden`}>
             <Card className={`w-full shadow-md ${variant !== "horizontal" ? "flex flex-col" : "flex flex-col md:flex-row"} gap-2`}>
@@ -139,21 +131,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     <CardContent>
                         <CardTitle className="text-lg group-hover:text-red-500 font-semibold">{tieuDeBaiViet}</CardTitle>
                         <CardDescription className="text-gray-500 text-xs line-clamp-2">{noiDung}</CardDescription>
-                        <div className="flex items-center gap-2 mt-2">
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
                             <Badge variant={"outline"} className="text-sm text-gray-700 font-medium">{dienTichDat} m²</Badge>
                             <Badge variant={"outline"} className="text-sm text-gray-700 font-medium">{soPhongNgu} PN</Badge>
                             <Badge variant={"outline"} className="text-sm text-gray-700 font-medium">{soPhongVeSinh} WC</Badge>
                         </div>
                     </CardContent>
-                    <CardFooter className="flex flex-col gap-2 px-4 pb-4">
+                    <CardFooter className="flex flex-col gap-2 pb-4">
                         <span className="text-lg font-bold text-red-600">{formatPrice()}</span>
                         <div className="flex items-center gap-2 text-gray-600 text-sm">
                             <Clock className="h-4 w-4" />
                             <span>{"00:00:00"}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-600 text-sm">
-                            <MapPin className="h-4 w-4" />
-                            <span>{formatAddress()}</span>
+                        <div className="flex items-center px-0 gap-2 text-gray-600 text-sm">
+                            <MapPin size={24} className="h-4 w-4" />
+                            <span className='text-xs max-w-full'>{formatAddress()}</span>
                         </div>
                     </CardFooter>
                 </div>

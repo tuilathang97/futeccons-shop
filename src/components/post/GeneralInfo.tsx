@@ -92,7 +92,7 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
-        <div className="flex flex-col justify-center items-center">
+        <div className="hidden md:flex flex-col justify-center items-center">
           <ArrowRightIcon/>
         </div>
         <FormField
@@ -126,7 +126,7 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
-        <div className="flex flex-col justify-center items-center">
+        <div className="hidden md:flex flex-col justify-center items-center">
           <ArrowRightIcon/>
         </div>
         <FormField
