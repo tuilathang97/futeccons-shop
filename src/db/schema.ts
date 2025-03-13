@@ -25,6 +25,7 @@ export const postsTable = pgTable('posts', {
   thanhPho: varchar('thanh_pho', { length: 255 }).notNull(),
   thanhPhoCodeName: varchar('thanh_pho_code_name', { length: 255 }).notNull(),
   quan: varchar('quan', { length: 255 }).notNull(),
+  tieuDeBaiViet:varchar('tieu-de').notNull(),
   quanCodeName: varchar('quan_code_name', { length: 255 }).notNull(),
   phuong: varchar('phuong', { length: 255 }).notNull(),
   phuongCodeName: varchar('phuong_code_name', { length: 255 }).notNull(),

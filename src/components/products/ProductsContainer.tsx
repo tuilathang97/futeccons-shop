@@ -17,6 +17,7 @@ function ProductsContainer({ title,posts }: Container) {
             </div>
             <div className='
                 grid gap-4
+                md:grid-cols-3
                 grid-cols-1
                 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]
                 place-items-center
@@ -27,12 +28,9 @@ function ProductsContainer({ title,posts }: Container) {
                 mx-auto'
             >
                 {posts?.map((post,index) => {
-                    const productWithFilter = post.mediaItems.filter((post) => post.type === "image")
-                    if(productWithFilter.length > 0){
-                        return (
-                            <ProductCard key={index} {...post} />
-                        )
-                    }
+                    return (
+                        <ProductCard key={index} {...post} />
+                    )
                 })}
             </div>
             <div className='flex justify-center'>

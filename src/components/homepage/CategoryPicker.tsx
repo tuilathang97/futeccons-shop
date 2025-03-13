@@ -16,7 +16,7 @@ function CategoryPicker({categories}:{categories:Category[]}) {
                     firstLevelCategories.map((category,key) => {
                         return (
                             <Link key={key} href={category.slug ? category.slug : "/"} className='flex flex-col gap-2 w-fit items-center'>
-                                <div className='bg-slate-400 p-1 rounded-md'><HouseIcon size={80}/></div>
+                                <div className='bg-slate-900 p-1 rounded-md'><HouseIcon color='white' size={80}/></div>
                                 <p>{category.name}</p>
                             </Link>
                         )

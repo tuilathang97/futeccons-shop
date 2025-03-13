@@ -1,25 +1,24 @@
-"use client"
+// Remove the "use client" directive
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
 import React from 'react'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import PostDetail from '@/components/products/PostDetail'
 import { Phone } from 'lucide-react'
-import { postsData } from '@/constants/data'
+import { getPostById } from '@/lib/queries/categoryQueries'
 
-function Page() {
-    const { postId } = useParams()
-    const foundPost = postsData.filter(p => p.id === postId?.toString());
+export default async function Page({ params }: { params: { postId: string[] } }) {
+    const postId = await params.postId;
+    const postFound = await getPostById(Number(postId))
     return (
         <div className='max-w-[70rem] mx-auto'>
             {
-                postId && foundPost.length > 0 ?
+                postFound ?
                     <div className='flex flex-col gap-4'>
                         <div className='grid grid-cols-12 gap-4 py-2'>
                             <div className='col-span-12 md:col-span-8 gap-4'>
-                                <PostDetail postId={postId?.toString()}/>
+                                <PostDetail post={postFound}/>
                             </div>
                             <div className='col-span-12 md:col-span-4'>
                                 <div className='h-[10rem] w-full rounded-md border border-gray-300 p-4'>
@@ -35,7 +34,6 @@ function Page() {
                                         </div>
                                         <Separator className='w-full' />
                                         <Button> Bấm để hiện số 00000000000 <Phone /></Button>
-                                        {/* TODO : chức năng tắt hiện số điện thoại | schema của post |  */}
                                     </div>
                                 </div>
                             </div>
@@ -48,5 +46,3 @@ function Page() {
         </div>
     )
 }
-
-export default Page
