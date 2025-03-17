@@ -7,9 +7,9 @@ async function main() {
         posts: {
             columns: {
                 userId: f.uuid(),  // Generate a UUID for userId
-                level1_category: f.string(),  // No length limit
-                level2_category: f.string(),  // No length limit
-                level3_category: f.string(),  // No length limit
+                level1_category: f.number(),  // No length limit
+                level2_category: f.number(),  // No length limit
+                level3_category: f.number(),  // No length limit
                 thanh_pho: f.city(),  // Generate a city name
                 thanh_pho_code_name: f.string(),  // Generate a slug
                 quan: f.string(),  // No length limit
