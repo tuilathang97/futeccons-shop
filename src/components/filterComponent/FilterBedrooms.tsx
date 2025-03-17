@@ -77,14 +77,14 @@ function FilterBedrooms() {
 
     return (
         <div>
-            <div className=''>
+            <div>
                 <Select
                     value={selectedBedrooms}
                     onValueChange={handleBedroomsChange}
                 >
                     <SelectTrigger
                         className={cn(
-                            "w-[180px]",
+                            "w-full md:w-[180px]",
                             selectedBedrooms && "border-red-500 text-red-500 border " // Thêm border màu vàng khi có giá trị được chọn
                         )}
                     >

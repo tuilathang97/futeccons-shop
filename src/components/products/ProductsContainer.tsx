@@ -2,18 +2,18 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
-import { RealEstateCardProps } from '@/constants/data'
+import { Post } from '@/db/schema'
 
 interface Container {
     title: string
-    posts?:RealEstateCardProps[]
+    posts?:Post[]
 }
 
 function ProductsContainer({ title,posts }: Container) {
     return (
         <div className='min-h-[5rem] flex flex-col bg-white gap-4 w-full max-w-[100rem] border border-gray-100 rounded-md p-4'>
             <div className='flex justify-center'>
-                <h1 className='text-xl md:text-2xl font-semibold'>{title}</h1>
+                <h1 className='text-xl font-semibold md:text-2xl'>{title}</h1>
             </div>
             <div className='
                 grid gap-4
@@ -27,9 +27,9 @@ function ProductsContainer({ title,posts }: Container) {
                 max-w-[1200px]
                 mx-auto'
             >
-                {posts?.map((post,index) => {
+                {posts?.map((postData,index) => {
                     return (
-                        <ProductCard key={index} {...post} />
+                        <ProductCard variant="vertical" post={postData} key={index} />
                     )
                 })}
             </div>

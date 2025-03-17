@@ -8,7 +8,6 @@ export default async function Home() {
   const { user } = await getCurrentSession();
   const categories = await getCategories()
   const posts = await getPosts()
-  console.log(posts)
 	if (user === null) {
     console.log("not login - redirect to auth")
 		return redirect("/signup");

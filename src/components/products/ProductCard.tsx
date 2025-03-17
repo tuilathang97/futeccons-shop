@@ -6,57 +6,58 @@ import { Clock, Heart, MapPin } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Post } from '../post/postSchema';
+import { Post } from '@/db/schema';
 
-interface ProductCardProps extends Post {
-    mediaItems: { url: string, type: string }[] | string;
-    badge?: string;
+interface ProductCardProps {
+    post: Post;
     variant?: "horizontal" | "vertical";
-    createdAt: string;
+    badge?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-    id,
-    tieuDeBaiViet,
-    noiDung,
-    giaTien,
-    dienTichDat,
-    soPhongNgu,
-    soPhongVeSinh,
-    duong,
-    phuong,
-    quan,
-    thanhPho,
-    createdAt,
-    mediaItems,
-    badge = "Tin thường",
-    variant = "vertical"
-}) => {
+function LocationAnchor({location, href}:{location:string, href?:string}) {
+    if(!href) {
+        return <span>{location}</span>
+    }
+    
+    const handleClick = () => {
+        const params = new URLSearchParams(href)
+        console.log(params)
+    }
+    
+    return (
+        <span className='cursor-pointer hover:text-red-500' onClick={handleClick}>
+            {location}
+        </span>
+    )
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", badge = "Hot" }) => {
     const [isLiked, setIsLiked] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
-    // Only run client-side effects after component has mounted
     useEffect(() => {
         setIsMounted(true);
-        
         try {
             const likedPosts = localStorage.getItem('likedPosts');
             if (likedPosts) {
                 const likedPostsArray = JSON.parse(likedPosts);
-                setIsLiked(Array.isArray(likedPostsArray) && likedPostsArray.includes(id));
+                setIsLiked(Array.isArray(likedPostsArray) && likedPostsArray.includes(post.id));
             }
         } catch (error) {
             console.error('Error loading liked posts:', error);
         }
-    }, [id]);
-
+    }, [post.id]);
+    
+    const {thanhPhoCodeName, quanCodeName, phuongCodeName} = post;
+    
     const toggleLike = (e: React.MouseEvent) => {
         e.preventDefault();
+        e.stopPropagation();
 
         if (!isMounted) return;
 
         try {
-            let likedPostsArray: string[] = [];
+            let likedPostsArray: number[] = [];
             const likedPosts = localStorage.getItem('likedPosts');
 
             if (likedPosts) {
@@ -65,9 +66,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             }
 
             if (isLiked) {
-                likedPostsArray = likedPostsArray.filter(postId => postId !== id);
+                likedPostsArray = likedPostsArray.filter(postId => postId !== post.id);
             } else {
-                likedPostsArray.push(id);
+                likedPostsArray.push(post.id);
             }
 
             localStorage.setItem('likedPosts', JSON.stringify(likedPostsArray));
@@ -76,9 +77,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             console.error('Error toggling like:', error);
         }
     };
+
     // Format price from raw number to formatted string
     const formatPrice = () => {
-        const numPrice = parseInt(giaTien);
+        const numPrice = parseFloat(post.giaTien);
         if (numPrice >= 1000000000) {
             return `${(numPrice / 1000000000).toFixed(1)} tỷ`;
         } else if (numPrice >= 1000000) {
@@ -89,68 +91,97 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
     // Format address
     const formatAddress = () => {
-        return `${duong}, ${phuong}, ${quan}, ${thanhPho}`;
+        return (
+            <div className='flex flex-wrap items-center gap-1'>
+                {post.duong && <LocationAnchor location={post.duong} />}
+                {post.duong && (post.phuong || post.quan || post.thanhPho) && <span>, </span>}
+                {post.phuong && <LocationAnchor location={post.phuong} href={phuongCodeName} />}
+                {post.phuong && (post.quan || post.thanhPho) && <span>, </span>}
+                {post.quan && <LocationAnchor location={post.quan} href={quanCodeName} />}
+                {post.quan && post.thanhPho && <span>, </span>}
+                {post.thanhPho && <LocationAnchor location={post.thanhPho} href={thanhPhoCodeName} />}
+            </div>
+        );
     };
 
-
-    // Handle media items which can be string or array
-    const getImageUrl = () => {
-        if (typeof mediaItems === 'string') {
-            return mediaItems;
-        } else if (Array.isArray(mediaItems) && mediaItems.length > 0 && mediaItems[0].url) {
-            return mediaItems[0].url;
-        }
-        return "https://picsum.photos/200/300.jpg"; // Fallback image
-    };
     return (
-        <Link href={`/post/${id}`} className={`${variant !== "horizontal" ? "min-h-[15rem] border-gray-300 max-w-[20rem]" : "w-full border-gray-200"} block max-h-fit group border rounded-lg hover:shadow-lg overflow-hidden`}>
-            <Card className={`w-full shadow-md ${variant !== "horizontal" ? "flex flex-col" : "flex flex-col md:flex-row"} gap-2`}>
-                <CardHeader className="p-0">
-                    <div className={cn("relative", variant === "vertical" ? "p-0" : "p-4")}>
+        <Card className={`shadow-md border ${variant === "vertical" ? "h-full w-[90%]" : "w-full"} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
+            <Link href={`/post/${post.id}`} className="block h-full">
+                <div className={cn(
+                    "flex",
+                    variant === "vertical"
+                        ? "flex-col h-full"
+                        : "flex-col md:flex-row md:h-full"
+                )}>
+                    {/* Image Container */}
+                    <div className={cn(
+                        "relative overflow-hidden", 
+                        variant === "vertical" 
+                            ? "h-[200px] w-full"
+                            : "h-[200px] md:h-full md:w-[280px] flex-shrink-0"
+                        )}>
                         <Image
-                            src={getImageUrl()}
-                            height={250}
-                            width={250}
-                            alt={tieuDeBaiViet || "Property image"}
-                            className={cn("w-full h-48 object-cover", variant === "vertical" ? "" : "rounded-md")}
+                            src={`https://picsum.photos/200/300.jpg`}
+                            fill
+                            alt={post.tieuDeBaiViet || "Property image"}
+                            className="object-cover"
                         />
-                        <Badge className={cn("absolute top-2 left-2 bg-red-500 text-white", variant === "vertical" ? "top-2 left-2" : "top-6 left-6")}>
+                        <Badge className="absolute text-white bg-red-500 border border-gray-500 shadow-md top-2 left-2">
                             {badge}
                         </Badge>
                         {isMounted && (
                             <Heart
                                 strokeWidth={0.5}
-                                className={`absolute ${variant === "vertical" ? "top-2 right-2" : "top-6 right-6"} cursor-pointer transition-all duration-300 hover:scale-110
-                                    ${isLiked ? 'fill-red-500 stroke-red-500' : 'fill-white stroke-gray-400'}`}
+                                className={`absolute top-2 right-2 cursor-pointer transition-all duration-300 hover:scale-110
+                                ${isLiked ? 'fill-red-500 stroke-red-500' : 'fill-white stroke-gray-400'}`}
                                 onClick={toggleLike}
                             />
                         )}
                     </div>
-                </CardHeader>
-                <div>
-                    <CardContent>
-                        <CardTitle className="text-lg group-hover:text-red-500 font-semibold">{tieuDeBaiViet}</CardTitle>
-                        <CardDescription className="text-gray-500 text-xs line-clamp-2">{noiDung}</CardDescription>
-                        <div className="flex flex-wrap items-center gap-2 mt-2">
-                            <Badge variant={"outline"} className="text-sm text-gray-700 font-medium">{dienTichDat} m²</Badge>
-                            <Badge variant={"outline"} className="text-sm text-gray-700 font-medium">{soPhongNgu} PN</Badge>
-                            <Badge variant={"outline"} className="text-sm text-gray-700 font-medium">{soPhongVeSinh} WC</Badge>
+
+                    {/* Content Container */}
+                    <div className={cn(
+                        "flex flex-col flex-grow",
+                        variant === "vertical" ? "p-4" : "p-4"
+                    )}>
+                        <CardTitle className="mb-2 text-lg font-semibold group-hover:text-red-500 line-clamp-2">
+                            {post.tieuDeBaiViet}
+                        </CardTitle>
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-lg font-bold text-red-600">{formatPrice()}</span>
+                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
+                                {post.dienTichDat} m²
+                            </Badge>
                         </div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col gap-2 pb-4">
-                        <span className="text-lg font-bold text-red-600">{formatPrice()}</span>
-                        <div className="flex items-center gap-2 text-gray-600 text-sm">
-                            <Clock className="h-4 w-4" />
-                            <span>{"00:00:00"}</span>
+                        <CardDescription className="mb-3 text-sm text-gray-800 line-clamp-2">
+                            {post.noiDung}
+                        </CardDescription>
+                        
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
+                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
+                                {post.dienTichDat} m²
+                            </Badge>
+                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
+                                {post.soPhongNgu} PN
+                            </Badge>
+                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
+                                {post.soPhongVeSinh} WC
+                            </Badge>
                         </div>
-                        <div className="flex items-center px-0 gap-2 text-gray-600 text-sm">
-                            <MapPin size={24} className="h-4 w-4" />
-                            <span className='text-xs max-w-full'>{formatAddress()}</span>
+                        <div>
+                            <div className="flex items-center gap-2 mb-1 text-sm text-gray-600">
+                                <Clock className="w-4 h-4" />
+                                <span>{post.createdAt.toLocaleDateString()}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                                <MapPin className="flex-shrink-0 w-4 h-4"/>
+                                <span className='text-xs'>{formatAddress()}</span>
+                            </div>
                         </div>
-                    </CardFooter>
+                    </div>
                 </div>
-            </Card>
-        </Link>
+            </Link>
+        </Card>
     );
 };
 

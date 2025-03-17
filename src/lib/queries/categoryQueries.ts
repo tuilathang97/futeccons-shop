@@ -1,6 +1,5 @@
 'use server'
 
-import { Post } from '@/components/post/postSchema';
 import { db } from '@/db/drizzle';
 import { categoriesTable,postsTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
@@ -17,7 +16,7 @@ export async function getPosts() {
   return await db.select().from(postsTable);
 }
 
-export async function createPostToDb(formData) {
+export async function createPostToDb(formData:FormData) {
   try {
     if (!formData) {
       throw new Error("No data provided");
