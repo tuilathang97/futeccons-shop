@@ -26,7 +26,7 @@ export default async function RootLayout({children,}: Readonly<{children: React.
   return (
     <html lang="vi" className="h-svh">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] antialiased !pt-[7rem] !px-4 lg:!px-8 md:!pt-[5rem] container`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] antialiased max-w-[80rem] !pt-[7rem] !px-4 lg:!px-8 md:!pt-[5rem] container`}
       >
         <Header user={user} session={session}/>
         <Toaster />

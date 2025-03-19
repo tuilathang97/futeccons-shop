@@ -18,6 +18,7 @@ function ProductsContainer({ title,posts }: Container) {
             <div className='
                 grid gap-4
                 md:grid-cols-3
+                lg:grid-cols-4
                 grid-cols-1
                 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]
                 place-items-center
