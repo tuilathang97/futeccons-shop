@@ -10,7 +10,17 @@ import { FormField, FormItem, FormControl, FormLabel, FormMessage, Form } from '
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ChevronDown } from 'lucide-react' 
+import { ChevronDown } from 'lucide-react'
+
+
+export const queryMappingString = {
+    thanhPho: "thanhPho",
+    quan: "quan",
+    phuong: "phuong",
+    gia: "gia",
+    bedrooms: "bedrooms",
+    area: "area"
+}
 
 const formSchema = z.object({
     thanhPho: z.string().optional(),
@@ -33,7 +43,6 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
             phuong: ""
         },
     })
-
     const { thanhPho, quan, phuong } = form.watch()
 
     const districts = provinces.find(province => province.codename === thanhPho?.replace(/-/g, '_'))?.districts || []
@@ -46,97 +55,133 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
         const thanhPhoParam = searchParams.get('thanhPho')
         const quanParam = searchParams.get('quan')
         const phuongParam = searchParams.get('phuong')
-        
-        if (thanhPhoParam) {
-            // Tìm province tương ứng
-            const province = provinces.find(p => p.codename === thanhPhoParam)
+
+        if (!thanhPhoParam) {
+            form.setValue("thanhPho", "")
+            form.setValue("quan", "")
+            form.setValue("phuong", "")
+            setDisplayText("Khu vực")
+            return
+        }
+
+        const province = provinces.find(p => p.codename === thanhPhoParam)
+        if (province) {
+            form.setValue("thanhPho", province.codename)
+            setDisplayText(province.name)
+
+            if (!quanParam) {
+                form.setValue("quan", "")
+                form.setValue("phuong", "")
+                return
+            }
+
+            const districts = province.districts || []
+            const district = districts.find(d => d.codename === quanParam)
+            if (district) {
+                form.setValue("quan", district.codename)
+                setDisplayText(district.name)
+
+                if (!phuongParam) {
+                    form.setValue("phuong", "")
+                    return
+                }
+
+                const wards = district.wards || []
+                const ward = wards.find(w => w.codename === phuongParam)
+                if (ward) {
+                    form.setValue("phuong", ward.codename)
+                    setDisplayText(ward.name)
+                } else {
+                    form.setValue("phuong", "")
+                }
+            } else {
+                form.setValue("quan", "")
+                form.setValue("phuong", "")
+            }
+        } else {
+            form.setValue("thanhPho", "")
+            form.setValue("quan", "")
+            form.setValue("phuong", "")
+            setDisplayText("Khu vực")
+        }
+    }, [searchParams, provinces, form])
+
+    useEffect(() => {
+        if (thanhPho && quan && phuong) {
+            const province = provinces.find(p => p.codename === thanhPho)
             if (province) {
-                form.setValue("thanhPho", province.codename)
-                setDisplayText(province.name)
-                
-                // Nếu có quận trong URL
-                if (quanParam) {
-                    const districts = province.districts || []
-                    const district = districts.find(d => d.codename === quanParam)
-                    if (district) {
-                        form.setValue("quan", district.codename)
-                        setDisplayText(district.name)
-                        
-                        // Nếu có phường trong URL
-                        if (phuongParam) {
-                            const wards = district.wards || []
-                            const ward = wards.find(w => w.codename === phuongParam)
-                            if (ward) {
-                                form.setValue("phuong", ward.codename)
-                                setDisplayText(ward.name)
-                            }
-                        }
+                const district = province.districts?.find(d => d.codename === quan)
+                if (district) {
+                    const ward = district.wards?.find(w => w.codename === phuong)
+                    if (ward) {
+                        setDisplayText(ward.name)
+                        return
                     }
                 }
             }
         }
-    }, [searchParams, provinces, form])
 
-    const handleProvinceSelect = (value: string) => {
-        const province = provinces.find(p => p.codename === value)
-        if (province) {
-            form.setValue("thanhPho", province.codename)
-            form.setValue("quan", "")
-            form.setValue("phuong", "")
-            setDisplayText(province.name)
-            updateQueryParams(province.codename, "", "") 
+        if (thanhPho && quan) {
+            const province = provinces.find(p => p.codename === thanhPho)
+            if (province) {
+                const district = province.districts?.find(d => d.codename === quan)
+                if (district) {
+                    setDisplayText(district.name)
+                    return
+                }
+            }
         }
-    }
 
-    const handleDistrictSelect = (value: string) => {
-        const district = districts.find(d => d.codename === value)
-        const province = provinces.find(p => p.codename === thanhPho?.replace(/-/g, '_'))
-        if (district && province) {
-            form.setValue("quan", district.codename)
-            form.setValue("phuong", "")
-            setDisplayText(district.name)
-            if (thanhPho)
-                updateQueryParams(thanhPho, district.codename, "")
+        if (thanhPho) {
+            const province = provinces.find(p => p.codename === thanhPho)
+            if (province) {
+                setDisplayText(province.name)
+                return
+            }
         }
-    }
 
-    const handleWardSelect = (value: string) => {
-        const ward = wards.find(w => w.codename === value)
-        const province = provinces.find(p => p.codename === thanhPho?.replace(/-/g, '_'))
-        const district = districts.find(d => d.codename === quan?.replace(/-/g, '_'))
-        if (ward && province && district) {
-            form.setValue("phuong", ward.codename)
-            setDisplayText(ward.name)
-            if (thanhPho && quan)
-                updateQueryParams(thanhPho, quan, ward.codename)
+        if (!thanhPho) {
+            setDisplayText("Khu vực")
         }
+    }, [thanhPho, quan, phuong, provinces])
+
+    function handleSelectAddress() {
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete(queryMappingString.thanhPho);
+        params.delete(queryMappingString.quan);
+        params.delete(queryMappingString.phuong);
+        if (thanhPho) {
+            params.set(queryMappingString.thanhPho, thanhPho);
+            if (quan) {
+                params.set(queryMappingString.quan, quan);
+                if (phuong) {
+                    params.set(queryMappingString.phuong, phuong);
+                }
+            }
+        }
+        router.push(`${path}?${params.toString()}`);
     }
 
     const handleReset = () => {
-        form.reset()
-        setDisplayText("Khu vực")
-        router.push(path)
-    }
+        form.reset({
+            thanhPho: "",
+            quan: "",
+            phuong: ""
+        });
+        setDisplayText("Khu vực");
 
-    const updateQueryParams = (thanhPho: string, quan: string, phuong: string) => {
-        const params = new URLSearchParams()
-        if (thanhPho) {
-            params.append('thanhPho', thanhPho)
-        }
-        if (quan) {
-            params.append('quan', quan)
-        }
-        if (phuong) {
-            params.append('phuong', phuong)
-        }
-        router.push(`${path}?${params.toString()}`)
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete(queryMappingString.thanhPho);
+        params.delete(queryMappingString.quan);
+        params.delete(queryMappingString.phuong);
+        router.push(`${path}?${params.toString()}`);
     }
 
     return (
         <Form {...form}>
             <form className="flex min-w-full">
                 <Dialog>
-                    <DialogTrigger asChild className={`${displayText !== "Khu vực" ? "border border-red-500 text-red-500 hover:text-red-600 " : "khu vực"} min-w-full md:w-[200px] justify-between`}>
+                    <DialogTrigger asChild className={`${displayText !== "Khu vực" ? "border border-red-500 text-red-500 hover:text-red-600 " : "khu vực"} min-w-full md:w-fit justify-between`}>
                         <Button variant="outline">
                             {displayText} <ChevronDown />
                         </Button>
@@ -158,8 +203,10 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                         <FormLabel>Thành phố</FormLabel>
                                         <Select
                                             onValueChange={(value) => {
-                                                field.onChange(value)
-                                                handleProvinceSelect(value)
+                                                // When city changes, reset district and ward
+                                                field.onChange(value);
+                                                form.setValue("quan", "");
+                                                form.setValue("phuong", "");
                                             }}
                                             value={field.value}
                                         >
@@ -192,8 +239,9 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                         <FormLabel>Quận</FormLabel>
                                         <Select
                                             onValueChange={(value) => {
-                                                field.onChange(value)
-                                                handleDistrictSelect(value)
+                                                // When district changes, reset ward
+                                                field.onChange(value);
+                                                form.setValue("phuong", "");
                                             }}
                                             value={field.value}
                                             disabled={!thanhPho}
@@ -227,8 +275,7 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                         <FormLabel>Phường</FormLabel>
                                         <Select
                                             onValueChange={(value) => {
-                                                field.onChange(value)
-                                                handleWardSelect(value)
+                                                field.onChange(value);
                                             }}
                                             value={field.value}
                                             disabled={!quan}
@@ -265,7 +312,7 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                 Đặt lại
                             </Button>
                             <DialogClose asChild>
-                                <Button type="button">
+                                <Button onClick={handleSelectAddress} type="button">
                                     Áp dụng
                                 </Button>
                             </DialogClose>

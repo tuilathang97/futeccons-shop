@@ -19,7 +19,6 @@ interface PriceI {
 
 
 
-// Hàm chuyển đổi giá trị số thành định dạng URL dễ đọc
 function formatPriceForUrl(price?: number): string {
     if (!price) return '0';
     if (price >= 1000000000) {
@@ -30,7 +29,6 @@ function formatPriceForUrl(price?: number): string {
     return price.toString()
 }
 
-// Hàm phân tích giá trị từ URL về số
 function parsePriceFromUrl(priceStr: string): number {
     if (priceStr.includes('ty')) {
         return parseInt(priceStr.replace('ty', '')) * 1000000000
@@ -40,7 +38,6 @@ function parsePriceFromUrl(priceStr: string): number {
     return parseInt(priceStr)
 }
 
-// Hàm hiển thị giá trị đẹp hơn cho người dùng
 function formatPriceForDisplay(min: number, max?: number | null): string {
     if (min === 0 && max) {
         return `Dưới ${formatPriceValue(max)}`
@@ -72,13 +69,11 @@ function FilterPrice({ priceType }: FilterPriceProps) {
     const [customMaxPrice, setCustomMaxPrice] = useState<string>('')
     const [selectedPrice, setSelectedPrice] = useState<string>('')
     const [displayValue, setDisplayValue] = useState<string>('')
-
-    // Select the appropriate price ranges based on the type
+    const price = searchParams.has("gia")
     const priceRanges = priceType === 'sale' ? EstatePriceRanges : estateRentPriceRanges
 
-    // Khởi tạo giá trị từ URL khi component mount
     useEffect(() => {
-        const priceParam = searchParams.get('price')
+        const priceParam = searchParams.get('gia')
         if (priceParam) {
             setSelectedPrice(priceParam)
 
@@ -86,7 +81,6 @@ function FilterPrice({ priceType }: FilterPriceProps) {
             const min = minStr ? parsePriceFromUrl(minStr) : 0
             const max = maxStr ? parsePriceFromUrl(maxStr) : (priceType === 'sale' ? 1000000000000 : null)
 
-            // Kiểm tra xem có phải là khoảng giá được định nghĩa sẵn không
             const predefinedRange = priceRanges.find(range => {
                 const rangeMin = range.value.min || 0;
                 const rangeMax = range.value.max === null ? null : (range.value.max || (priceType === 'sale' ? 1000000000000 : null));
@@ -101,19 +95,18 @@ function FilterPrice({ priceType }: FilterPriceProps) {
             if (predefinedRange) {
                 setDisplayValue(predefinedRange.label)
             } else {
-                // Đây là giá trị tùy chỉnh
+                console.log(setSelectedPrice)
                 setDisplayValue(formatPriceForDisplay(min, max))
                 setCustomMinPrice(min.toString())
                 setCustomMaxPrice(max ? max.toString() : '')
             }
         }
-    }, [searchParams, priceType, priceRanges])
+        setSelectedPrice("Chọn giá")
+    }, [searchParams, priceType, priceRanges,price])
 
-    // Xử lý khi chọn khoảng giá
     const handlePriceChange = (value: string) => {
         setSelectedPrice(value)
 
-        // Tìm và cập nhật giá trị hiển thị
         const [minStr, maxStr] = value.split('-')
         const min = minStr ? parsePriceFromUrl(minStr) : 0
         const max = maxStr ? parsePriceFromUrl(maxStr) : (priceType === 'sale' ? 1000000000000 : null)
@@ -135,26 +128,22 @@ function FilterPrice({ priceType }: FilterPriceProps) {
             setDisplayValue(formatPriceForDisplay(min, max))
         }
 
-        // Cập nhật URL với giá trị mới
         updateUrl(value)
     }
     const handleReset = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Ngăn sự kiện lan tỏa
+        e.stopPropagation();
         
-        // Reset các state
         setCustomMinPrice('');
         setCustomMaxPrice('');
         setSelectedPrice('');
         setDisplayValue('');
         
-        // Xóa query param price
         const params = new URLSearchParams(searchParams.toString());
-        params.delete('price');
+        params.delete('gia');
         router.push(`?${params.toString()}`, { scroll: false });
     }
     
 
-    // Xử lý khi nhập giá tùy chỉnh
     const handleCustomPriceApply = () => {
         if (customMinPrice || customMaxPrice) {
             const min = customMinPrice ? parseInt(customMinPrice) : 0
@@ -166,26 +155,23 @@ function FilterPrice({ priceType }: FilterPriceProps) {
 
             setSelectedPrice(formattedValue)
 
-            // Cập nhật giá trị hiển thị
             setDisplayValue(formatPriceForDisplay(min, max))
 
             updateUrl(formattedValue)
         }
     }
 
-    // Cập nhật URL với giá trị mới
     const updateUrl = (priceValue: string) => {
         const params = new URLSearchParams(searchParams.toString())
 
         if (priceValue) {
-            params.set('price', priceValue)
+            params.set('gia', priceValue)
         } else {
-            params.delete('price')
+            params.delete('gia')
         }
 
         router.push(`?${params.toString()}`, { scroll: false })
     }
-
     return (
         <div>
             <div className=''>
@@ -193,13 +179,13 @@ function FilterPrice({ priceType }: FilterPriceProps) {
                     value={selectedPrice}
                     onValueChange={handlePriceChange}
                 >
-                    <SelectTrigger className={`${displayValue ? "border border-red-500 text-red-500" : ""} w-full sm:w-[200px]`}>
+                    <SelectTrigger className={`${displayValue && price ? "border border-red-500 text-red-500" : ""} w-full sm:w-[200px]`}>
                         <SelectValue placeholder="Chọn giá">
-                            {displayValue}
+                            {price ? displayValue : "Chọn giá"}
                         </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                        <div className='grid grid-cols-2 p-4 gap-4'>
+                        <div className='grid grid-cols-2 gap-4 p-4'>
                             <Input
                                 type="number"
                                 placeholder="Giá thấp nhất"

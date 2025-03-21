@@ -1,12 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Heart, MapPin } from "lucide-react";
 import Image from 'next/image';
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Post } from '@/db/schema';
+import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface ProductCardProps {
     post: Post;
@@ -14,26 +15,11 @@ interface ProductCardProps {
     badge?: string;
 }
 
-function LocationAnchor({location, href}:{location:string, href?:string}) {
-    if(!href) {
-        return <span>{location}</span>
-    }
-    
-    const handleClick = () => {
-        const params = new URLSearchParams(href)
-        console.log(params)
-    }
-    
-    return (
-        <span className='cursor-pointer hover:text-red-500' onClick={handleClick}>
-            {location}
-        </span>
-    )
-}
-
 const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", badge = "Hot" }) => {
     const [isLiked, setIsLiked] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const router = useRouter();
+    const path = usePathname();
 
     useEffect(() => {
         setIsMounted(true);
@@ -47,9 +33,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
             console.error('Error loading liked posts:', error);
         }
     }, [post.id]);
-    
-    const {thanhPhoCodeName, quanCodeName, phuongCodeName} = post;
-    
+
     const toggleLike = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -78,7 +62,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
         }
     };
 
-    // Format price from raw number to formatted string
     const formatPrice = () => {
         const numPrice = parseFloat(post.giaTien);
         if (numPrice >= 1000000000) {
@@ -89,62 +72,74 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
         return numPrice.toString();
     };
 
-    // Format address
+    function handleRedirectToPost(postId: number) {
+        router.push(`/post/${postId}`);
+    }
     const formatAddress = () => {
         return (
-            <div className='flex flex-wrap items-center gap-1'>
-                {post.duong && <LocationAnchor location={post.duong} />}
-                {post.duong && (post.phuong || post.quan || post.thanhPho) && <span>, </span>}
-                {post.phuong && <LocationAnchor location={post.phuong} href={phuongCodeName} />}
-                {post.phuong && (post.quan || post.thanhPho) && <span>, </span>}
-                {post.quan && <LocationAnchor location={post.quan} href={quanCodeName} />}
-                {post.quan && post.thanhPho && <span>, </span>}
-                {post.thanhPho && <LocationAnchor location={post.thanhPho} href={thanhPhoCodeName} />}
+            <div className='flex flex-wrap items-center gap-1' onClick={(e) => { e.stopPropagation(); }}>
+                <Link
+                    className='hover:text-red-500'
+                    href={`${path}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
+                >
+                    {post.phuong}
+                </Link>
+                <Link
+                    className='hover:text-red-500'
+                    href={`${path}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
+                >
+                    {post.quan}
+                </Link>
+                <Link
+                    className='hover:text-red-500'
+                    href={`${path}?thanhPho=${post.thanhPhoCodeName}`}
+                >
+                    {post.thanhPho}
+                </Link>
             </div>
         );
     };
 
+
     return (
-        <Card className={`shadow-md border ${variant === "vertical" ? "h-full w-[90%]" : "w-full"} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
-            <Link href={`/post/${post.id}`} className="block h-full">
+        <Card className={`shadow-md  ${variant === "vertical" ? "h-full max-w-[20rem]" : "w-full md:max-h-[17rem] "} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
+            <button onClick={() => handleRedirectToPost(post.id)} className="block h-full">
                 <div className={cn(
-                    "flex",
+                    "flex ",
                     variant === "vertical"
                         ? "flex-col h-full"
                         : "flex-col md:flex-row md:h-full"
                 )}>
-                    {/* Image Container */}
                     <div className={cn(
-                        "relative overflow-hidden", 
-                        variant === "vertical" 
-                            ? "h-[200px] w-full"
-                            : "h-[200px] md:h-full md:w-[280px] flex-shrink-0"
-                        )}>
+                        "relative overflow-hidden rounded-md",
+                        variant === "vertical"
+                            ? "h-[200px] w-full "
+                            : "h-[200px] md:h-full md:w-[280px] flex-shrink-0 p-0 md:p-4"
+                    )}>
                         <Image
                             src={`https://picsum.photos/200/300.jpg`}
                             fill
                             alt={post.tieuDeBaiViet || "Property image"}
-                            className="object-cover"
+                            className={`object-cover rounded-md ${variant === "vertical" ? "p-0" : "p-0 md:p-4"}`}
                         />
-                        <Badge className="absolute text-white bg-red-500 border border-gray-500 shadow-md top-2 left-2">
+                        <Badge className={`absolute text-white  bg-red-500 border border-gray-500 shadow-md top-2 left-2 ${variant === "vertical" ? "" : "md:top-6 md:left-6"}`}>
                             {badge}
                         </Badge>
                         {isMounted && (
                             <Heart
                                 strokeWidth={0.5}
-                                className={`absolute top-2 right-2 cursor-pointer transition-all duration-300 hover:scale-110
+                                className={`absolute top-2 right-2 ${variant === "vertical" ? "" : "sm:top-6 sm:right-6 "} cursor-pointer transition-all duration-300 hover:scale-110
                                 ${isLiked ? 'fill-red-500 stroke-red-500' : 'fill-white stroke-gray-400'}`}
                                 onClick={toggleLike}
                             />
                         )}
                     </div>
 
-                    {/* Content Container */}
                     <div className={cn(
                         "flex flex-col flex-grow",
                         variant === "vertical" ? "p-4" : "p-4"
                     )}>
-                        <CardTitle className="mb-2 text-lg font-semibold group-hover:text-red-500 line-clamp-2">
+                        <CardTitle className="flex mb-2 text-base font-semibold text-start md:text-lg group-hover:text-red-500 line-clamp-2">
                             {post.tieuDeBaiViet}
                         </CardTitle>
                         <div className="flex items-center gap-2 mb-2">
@@ -153,11 +148,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                                 {post.dienTichDat} m²
                             </Badge>
                         </div>
-                        <CardDescription className="mb-3 text-sm text-gray-800 line-clamp-2">
+                        <CardDescription className="flex mb-3 text-base text-gray-800 text-start md:text-xs line-clamp-1">
                             {post.noiDung}
                         </CardDescription>
-                        
-                        <div className="flex flex-wrap items-center gap-2 mb-3">
+
+                        <div className={`flex flex-wrap items-center gap-2 mb-3 ${variant === "vertical" ? "" : "block md:hidden"}`}>
                             <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
                                 {post.dienTichDat} m²
                             </Badge>
@@ -173,14 +168,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                                 <Clock className="w-4 h-4" />
                                 <span>{post.createdAt.toLocaleDateString()}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                                <MapPin className="flex-shrink-0 w-4 h-4"/>
+                            <div
+                                className="flex items-center gap-2 text-sm text-gray-600"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <MapPin className="flex-shrink-0 w-4 h-4" />
                                 <span className='text-xs'>{formatAddress()}</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </Link>
+            </button>
         </Card>
     );
 };

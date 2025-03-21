@@ -5,7 +5,7 @@ import FilterEstateTransaction from "@/components/filterComponent/FilterEstateTr
 import FilterEstateType from "@/components/filterComponent/FilterEstateType";
 import FilterPrice from "@/components/filterComponent/FilterPrice";
 import ProductsListWithFilter from "@/components/filterComponent/ProductsListWithFilter";
-import ProductCard from "@/components/products/ProductCard";
+import ProductsContainer from "@/components/post/ProductsContainer";
 import { Button } from "@/components/ui/button";
 import { getPostByCategoryPath } from "@/lib/queries";
 import { getCategories, getCategoryBySlug } from "@/lib/queries/categoryQueries";
@@ -17,9 +17,10 @@ interface paramsI {
     categoryLevel1: string
 }
 
-export default async function Page1({ params }: { params: Promise<paramsI>}) {
+export default async function Page1({ params,searchParams }: { params: Promise<paramsI>,searchParams:any}) {
     const { categoryLevel1 } = await params;
     const result = await getPostByCategoryPath(categoryLevel1);
+    const searchParam = await searchParams
     const currentParentCategory = await getCategoryBySlug(`/${categoryLevel1}`)
     if(!currentParentCategory){return (
         <div>
@@ -45,14 +46,7 @@ export default async function Page1({ params }: { params: Promise<paramsI>}) {
                 <h1 className='text-xl font-bold'>Mua bán nhà đất chính chủ T3/2025</h1>
             </div>
             <div className="flex flex-col grid-cols-6 gap-4 md:grid">
-                <div className="flex flex-col col-span-4 gap-4 py-4 min-h-fit">
-                    {result && result.length > 0 ? result.map((data,index) => {
-                        return (
-                            <ProductCard variant="horizontal" post={data} key={index} />
-                        )
-                    })  : <div>no post found</div>
-                    }
-                </div>
+                <ProductsContainer data={result} searchParam={searchParam}/>
                 <div className="col-span-2"></div>
             </div>
         </section> :
