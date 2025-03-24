@@ -82,7 +82,7 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
                     categories?.filter(category => category.level && category.level === 1)
                       .map(category => {
                         return (
-                          <SelectItem key={category.id} value={category.slug || ""}>{category.name}</SelectItem>
+                          <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
                         )
                       })
                   }
