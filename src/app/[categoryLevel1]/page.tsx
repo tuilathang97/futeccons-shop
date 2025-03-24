@@ -31,7 +31,7 @@ export default async function Page1({ params,searchParams }: { params: Promise<p
     const filteredCategories = categories.filter((e) => e.level === currentParentCategory.level)
     const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === currentParentCategory.id )
     return currentParentCategory ?
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col w-full gap-4">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <Button variant={"outline"}>Lọc <ArrowDownIcon/></Button>
                 <ProductsListWithFilter />

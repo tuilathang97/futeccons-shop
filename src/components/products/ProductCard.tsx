@@ -103,9 +103,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
 
     return (
         <Card className={`shadow-md  ${variant === "vertical" ? "h-full max-w-[20rem]" : "w-full md:max-h-[17rem] "} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
-            <button onClick={() => handleRedirectToPost(post.id)} className="block h-full">
+            <button onClick={() => handleRedirectToPost(post.id)} className="block w-full h-full">
                 <div className={cn(
-                    "flex ",
+                    "flex",
                     variant === "vertical"
                         ? "flex-col h-full"
                         : "flex-col md:flex-row md:h-full"
