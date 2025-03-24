@@ -6,8 +6,10 @@ import { Clock, Heart, MapPin } from "lucide-react";
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Post } from '@/db/schema';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { getCategoryById } from '@/lib/queries/categoryQueries';
+import { Skeleton } from '../ui/skeleton';
 
 interface ProductCardProps {
     post: Post;
@@ -18,9 +20,8 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", badge = "Hot" }) => {
     const [isLiked, setIsLiked] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const [level1Ref, setLevel1Ref] = useState("");
     const router = useRouter();
-    const path = usePathname();
-
     useEffect(() => {
         setIsMounted(true);
         try {
@@ -33,6 +34,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
             console.error('Error loading liked posts:', error);
         }
     }, [post.id]);
+    useEffect(() => {
+        const getAndSetData = async () => {
+            try {
+                const result = await getCategoryById(post.level1Category)
+                setLevel1Ref(result.slug || "");
+            } catch (err) {
+                console.error('Error:', err);
+            }
+        };
+        getAndSetData();
+    }, [post.level1Category]);
+
 
     const toggleLike = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -76,23 +89,26 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
         router.push(`/post/${postId}`);
     }
     const formatAddress = () => {
+        if(!level1Ref){
+            return (<Skeleton className="w-[200px] h-[20px] rounded-full" />)
+        }
         return (
             <div className='flex flex-wrap items-center gap-1' onClick={(e) => { e.stopPropagation(); }}>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
+                    href={`${level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
                 >
                     {post.phuong}
                 </Link>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
+                    href={`${level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
                 >
                     {post.quan}
                 </Link>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path}?thanhPho=${post.thanhPhoCodeName}`}
+                    href={`${level1Ref}?thanhPho=${post.thanhPhoCodeName}`}
                 >
                     {post.thanhPho}
                 </Link>
@@ -136,7 +152,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                     </div>
 
                     <div className={cn(
-                        "flex flex-col flex-grow",
+                        "flex flex-col justify-around flex-grow",
                         variant === "vertical" ? "p-4" : "p-4"
                     )}>
                         <CardTitle className="flex mb-2 text-base font-semibold text-start md:text-lg group-hover:text-red-500 line-clamp-2">
