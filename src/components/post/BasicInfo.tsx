@@ -1,293 +1,298 @@
 "use client"
 
-import { cn } from "@/lib/utils";
 import { FaqItem } from "../blocks/faq";
-import { Button } from "../ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
-import { ChevronsUpDown, Check } from "lucide-react";
 import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 import { useFormContext } from "react-hook-form";
 import { Province } from "types";
 import { Post } from "./postSchema";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useEffect, useMemo } from "react";
 
-const BasicInfo = ({ provinces }: { provinces: Province[]}) => {
+const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: string }) => {
   const form = useFormContext<Post>();
-  const [selectedProvince, selectedDistrict] = form.watch(["thanhPho", "quan"]);
+
+  // Watch all required fields to determine section completion status
+  const [
+    selectedProvince,
+    selectedDistrict,
+    selectedWard,
+    duong,
+    loaiHinhNhaO,
+    giayToPhapLy,
+    giaTien,
+    dienTichDat,
+    soTang,
+    soPhongNgu,
+    soPhongVeSinh
+  ] = form.watch([
+    "thanhPho",
+    "quan",
+    "phuong",
+    "duong",
+    "loaiHinhNhaO",
+    "giayToPhapLy",
+    "giaTien",
+    "dienTichDat",
+    "soTang",
+    "soPhongNgu",
+    "soPhongVeSinh"
+  ]);
 
   const districts = provinces.find(province => province.name === selectedProvince)?.districts || [];
   const wards = districts.find(district => district.name === selectedDistrict)?.wards || [];
+
+  // Check if the section is complete
+  const isSectionComplete = useMemo(() => {
+    // Check required string fields
+    const isStringFieldsValid =
+      Boolean(selectedProvince) &&
+      Boolean(selectedDistrict) &&
+      Boolean(selectedWard) &&
+      Boolean(duong) &&
+      Boolean(loaiHinhNhaO) &&
+      Boolean(giayToPhapLy) &&
+      Boolean(giaTien);
+
+    // Check number fields with specific requirements
+    const isDienTichDatValid =
+      typeof dienTichDat === 'number' &&
+      dienTichDat >= 10 &&
+      dienTichDat <= 1000000;
+
+    const isSoTangValid =
+      typeof soTang === 'number' &&
+      soTang <= 20;
+
+    const isSoPhongNguValid =
+      typeof soPhongNgu === 'number' &&
+      soPhongNgu >= 1;
+
+    const isSoPhongVeSinhValid =
+      typeof soPhongVeSinh === 'number' &&
+      soPhongVeSinh >= 1;
+
+    // Return true only if all validations pass
+    return isStringFieldsValid &&
+      isDienTichDatValid &&
+      isSoTangValid &&
+      isSoPhongNguValid &&
+      isSoPhongVeSinhValid;
+  }, [
+    selectedProvince,
+    selectedDistrict,
+    selectedWard,
+    duong,
+    loaiHinhNhaO,
+    giayToPhapLy,
+    giaTien,
+    dienTichDat,
+    soTang,
+    soPhongNgu,
+    soPhongVeSinh
+  ]);
+
+  function handleCurrency(currencyString: string) {
+    const withoutSeparators = currencyString.replace(/\./g, '');
+    const normalizedString = withoutSeparators.replace(',', '.');
+    const numValue = Number(normalizedString);
+    if (!isNaN(numValue)) {
+      return new Intl.NumberFormat("vi-VN").format(numValue)
+    }
+    form.setError("giaTien", { message: "giá tiền không được bao gồm chữ" })
+    return ""
+  }
+
+  useEffect(() => {
+    if (selectedProvince) {
+      const province = provinces.find(p => p.name === selectedProvince);
+      if (province) {
+        form.setValue("thanhPhoCodeName", province.codename);
+      }
+    }
+
+    if (selectedProvince && selectedDistrict) {
+      const province = provinces.find(p => p.name === selectedProvince);
+      const district = province?.districts.find(d => d.name === selectedDistrict);
+      if (district) {
+        form.setValue("quanCodeName", district.codename);
+      }
+    }
+    if (selectedProvince && selectedDistrict && selectedWard) {
+      const province = provinces.find(p => p.name === selectedProvince);
+      const district = province?.districts.find(d => d.name === selectedDistrict);
+      const ward = district?.wards.find(w => w.name === selectedWard);
+      if (ward) {
+        form.setValue("phuongCodeName", ward.codename);
+      }
+    }
+
+  }, [selectedProvince, selectedDistrict, selectedWard, provinces, form]);
 
   return (
     <FaqItem
       question="Thông tin cơ bản"
       index={0}
-      isFinish={false}
+      isFinish={isSectionComplete}
     >
-      <div className="flex flex-row md:flex-wrap md:items-center gap-2">
+      <div className="flex flex-col items-center justify-center md:grid md:grid-cols-3 gap-4">
         <FormField
           control={form.control}
-          name="thanhPho"
+          name="userId"
           render={({ field }) => (
-            <FormItem className="flex gap-4 mt-2">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? provinces.find(
-                          (province) => province.name === field.value
-                        )?.name
-                        : "Thành phố"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Tìm thành phố..." />
-                    <CommandList>
-                      <CommandEmpty>Không tìm thấy thành phố</CommandEmpty>
-                      <CommandGroup>
+            <FormItem className="hidden">
+              <FormControl>
+                <Input defaultValue={userId} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Address Section */}
+        <div className="col-span-3 w-full">
+          <h3 className="text-lg font-medium mb-2">Thông tin địa chỉ</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name="thanhPho"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Thành phố <span className="text-red-500">*</span></FormLabel>
+                  <Select {...field} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn thành phố" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
                         {provinces.map((province) => (
-                          <CommandItem
-                            value={province.name}
-                            key={province.code}
-                            onSelect={() => {
-                              form.setValue("thanhPho", province.name);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                province.name === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
+                          <SelectItem key={province.code} value={province.name}>
                             {province.name}
-                          </CommandItem>
+                          </SelectItem>
                         ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                  {/* Hidden field for thanhPhoCodeName */}
+                  <FormField
+                    control={form.control}
+                    name="thanhPhoCodeName"
+                    render={({ field }) => (
+                      <input
+                        type="hidden"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    )}
+                  />
+                </FormItem>
+              )}
+            />
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="quan"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel></FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-
-                    >
-                      {field.value
-                        ? districts.find(
-                          (district) => district.name === field.value
-                        )?.name
-                        : "Quận"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandList>
-                      <CommandEmpty>No language found.</CommandEmpty>
-                      <CommandGroup>
+            <FormField
+              control={form.control}
+              name="quan"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quận/Huyện <span className="text-red-500">*</span></FormLabel>
+                  <Select disabled={!selectedProvince} {...field} onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn quận/huyện" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
                         {districts.map((district) => (
-                          <CommandItem
-                            value={district.name}
-                            key={district.code}
-                            onSelect={() => {
-                              form.setValue("quan", district.name);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                district.name === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
+                          <SelectItem key={district.code} value={district.name}>
                             {district.name}
-                          </CommandItem>
+                          </SelectItem>
                         ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                  {/* Hidden field for quanCodeName */}
+                  <FormField
+                    control={form.control}
+                    name="quanCodeName"
+                    render={({ field }) => (
+                      <input
+                        type="hidden"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    )}
+                  />
+                </FormItem>
+              )}
+            />
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phuong"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel></FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-
-                    >
-                      {field.value
-                        ? wards.find(
-                          (ward) => ward.name === field.value
-                        )?.name
-                        : "Phường / Huyện"}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandList>
-                      <CommandEmpty>No language found.</CommandEmpty>
-                      <CommandGroup>
+            <FormField
+              control={form.control}
+              name="phuong"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phường/Xã <span className="text-red-500">*</span></FormLabel>
+                  <Select disabled={!selectedDistrict} {...field} onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Chọn phường/xã" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
                         {wards.map((ward) => (
-                          <CommandItem
-                            value={ward.name}
-                            key={ward.code}
-                            onSelect={() => {
-                              form.setValue("phuong", ward.name);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                ward.name === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
+                          <SelectItem key={ward.code} value={ward.name}>
                             {ward.name}
-                          </CommandItem>
+                          </SelectItem>
                         ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                  {/* Hidden field for phuongCodeName */}
+                  <FormField
+                    control={form.control}
+                    name="phuongCodeName"
+                    render={({ field }) => (
+                      <input
+                        type="hidden"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    )}
+                  />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Additional Fields */}
         <FormField
           control={form.control}
           name="duong"
           render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "flex-1 basis-full justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-
-                    >
-                      {/* {field.value
-                        ? languages.find(
-                          (language) => language.value === field.value
-                        )?.label
-                        : "Đường"} */}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandList>
-                      <CommandEmpty>No language found.</CommandEmpty>
-                      <CommandGroup>
-                        {/* {languages.map((language) => (
-                          <CommandItem
-                            value={language.label}
-                            key={language.value}
-                            onSelect={() => {
-                              form.setValue("duong", language.value);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                language.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {language.label}
-                          </CommandItem>
-                        ))} */}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="giaTien"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Giá tiền"
-
-                  type="number"
-                  {...field} />
-              </FormControl>
-
+            <FormItem className="w-full md:w-[200px]">
+              <FormLabel className="w-full md:w-[200px]">Đường <span className="text-red-500">*</span></FormLabel>
+              <Select {...field} onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Chọn đường" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="duong-1">Đường 1</SelectItem>
+                    <SelectItem value="duong-2">Đường 2</SelectItem>
+                    <SelectItem value="duong-3">Đường 3</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -297,97 +302,22 @@ const BasicInfo = ({ provinces }: { provinces: Province[]}) => {
           control={form.control}
           name="loaiHinhNhaO"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormItem className="w-full md:w-[200px]">
+              <FormLabel>Loại hình nhà ở <span className="text-red-500">*</span></FormLabel>
+              <Select {...field} onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Loại hình nhà ở" />
+                    <SelectValue placeholder="Chọn loại hình nhà ở" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  <SelectGroup>
+                    <SelectItem value="chung-cu">Chung cư</SelectItem>
+                    <SelectItem value="nha-rieng">Nhà riêng</SelectItem>
+                    <SelectItem value="dat">Đất</SelectItem>
+                  </SelectGroup>
                 </SelectContent>
               </Select>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="dienTichDat"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Diện tích đất"
-
-                  type="number"
-                  {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="soTang"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Số tầng"
-
-                  type="number"
-                  {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="soPhongNgu"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Số phòng ngủ"
-
-                  type="number"
-                  {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="soPhongVeSinh"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Số phòng vệ sinh"
-
-                  type="number"
-                  {...field} />
-              </FormControl>
-
               <FormMessage />
             </FormItem>
           )}
@@ -397,44 +327,131 @@ const BasicInfo = ({ provinces }: { provinces: Province[]}) => {
           control={form.control}
           name="giayToPhapLy"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <FormItem className="w-full md:w-[200px]">
+              <FormLabel>Giấy tờ pháp lý <span className="text-red-500">*</span></FormLabel>
+              <Select {...field} onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Giấy tờ pháp lý" />
+                    <SelectValue placeholder="Chọn giấy tờ pháp lý" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  <SelectGroup>
+                    <SelectItem value="so-hong">Sổ hồng</SelectItem>
+                    <SelectItem value="so-do">Sổ đỏ</SelectItem>
+                    <SelectItem value="giay-to-khac">Giấy tờ khác</SelectItem>
+                  </SelectGroup>
                 </SelectContent>
               </Select>
-
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="noiDung"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nội dung bài viết</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder=""
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
+        {/* Detailed Information Section */}
+        <div className="col-span-3 w-full mt-4">
+          <h3 className="text-lg font-medium mb-2">Thông tin chi tiết</h3>
+          <div className="grid md:grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name="giaTien"
+              render={({ field: { ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Giá tiền <span className="text-red-500">*</span></FormLabel>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      placeholder="Nhập giá tiền"
+                      type='currency'
+                      value={handleCurrency(fieldProps.value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+            <FormField
+              control={form.control}
+              name="dienTichDat"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Diện tích đất (m²) <span className="text-red-500">*</span> </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      placeholder="Nhập diện tích"
+                      type="number"
+                      value={value ?? ''}
+                      onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="soTang"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Số tầng</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      placeholder="Nhập số tầng"
+                      type="number"
+                      value={value ?? ''}
+                      onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="soPhongNgu"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Số phòng ngủ <span className="text-red-500">*</span> </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      placeholder="Nhập số phòng ngủ"
+                      type="number"
+                      value={value ?? ''}
+                      onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="soPhongVeSinh"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Số phòng vệ sinh <span className="text-red-500">*</span></FormLabel>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      placeholder="Nhập số phòng vệ sinh"
+                      type="number"
+                      value={value ?? ''}
+                      onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
       </div>
     </FaqItem>
   )

@@ -7,7 +7,7 @@ export default async function CategoryList({ }) {
   return (
     <div>
       <h2 className="text-xl font-bold mb-2">Categories</h2>
-      <ul>
+      <ul className="flex flex-col sm:grid sm:grid-cols-3 gap-4">
         {categories
           .map((category) => (
             <li key={category.id} className="mb-2">

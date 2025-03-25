@@ -84,7 +84,7 @@ export default function Header({ user, session }: { user: User | null, session: 
                 ) : <UserActionGroup />
                 }
                 <Link
-                    href="/post"
+                    href="/post-page"
                 >
                     <Button variant={"destructive"} className="flex gap-2">
                         <p>Đăng tin</p>

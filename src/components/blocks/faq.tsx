@@ -65,6 +65,7 @@ const FaqItem = React.forwardRef<
       )}
     >
       <Button
+        type="button"
         variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(

@@ -1,9 +1,10 @@
 // components/MediaCarousel/MediaRenderer.tsx
+"use client"
 import Image from 'next/image';
 import YouTube, { YouTubeProps } from 'react-youtube';
 import { useState } from 'react';
-import { MediaItem } from '@/db/Data';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel';
+import { MediaItem } from '@/constants/data';
 
 interface MediaRendererProps {
     item: MediaItem;
