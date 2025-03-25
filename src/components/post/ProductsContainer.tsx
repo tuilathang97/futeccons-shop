@@ -24,7 +24,7 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
 }
 
 
-function ProductsContainer({ data, searchParam }: { data: any[], searchParam: any }) {
+function ProductsContainer({ data, searchParam,cardVariant="vertical" }: { data: any[], searchParam: any,cardVariant?:"horizontal" | "vertical" }) {
     const { gia, area, bedrooms, phuong, quan, thanhPho } = searchParam
     const formatedPrice = handleFormatPriceToNumber({ gia })
 
@@ -83,7 +83,7 @@ function ProductsContainer({ data, searchParam }: { data: any[], searchParam: an
         <div className="flex flex-col col-span-4 gap-4 py-4 min-h-fit">
             {filteredResult && filteredResult.length > 0 ? filteredResult.map((data: Post, index: number) => {
                 return (
-                    <ProductCard variant="horizontal" post={data} key={index} />
+                    <ProductCard variant={cardVariant} post={data} key={index} />
                 )
             }) : <div>Không có bài viết phù hợp với yêu cầu </div>
             }

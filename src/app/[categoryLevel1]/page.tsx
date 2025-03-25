@@ -46,7 +46,7 @@ export default async function Page1({ params,searchParams }: { params: Promise<p
                 <h1 className='text-xl font-bold'>Mua bán nhà đất chính chủ T3/2025</h1>
             </div>
             <div className="flex flex-col grid-cols-6 gap-4 md:grid">
-                <ProductsContainer data={result} searchParam={searchParam}/>
+                <ProductsContainer data={result} searchParam={searchParam} cardVariant="horizontal"/>
                 <div className="col-span-2"></div>
             </div>
         </section> :
