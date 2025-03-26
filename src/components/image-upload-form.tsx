@@ -1,28 +1,37 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useActionState, useCallback, useState } from 'react';
+import { useActionState, useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { uploadImages } from '@/actions/upload';
 import { Card } from './ui/card';
-import { useFormStatus } from 'react-dom';
+import { useToast } from '@/hooks/use-toast';
+
 
 export function UploadForm() {
+  const { toast } = useToast()
   const [previews, setPreviews] = useState<string[]>([]);
-  const [state, action] = useActionState(uploadImages, { success: false, paths: '', error: ''});
-
+  const [state, action,isPending] = useActionState(uploadImages, { success: false, paths: '', error: '' });
   const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files) return;
-
+    if (!files){
+      toast({title:"Nhập ảnh thất bại"});
+      return
+    };
     const urls = Array.from(files).map(file => URL.createObjectURL(file));
+    console.log(urls)
     setPreviews(urls);
-  }, []);
-
+  }, [toast]);
+  useEffect(() => {
+    if(state.success){
+      toast({title:"Thông báo",description:"Tải ảnh lên máy chủ thành công"})
+    }
+  },[state.success,toast])
+  console.log(state.images)
   return (
     <form action={action} className="space-y-4">
       <Card className="p-6 border-2 border-dashed">
-        <Input 
+        <Input
           type="file"
           name="images"
           multiple
@@ -30,8 +39,8 @@ export function UploadForm() {
           onChange={handleFileSelect}
           className="cursor-pointer"
         />
-        
-        <div className="mt-4 grid grid-cols-5 gap-4">
+
+        <div className="grid grid-cols-5 gap-4 mt-4">
           {previews.map((url, index) => (
             <div key={index} className="relative aspect-square">
               <Image
@@ -46,12 +55,17 @@ export function UploadForm() {
         </div>
       </Card>
 
-      <SubmitButton />
-      
+      <Button type="submit" disabled={isPending}>
+        {isPending ? 'Uploading...' : 'Upload Images'}
+      </Button>
+      <Button type="submit" disabled={previews.length > 0 ? false : true}>
+        Đặt lại
+      </Button>
+
       {state?.error && (
         <p className="text-red-500">{state.error}</p>
       )}
-      
+
       {state?.paths && (
         <div className="grid grid-cols-5 gap-4">
           {state.paths.map((path, index) => (
@@ -67,10 +81,10 @@ export function UploadForm() {
         </div>
       )}
 
-{state?.images && (
+      {state?.images && (
         <div className="space-y-8">
           <div>
-            <h3 className="text-lg font-bold mb-4">Square Versions</h3>
+            <h3 className="mb-4 text-lg font-bold">Square Versions</h3>
             <div className="grid grid-cols-5 gap-4">
               {state.images.map((img, index) => (
                 <div key={index} className="relative aspect-square">
@@ -86,7 +100,7 @@ export function UploadForm() {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-4">Carousel Versions</h3>
+            <h3 className="mb-4 text-lg font-bold">Carousel Versions</h3>
             <div className="grid grid-cols-3 gap-4">
               {state.images.map((img, index) => (
                 <div key={index} className="relative aspect-video">
@@ -103,14 +117,5 @@ export function UploadForm() {
         </div>
       )}
     </form>
-  );
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button type="submit" disabled={pending}>
-      {pending ? 'Uploading...' : 'Upload Images'}
-    </Button>
   );
 }
