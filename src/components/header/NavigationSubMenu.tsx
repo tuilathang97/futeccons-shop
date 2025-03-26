@@ -22,7 +22,7 @@ function NavigationSubMenu() {
             </SheetTrigger>
             {/* đây là mobile nav */}
             <SheetContent side="left">
-                <Link href="#" className="!max-w-8" prefetch={false}>
+                <Link href="/" className="!max-w-8" prefetch={false}>
                     <Home className="h-6 w-6" />
                 </Link>
                 <div className="grid gap-2 py-6">

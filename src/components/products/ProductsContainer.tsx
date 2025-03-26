@@ -2,21 +2,23 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
-import { postsData, RealEstateCardProps } from '@/db/Data'
+import { Post } from '@/db/schema'
 
 interface Container {
     title: string
-    posts?:RealEstateCardProps[]
+    posts?:Post[]
 }
 
 function ProductsContainer({ title,posts }: Container) {
     return (
-        <div className='min-h-[5rem] flex flex-col gap-4 w-full max-w-[100rem] bg-gray-50 border border-gray-50 rounded-md p-4'>
+        <div className='min-h-[5rem] flex flex-col bg-white gap-4 w-full max-w-[100rem] border border-gray-100 rounded-md p-4'>
             <div className='flex justify-center'>
-                <h1 className='text-xl md:text-2xl font-semibold'>{title}</h1>
+                <h1 className='text-xl font-semibold md:text-2xl'>{title}</h1>
             </div>
             <div className='
                 grid gap-4
+                md:grid-cols-3
+                lg:grid-cols-4
                 grid-cols-1
                 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]
                 place-items-center
@@ -26,13 +28,10 @@ function ProductsContainer({ title,posts }: Container) {
                 max-w-[1200px]
                 mx-auto'
             >
-                {postsData.map((post,index) => {
-                    const productWithFilter = post.mediaItems.filter((post) => post.type === "image")
-                    if(productWithFilter.length > 0){
-                        return (
-                            <ProductCard key={index} {...post} />
-                        )
-                    }
+                {posts?.map((postData,index) => {
+                    return (
+                        <ProductCard variant="vertical" post={postData} key={index} />
+                    )
                 })}
             </div>
             <div className='flex justify-center'>

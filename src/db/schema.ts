@@ -1,6 +1,6 @@
 
 import { InferSelectModel, relations } from 'drizzle-orm';
-import { pgTable, integer, varchar, uuid, text, timestamp, index, uniqueIndex, primaryKey } from 'drizzle-orm/pg-core';
+import { pgTable, integer,serial,varchar, uuid, text, timestamp, index, uniqueIndex, primaryKey, decimal, boolean } from 'drizzle-orm/pg-core';
 
 export const categoriesTable = pgTable("categories", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -14,6 +14,36 @@ export const categoriesTable = pgTable("categories", {
 
 export type Category = typeof categoriesTable.$inferSelect;
 
+export const postsTable = pgTable('posts', {
+  id: serial('id').primaryKey(),
+  userId:varchar('userId',{ length: 255 }).notNull(),
+  active: boolean('active').notNull().default(false),
+  level1Category: integer('level1_category').notNull(),
+  level2Category: integer('level2_category').notNull(),
+  level3Category: integer('level3_category').notNull(),
+  path: varchar('path', { length: 255 }),
+  thanhPho: varchar('thanh_pho', { length: 255 }).notNull(),
+  thanhPhoCodeName: varchar('thanh_pho_code_name', { length: 255 }).notNull(),
+  quan: varchar('quan', { length: 255 }).notNull(),
+  tieuDeBaiViet:varchar('tieu-de').notNull(),
+  quanCodeName: varchar('quan_code_name', { length: 255 }).notNull(),
+  phuong: varchar('phuong', { length: 255 }).notNull(),
+  phuongCodeName: varchar('phuong_code_name', { length: 255 }).notNull(),
+  duong: varchar('duong', { length: 255 }).notNull(),
+  giaTien: decimal('gia_tien', { precision: 15, scale: 2 }).notNull(),
+  dienTichDat: decimal('dien_tich_dat', { precision: 10, scale: 2 }).notNull(),
+  soTang: integer('so_tang').notNull(),
+  soPhongNgu: integer('so_phong_ngu').notNull(),
+  soPhongVeSinh: integer('so_phong_ve_sinh').notNull(),
+  giayToPhapLy: varchar('giay_to_phap_ly', { length: 255 }).notNull(),
+  loaiHinhNhaO: varchar('loai_hinh_nha_o', { length: 255 }).notNull(),
+  noiDung: text('noi_dung').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+
+export type Post = typeof postsTable.$inferSelect;
 
 export const categoriesRelation = relations(categoriesTable, ({one}) => ({
   parent: one(categoriesTable, {

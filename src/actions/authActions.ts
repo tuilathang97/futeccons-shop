@@ -6,6 +6,8 @@ import { eq, and } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import * as argon2 from "argon2";
 import { signInSchema, signUpSchema } from "@/components/signup/authSchema";
+import { createPostToDb } from "@/lib/queries/categoryQueries";
+import { Post } from "@/components/post/postSchema";
 
 export async function login(formData: FormData) {
   const data = Object.fromEntries(formData);
@@ -51,6 +53,41 @@ export async function logout() {
     redirect('/');
   }
 }
+
+export async function createPost(prevState: any, formData: FormData) {
+  try {
+    const data = Object.fromEntries(formData);
+    
+    if(!data.userId){
+      return {message: "Post failed : no user found"}
+    }
+    
+    if (!data.giaTien) {
+      throw Error("Missing required field: giaTien");
+    }
+
+    // formatMoney();
+    const currency = data.giaTien as string;
+    const number = Number(currency.replace(/[.,]/g, ''));
+    data.giaTien = number as any;
+    
+    // 
+    if(data.level1Category && data.level2Category && data.level3Category){
+      (data.level1Category as any) = Number(data.level1Category);
+      (data.level2Category as any) = Number(data.level2Category);
+      (data.level3Category as any) = Number(data.level3Category);
+    }
+    
+    console.log(data);
+    createPostToDb(data);
+    return {message: "Post created"}
+  } catch (error) {
+    return {message: "Post created" + error};
+  }
+}
+
+
+
 
 export async function signUp(formData: FormData) {
   console.log("dang dang ky")
