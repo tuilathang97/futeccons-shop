@@ -4,7 +4,7 @@ import { ProductPostForm } from '@/components/post/ProductPostForm';
 import GeneralInfoServer from '@/components/post/GeneralInfoServer';
 import BasicInfoServer from '@/components/post/BasicInfoServer';
 import PostInfo from '@/components/post/PostInfo';
-import { getCurrentSession } from '@/lib/auth';
+import { getCurrentSession } from '@/lib/lucia-auth';
 
 async function PostPage() {
 		const {user} = await getCurrentSession()

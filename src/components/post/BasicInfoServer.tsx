@@ -1,7 +1,7 @@
 import path from "path";
 import fs from 'fs';
 import BasicInfo from "./BasicInfo";
-import { getCurrentSession } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/lucia-auth";
 
 const BasicInfoServer = async () => {
   const {user} = await getCurrentSession()

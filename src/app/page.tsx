@@ -1,6 +1,6 @@
 import CategoryPicker from "@/components/homepage/CategoryPicker";
 import ProductsContainer from "@/components/products/ProductsContainer";
-import { getCurrentSession } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/lucia-auth";
 import { getCategories, getPosts } from "@/lib/queries/categoryQueries";
 import { redirect } from "next/navigation";
 

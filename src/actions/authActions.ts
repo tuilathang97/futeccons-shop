@@ -1,7 +1,7 @@
 'use server'
 import db from "@/db/drizzle";
 import { rolesTable, usersTable, usersToRoles } from "@/db/schema";
-import { generateSessionToken, createSession, setSessionTokenCookie, invalidateSession, getCurrentSession, deleteSessionTokenCookie } from "@/lib/auth";
+import { generateSessionToken, createSession, setSessionTokenCookie, invalidateSession, getCurrentSession, deleteSessionTokenCookie } from "@/lib/lucia-auth";
 import { eq, and } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import * as argon2 from "argon2";
