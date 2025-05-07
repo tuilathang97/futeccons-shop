@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 import * as argon2 from "argon2";
 import { signInSchema, signUpSchema } from "@/components/signup/authSchema";
 import { createPostToDb } from "@/lib/queries/categoryQueries";
-import { Post } from "@/components/post/postSchema";
 
 export async function login(formData: FormData) {
   const data = Object.fromEntries(formData);
@@ -78,7 +77,6 @@ export async function createPost(prevState: any, formData: FormData) {
       (data.level3Category as any) = Number(data.level3Category);
     }
     
-    console.log(data);
     createPostToDb(data);
     return {message: "Post created"}
   } catch (error) {

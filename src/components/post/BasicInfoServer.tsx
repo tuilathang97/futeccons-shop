@@ -9,7 +9,7 @@ const BasicInfoServer = async () => {
   const jsonData = await fs.promises.readFile(filePath, 'utf-8');
   const provinces = JSON.parse(jsonData);
   return(
-    user ? <BasicInfo provinces={provinces} userId={user.id} /> : <div>Không có người dùng được tìm thấy, thử lại sau</div>
+    user ? <BasicInfo provinces={provinces} userId={user.id} /> : null 
   )
 }
 

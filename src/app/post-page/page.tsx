@@ -4,9 +4,13 @@ import { ProductPostForm } from '@/components/post/ProductPostForm';
 import GeneralInfoServer from '@/components/post/GeneralInfoServer';
 import BasicInfoServer from '@/components/post/BasicInfoServer';
 import PostInfo from '@/components/post/PostInfo';
+import { getCurrentSession } from '@/lib/auth';
 
 async function PostPage() {
+		const {user} = await getCurrentSession()
+	
 	return (
+		user ?
 		<ProductPostForm>
 			<Suspense fallback={<div>Đang tải...</div>}>
 				<GeneralInfoServer />
@@ -17,7 +21,7 @@ async function PostPage() {
 			<Suspense fallback={<div>Đang tải...</div>}>
 				<PostInfo />
 			</Suspense>
-		</ProductPostForm>
+		</ProductPostForm> : <ProductPostForm>No user found, please try again </ProductPostForm>
 	)
 }
 

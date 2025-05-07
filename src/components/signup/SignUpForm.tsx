@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { signUpSchema } from "./authSchema"
-import { useActionState, useRef } from "react"
+import { useRef } from "react"
 import { signUp } from "@/actions/authActions"
 
 

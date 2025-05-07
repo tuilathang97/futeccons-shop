@@ -4,7 +4,7 @@ import { SignUpForm } from "@/components/signup/SignUpForm";
 import { getCurrentSession } from "@/lib/auth";
 
 export default async function SignUpPage() {
-  const { user, session } = await getCurrentSession();
+  const { user } = await getCurrentSession();
   return (
     <div>
       <h1>Đăng ký</h1>
