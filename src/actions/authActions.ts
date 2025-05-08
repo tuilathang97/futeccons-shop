@@ -1,5 +1,7 @@
 'use server'
+import { auth } from "@/lib/auth";
 import { createPostToDb } from "@/lib/queries/categoryQueries";
+import { headers } from "next/headers";
 
 export async function createPost(prevState: any, formData: FormData) {
   try {

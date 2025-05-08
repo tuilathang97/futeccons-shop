@@ -56,11 +56,11 @@ export default function CategoryForm({ categories }: { categories: Category[] })
           name="parentId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tên danh mục</FormLabel>
+              <FormLabel>Danh mục cha</FormLabel>
               <Select disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value} {...field}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Tên danh mục" />
+                    <SelectValue placeholder="Danh mục cha" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

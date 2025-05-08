@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
 
   const session = await auth.api.getSession({
-    headers: await headers() // you need to pass the headers object.
+    headers: await headers()
   })
   return (
     <html lang="vi" className="h-svh">

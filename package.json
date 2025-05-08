@@ -10,7 +10,9 @@
     "db-seed": "tsx ./src/db/drizzle/seed.ts",
     "db-generate": "pnpm drizzle-kit generate",
     "db-migrate": "pnpm drizzle-kit migrate",
-    "db-update": "pnpm drizzle-kit push"
+    "db-update": "pnpm drizzle-kit push",
+    "seed-categories": "tsx ./src/db/seed.ts",
+    "seed-posts": "tsx ./src/db/seed-posts.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
