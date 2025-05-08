@@ -13,11 +13,11 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { z } from "zod"
-import { login } from "@/actions/authActions"
+import { z } from "zod";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { signIn } from "@/lib/auth-client"
 
 const loginFormSchema = z.object({
     email: z.string()
@@ -44,7 +44,20 @@ function LoginHeaderForm() {
             const formData = new FormData();
             formData.append('email', values.email);
             formData.append('password', values.password);
-            await login(formData);
+            await signIn.email(
+                {
+                    email: values.email,
+                    password: values.password
+                },
+                {
+                    onRequest: (ctx) => {
+                        console.log("req login through header")
+                    },
+                    onResponse: (ctx) => {
+                        console.log("res login through header")
+                    },
+                },
+            );
         } catch (error) {
             console.error("Login failed:", error);
             form.setError("root", {

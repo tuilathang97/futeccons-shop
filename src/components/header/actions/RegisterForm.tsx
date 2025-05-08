@@ -36,7 +36,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signUp } from "@/actions/authActions";
 
 function RegisterForm() {
     const [isLoading, setIsLoading] = useState(false)
@@ -59,7 +58,7 @@ function RegisterForm() {
             Object.entries(values).forEach(([key, value]) => {
                 formData.append(key, value)
             })
-            await signUp(formData)
+            // await signUp(formData)
             form.reset()
             setOpen(false)
         } catch (error) {

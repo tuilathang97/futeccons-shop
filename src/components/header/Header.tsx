@@ -9,25 +9,9 @@ import { optionI, OPTIONS } from "@/app/posting/page"
 import NavigationSubMenu from "./NavigationSubMenu"
 import UserActionGroup from "./userActionGroup"
 import UserDropDown from "./UserDropDown"
+import { Session, User } from "@/db/schema"
 
-export interface User {
-    id: string;
-    email: string;
-    passwordHash: string;
-    fullName: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-};
-
-type Session = {
-    id: string;
-    userId: string;
-    expiresAt: Date;
-};
-
-
-
-export default function Header({ user, session }: { user: User | null, session: Session | null }) {
+export default function Header({ user, session }: { user: User, session: Session }) {
     return (
         <header className="fixed z-50 bg-gray-50 border-b-[0.1px] gap-4 border-gray-500 top-0 left-0 flex justify-between md:justify-around h-16 min-w-full shrink-0 items-center px-4 md:px-6">
             <NavigationSubMenu></NavigationSubMenu>

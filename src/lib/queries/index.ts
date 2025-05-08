@@ -1,4 +1,4 @@
-import db from "@/db/drizzle";
+import {db} from "@/db/drizzle";
 import { eq, ilike, or, and } from 'drizzle-orm';
 import { categoriesTable, postsTable } from "@/db/schema";
 

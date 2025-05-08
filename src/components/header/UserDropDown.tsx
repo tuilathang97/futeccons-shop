@@ -9,10 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { LogOut, Settings, User2 } from "lucide-react"
-import { User } from './Header'
-import { logout } from '@/actions/authActions'
 
-function UserDropdown({user}:{user:User}) {
+function UserDropdown({user}:{user: any}) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -37,7 +35,7 @@ function UserDropdown({user}:{user:User}) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={() => logout()}
+                <DropdownMenuItem onClick={() => {}}
                     className="text-red-600 focus:text-red-600"
                 >
                     <LogOut className="mr-2 h-4 w-4" />
