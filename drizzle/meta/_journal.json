@@ -8,6 +8,20 @@
       "when": 1738905253430,
       "tag": "0000_mature_earthquake",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1746641481336,
+      "tag": "0001_fair_ikaris",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1746642612768,
+      "tag": "0002_shiny_squadron_sinister",
+      "breakpoints": true
     }
   ]
 }
