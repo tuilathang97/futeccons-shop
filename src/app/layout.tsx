@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import { getCurrentSession } from "@/lib/lucia-auth";
+import { authClient } from "@/lib/auth-client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,14 +24,16 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
-  const {user,session} = await getCurrentSession();
-  
+
+  const session = await auth.api.getSession({
+    headers: await headers() // you need to pass the headers object.
+  })
   return (
     <html lang="vi" className="h-svh">
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] min-w-full antialiased !mx-0 max-w-[80rem] !pt-[7rem] !px-4 lg:!px-8 md:!pt-[5rem] container`}
       >
-        <Header user={user} session={session}/>
+        <Header user={session?.user} session={session?.session}/>
         <Toaster />
         {children}
       </body>
