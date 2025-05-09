@@ -25,6 +25,7 @@ services:
       DB_HOST: db
       DB_NAME: futeccons-shop
       DB_PASSWORD: admin
+      DATABASE_URL: postgresql://admin:admin@db:5432/futeccons-shop
       NODE_ENV: development
     command: sh run.sh
     volumes:
