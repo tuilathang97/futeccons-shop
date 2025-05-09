@@ -6,8 +6,7 @@ import BasicInfoServer from '@/components/post/BasicInfoServer';
 import PostInfo from '@/components/post/PostInfo';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-
-
+import { UploadForm } from '@/components/image-upload-form';
 
 async function PostPage() {
 	const session = await auth.api.getSession({
@@ -26,6 +25,9 @@ async function PostPage() {
 				</Suspense>
 				<Suspense fallback={<div>Đang tải...</div>}>
 					<PostInfo />
+				</Suspense>
+				<Suspense>
+					<UploadForm/>
 				</Suspense>
 			</ProductPostForm> 
 		)

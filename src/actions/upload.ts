@@ -1,7 +1,7 @@
 'use server';
 import sharp from 'sharp';
 import { v4 as uuidv4 } from 'uuid';
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir } from 'fs/promises';
 import { join } from 'path';
 import { createHash } from 'crypto';
 
