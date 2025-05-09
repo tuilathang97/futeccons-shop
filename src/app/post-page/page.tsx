@@ -6,7 +6,7 @@ import BasicInfoServer from '@/components/post/BasicInfoServer';
 import PostInfo from '@/components/post/PostInfo';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-import { UploadForm } from '@/components/image-upload-form';
+import UploadWidget from '@/components/UploadWidget';
 
 async function PostPage() {
 	const session = await auth.api.getSession({
@@ -27,7 +27,7 @@ async function PostPage() {
 					<PostInfo />
 				</Suspense>
 				<Suspense>
-					<UploadForm/>
+					<UploadWidget/>
 				</Suspense>
 			</ProductPostForm> 
 		)

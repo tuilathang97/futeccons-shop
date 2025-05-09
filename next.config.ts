@@ -11,7 +11,13 @@ const nextConfig: NextConfig = {
         search: '',
       },
     ],
-  }
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '1900mb',
+    },
+  },
+
 };
 
 export default nextConfig;

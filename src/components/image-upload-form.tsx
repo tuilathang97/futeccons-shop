@@ -5,7 +5,6 @@ import { useCallback, useState } from 'react';
 import Image from 'next/image';
 import { Card } from './ui/card';
 import { FaqItem } from './blocks/faq';
-import handleConvertImage from './ImageConverter';
 
 export function UploadForm() {
   const [previews, setPreviews] = useState<string[]>([]);
@@ -13,8 +12,6 @@ export function UploadForm() {
   const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
-    const convertedImages = await handleConvertImage(files)
-    console.log({convertedImages})
     const urls = Array.from(files).map(file => URL.createObjectURL(file));
     setPreviews(urls);
   }, []);

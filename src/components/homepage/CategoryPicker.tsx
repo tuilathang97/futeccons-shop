@@ -9,7 +9,7 @@ function CategoryPicker({categories}:{categories:Category[]}) {
         return <></>
     }
     return (
-        <div className='bg-white py-4 flex flex-col gap-4 rounded-md'>
+        <div className='bg-white container  py-4 flex flex-col gap-4 rounded-md'>
             <h1 className='text-lg font-semibold px-4'>Bất động sản: Mua bán, cho thuê nhà đất toàn quốc T2/2025</h1>
             <div className='flex gap-4 items-center justify-around'>
                 {
