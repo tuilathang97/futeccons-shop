@@ -3,16 +3,16 @@ import { eq, ilike, or, and } from 'drizzle-orm';
 import { categoriesTable, postsTable } from "@/db/schema";
 
 export async function getPostByCategoryPath(slug1?: string, slug2?: string, slug3?: string,) {
-    const slug1Category = `${slug1 ? '/' + slug1 : ''}`;
-    const slug2Category = slug1Category + `${slug2 ? '/' + slug2 : ''}`
-    const slug3Category = slug2Category + `${slug3 ? '/' + slug3 : ''}`
+    const path1 = `${slug1 ? '/' + slug1 : ''}`;
+    const path2 = path1 + `${slug2 ? '/' + slug2 : ''}`
+    const path3 = path2 + `${slug3 ? '/' + slug3 : ''}`
 
     const categories = await db.select()
         .from(categoriesTable)
         .where(or(
-            slug1 ? ilike(categoriesTable.slug, slug1Category) : undefined,
-            slug2 ? ilike(categoriesTable.slug, slug2Category) : undefined,
-            slug3 ? ilike(categoriesTable.slug, slug3Category) : undefined
+            path1 ? ilike(categoriesTable.path, path1) : undefined,
+            path2 ? ilike(categoriesTable.path, path2) : undefined,
+            path3 ? ilike(categoriesTable.path, path3) : undefined
         ));
 
     const categoryNameByLevel: Record<string, number> = {};

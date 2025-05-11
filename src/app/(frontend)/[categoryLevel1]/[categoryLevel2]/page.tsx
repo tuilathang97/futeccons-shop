@@ -7,20 +7,21 @@ import FilterPrice from "@/components/filterComponent/FilterPrice";
 import ProductsListWithFilter from "@/components/filterComponent/ProductsListWithFilter";
 import ProductCard from "@/components/products/ProductCard";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, getCategoryBySlug } from "@/lib/queries/categoryQueries";
+import { getCategories, getCategoryByPath, getCategoryBySlug } from "@/lib/queries/categoryQueries";
 import Link from "next/link";
 
 export default async function Page2({ params }: { params: Promise<{ categoryLevel1: string, categoryLevel2: string }> }) {
     const { categoryLevel1, categoryLevel2 } = await params;
-    // Lấy categories
-    const parentCategory = await getCategoryBySlug(`/${categoryLevel1}`)
-    const currentCategory = await getCategoryBySlug(`/${categoryLevel1}/${categoryLevel2}`)
+    const parentCategory = await getCategoryByPath(`/${categoryLevel1}`)
+    const currentCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}`)
     const categories = await getCategories()
     const filteredCategories = categories.filter((e) => e.level === parentCategory.level)
     const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === parentCategory.id)
-    const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory.id)
+    const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory?.id)
+    console.log({parentCategory, currentCategory})
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2)
     // Validate
+
     if (!parentCategory || !currentCategory) {
         return (
             <div>
