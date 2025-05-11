@@ -44,6 +44,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CategorySchema } from './categorySchema';
 import { z } from 'zod';
+import { useToast } from '@/hooks/use-toast';
 
 interface CategoryClientUIProps {
   initialCategories: Category[];
@@ -59,6 +60,7 @@ export default function CategoryClientUI({ initialCategories }: CategoryClientUI
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<CategoryFormData>({
     resolver: zodResolver(CategorySchema),
@@ -106,23 +108,38 @@ export default function CategoryClientUI({ initialCategories }: CategoryClientUI
 
     startTransition(async () => {
       try {
-        let updatedCategories;
+        let result;
         if (selectedCategory && selectedCategory.id) {
           formData.append('id', String(selectedCategory.id));
-          updatedCategories = await updateCategoryAction(formData);
+          result = await updateCategoryAction(formData);
         } else {
-          updatedCategories = await createCategoryAction(formData);
+          result = await createCategoryAction(formData);
         }
         
-        if (updatedCategories) {
-          setCategories(updatedCategories as Category[]);
+        if (result.success) {
+          setCategories(result.data || []);
+          toast({
+            title: "Thành công",
+            description: result.message,
+          });
+          setIsCreateModalOpen(false);
+          setIsEditModalOpen(false);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Lỗi",
+            description: result.message,
+          });
         }
         
-        setIsCreateModalOpen(false);
-        setIsEditModalOpen(false);
         router.refresh();
       } catch (error) {
         console.error('Error saving category:', error);
+        toast({
+          variant: "destructive",
+          title: "Lỗi",
+          description: "Đã xảy ra lỗi khi lưu danh mục",
+        });
       }
     });
   };
@@ -132,17 +149,33 @@ export default function CategoryClientUI({ initialCategories }: CategoryClientUI
     
     startTransition(async () => {
       try {
-        const updatedCategories = await deleteCategoryAction(selectedCategory.id);
+        const result = await deleteCategoryAction(selectedCategory.id);
         
-        if (updatedCategories) {
-          setCategories(updatedCategories as Category[]);
+        if (result.success) {
+          setCategories(result.data || []);
+          toast({
+            variant: "success",
+            title: "Thành công",
+            description: result.message,
+          });
+          setIsDeleteModalOpen(false);
+          setSelectedCategory(null);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Lỗi",
+            description: result.message,
+          });
         }
         
-        setIsDeleteModalOpen(false);
-        setSelectedCategory(null);
         router.refresh();
       } catch (error) {
         console.error('Error deleting category:', error);
+        toast({
+          variant: "destructive",
+          title: "Lỗi",
+          description: "Đã xảy ra lỗi khi xóa danh mục",
+        });
       }
     });
   };

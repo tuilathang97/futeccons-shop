@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import React from 'react';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

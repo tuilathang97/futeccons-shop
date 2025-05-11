@@ -9,7 +9,7 @@ import {
 import { Button } from '../ui/button'
 import { Home, Menu } from 'lucide-react'
 import Link from 'next/link'
-import { OPTIONS } from '@/app/posting/page'
+import { OPTIONS } from '@/app/(frontend)/posting/page'
 
 function NavigationSubMenu() {
     return (
