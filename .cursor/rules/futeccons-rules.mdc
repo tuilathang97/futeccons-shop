@@ -41,6 +41,175 @@ Before responding to any request, follow these steps:
 - Implement early returns for better readability
 - Structure components logically: exports, subcomponents, helpers, types
 
+### Component Organization
+
+#### File Structure
+- Group related components in feature-specific directories
+- Keep shared components in a common directory
+- Use index files for clean exports
+- Maintain consistent file naming (PascalCase for components)
+
+#### Component Breakdown
+- Break down large components into smaller, focused pieces
+- Extract reusable logic into utility functions
+- Create shared form components for consistent UX
+- Separate modal components into their own files
+- Follow Single Responsibility Principle
+
+Example structure for a feature:
+```
+feature/
+├── FeatureClientUI.tsx      # Main component
+├── components/             
+│   ├── FeatureForm.tsx     # Reusable form
+│   ├── FeatureTable.tsx    # Data display
+│   └── FeatureModals.tsx   # Modal components
+└── featureSchema.ts        # Types and validation
+```
+
+#### Component Patterns
+
+1. Main Container Component:
+```typescript
+export default function FeatureClientUI({ initialData }: Props) {
+  // State management
+  const [data, setData] = useState(initialData);
+  const [isPending, startTransition] = useTransition();
+  
+  // Action handlers
+  const handleCreate = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await createAction(formData);
+      handleActionResult(result, toast, () => {
+        // Success callback
+      });
+    });
+  };
+
+  return (
+    <>
+      <FeatureTable data={data} onEdit={} onDelete={} />
+      <FeatureModals data={data} onSubmit={} />
+    </>
+  );
+}
+```
+
+2. Form Components:
+```typescript
+interface FormProps {
+  defaultValues?: Partial<FormData>;
+  onSubmit: (data: FormData) => void;
+  isPending?: boolean;
+}
+
+export default function FeatureForm({ defaultValues, onSubmit }: FormProps) {
+  const form = useForm({
+    resolver: zodResolver(Schema),
+    defaultValues: {
+      ...defaultEmptyValues,
+      ...defaultValues
+    }
+  });
+  
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {/* Form fields */}
+      </form>
+    </Form>
+  );
+}
+```
+
+3. Table Components:
+```typescript
+interface TableProps {
+  data: Data[];
+  onEdit: (item: Data) => void;
+  onDelete: (item: Data) => void;
+}
+
+export default function FeatureTable({ data, onEdit, onDelete }: TableProps) {
+  return (
+    <Table>
+      <TableHeader>{/* ... */}</TableHeader>
+      <TableBody>
+        {data.map(item => (
+          <TableRow key={item.id}>
+            {/* Row cells */}
+            <TableCell>
+              <Button onClick={() => onEdit(item)}>Edit</Button>
+              <Button onClick={() => onDelete(item)}>Delete</Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+```
+
+4. Modal Components:
+```typescript
+interface ModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  data?: Data;
+  onSubmit: (data: FormData) => void;
+  isPending: boolean;
+}
+
+export function FeatureModal({ open, onOpenChange, data, onSubmit }: ModalProps) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>{/* ... */}</DialogHeader>
+        <FeatureForm 
+          defaultValues={data}
+          onSubmit={onSubmit}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+### Utility Functions
+
+- Extract reusable logic into utility functions
+- Place utilities in appropriate files based on scope
+- Use TypeScript for proper type safety
+- Document complex utilities with JSDoc comments
+
+Example:
+```typescript
+// Format and validate data
+export function formatPath(path: string | null): string | null {
+  if (!path) return null;
+  return path.startsWith('/') ? path : `/${path}`;
+}
+
+// Handle API responses consistently
+export function handleActionResult(
+  result: ActionResult,
+  toast: (props: ToastProps) => void,
+  onSuccess?: () => void
+): Data[] | undefined {
+  if (result.success) {
+    toast({ title: "Success", description: result.message });
+    onSuccess?.();
+    return result.data;
+  } else {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: result.message
+    });
+  }
+}
+```
+
 ### Naming Conventions
 
 - Use descriptive names with auxiliary verbs (isLoading, hasError)
@@ -84,7 +253,6 @@ const { isEnabled } = await draftMode()
 // Handle async params in layouts/pages
 const params = await props.params
 const searchParams = await props.searchParams
-
 ```
 
 ### Form and Data Management
