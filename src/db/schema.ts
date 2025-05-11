@@ -72,14 +72,18 @@ export type Permission = typeof permissionsTable.$inferSelect;
 
 
 export const user = pgTable("user", {
-  id: text('id').primaryKey(),
-  name: text('name').notNull(),
-email: text('email').notNull().unique(),
-emailVerified: boolean('email_verified').notNull(),
-image: text('image'),
-createdAt: timestamp('created_at').notNull(),
-updatedAt: timestamp('updated_at').notNull()
-});
+					id: text('id').primaryKey(),
+					name: text('name').notNull(),
+ email: text('email').notNull().unique(),
+ emailVerified: boolean('email_verified').notNull(),
+ image: text('image'),
+ createdAt: timestamp('created_at').notNull(),
+ updatedAt: timestamp('updated_at').notNull(),
+ role: text('role'),
+ banned: boolean('banned'),
+ banReason: text('ban_reason'),
+ banExpires: timestamp('ban_expires')
+				});
 
 
 export type User = typeof user.$inferSelect;
@@ -92,7 +96,8 @@ createdAt: timestamp('created_at').notNull(),
 updatedAt: timestamp('updated_at').notNull(),
 ipAddress: text('ip_address'),
 userAgent: text('user_agent'),
-userId: text('user_id').notNull().references(()=> user.id, { onDelete: 'cascade' })
+ userId: text('user_id').notNull().references(()=> user.id, { onDelete: 'cascade' }),
+ impersonatedBy: text('impersonated_by')
 });
 
 
