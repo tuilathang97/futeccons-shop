@@ -46,9 +46,9 @@ import { Icons } from '../icons';
 import { navItems } from '@/constants/data';
 
 export const company = {
-  name: 'Acme Inc',
+  name: 'Futeccons shop',
   logo: GalleryVerticalEnd,
-  plan: 'Enterprise'
+  plan: 'Trang quản lí'
 };
 
 export default function AppSidebar() {
