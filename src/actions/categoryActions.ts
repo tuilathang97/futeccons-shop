@@ -7,7 +7,8 @@ import {
   deleteCategory,
   getCategoryById
 } from "@/lib/queries/categoryQueries";
-import { Category, CategorySchema } from "@/components/categories/categorySchema";
+import { CategorySchema } from "@/components/categories/categorySchema";
+import { Category } from "@/db/schema";
 
 function generatePath(slug: string, level: number, parentSlug?: string): string {
   if (!slug || !level) {
@@ -100,7 +101,8 @@ export async function updateCategoryAction(formData: FormData): Promise<Category
     const data = {
       ...rawData,
       id: parseInt(rawData.id as string, 10),
-      parentId: rawData.parentId ? parseInt(rawData.parentId as string, 10) : null
+      parentId: rawData.parentId,
+      level: rawData.level ? parseInt(rawData.level as string, 10) : 1
     };
 
     const parsedData = CategorySchema.safeParse(data);
@@ -112,8 +114,32 @@ export async function updateCategoryAction(formData: FormData): Promise<Category
       };
     }
 
-    const { id, name, parentId, note } = parsedData.data;
-    await updateCategory(id, name, parentId, note || '');
+    const { id, name, parentId, note, slug } = parsedData.data;
+
+    let level = parsedData.data.level;
+
+
+    const parent = await findParentCategory(parsedData.data.parentId);
+    if (parent && parent.level && parent.level !== 3) {
+      level = parent.level + 1;
+    }
+
+    const normalizedSlug = slug.startsWith('/') ? slug : `/${slug}`;
+    const parentSlug = parent?.path || undefined;
+    const editedPath = generatePath(normalizedSlug, level, parentSlug);
+
+    const parsedParentId = typeof parentId === 'string' && !isNaN(Number(parentId)) 
+      ? Number(parentId)
+      : null;
+
+    if (!id) {
+      return { 
+        success: false,
+        message: 'Cập nhật thất bại: ID không hợp lệ',
+      };
+    }
+
+    await updateCategory(id, name, parsedParentId, note || '', normalizedSlug, editedPath);
     
     const updatedCategories = await getCategories();
     return { 
@@ -122,10 +148,9 @@ export async function updateCategoryAction(formData: FormData): Promise<Category
       data: updatedCategories
     };
   } catch(error: unknown) {
-    console.error("Failed to update category:", error);
     return { 
       success: false,
-      message: 'Cập nhật thất bại' 
+      message: 'Cập nhật thất bại: ' + error 
     };
   }
 }

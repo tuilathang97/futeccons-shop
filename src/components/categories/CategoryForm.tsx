@@ -1,10 +1,10 @@
 'use client'
 
-import { useActionState, useRef } from 'react';
-import { createCategoryAction } from '@/actions/categoriesActions';
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
+import { type Category } from '@/db/schema';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CategorySchema } from './categorySchema';
+import { z } from 'zod';
 import {
   Form,
   FormControl,
@@ -12,32 +12,50 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CategorySchema } from './categorySchema';
-import { Category } from '@/db/schema';
+import { Button } from '@/components/ui/button';
+import { getParentCategories } from '@/lib/utils';
 
-export default function CategoryForm({ categories }: { categories: Category[] }) {
-  const [state, formAction] = useActionState(createCategoryAction,{ message: "" });
-  const form = useForm<Category>({
+type CategoryFormData = z.infer<typeof CategorySchema>;
+
+interface CategoryFormProps {
+  defaultValues?: Partial<CategoryFormData>;
+  onSubmit: (data: CategoryFormData) => void;
+  categories: Category[];
+  selectedId?: number;
+  isPending?: boolean;
+  submitLabel?: string;
+}
+
+export default function CategoryForm({ 
+  defaultValues,
+  onSubmit,
+  categories,
+  selectedId,
+  isPending,
+  submitLabel = 'Lưu'
+}: CategoryFormProps) {
+  const form = useForm<CategoryFormData>({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
       name: "",
       parentId: undefined,
       level: 1,
       note: "",
-      slug: ""
+      slug: "",
+      path: "",
+      ...defaultValues
     },
   });
-  const formRef = useRef<HTMLFormElement>(null);
+
+  const parentCategories = getParentCategories(categories)
+    .filter(c => c.id !== selectedId); // Prevent selecting self as parent
+
   return (
     <Form {...form}>
-      <form
-        ref={formRef}
-        action={formAction}
-        onSubmit={form.handleSubmit(() => formRef?.current?.submit())} className="w-2/3 space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
         <FormField
           control={form.control}
           name="name"
@@ -45,7 +63,7 @@ export default function CategoryForm({ categories }: { categories: Category[] })
             <FormItem>
               <FormLabel>Tên danh mục</FormLabel>
               <FormControl>
-                <Input placeholder="Tên" {...field} />
+                <Input required placeholder="Tên" {...field} value={field.value || ''} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -57,21 +75,22 @@ export default function CategoryForm({ categories }: { categories: Category[] })
           render={({ field }) => (
             <FormItem>
               <FormLabel>Danh mục cha</FormLabel>
-              <Select disabled={Array.isArray(categories) && categories.length === 0} onValueChange={field.onChange} defaultValue={field.value} {...field}>
+              <Select 
+                disabled={parentCategories.length === 0} 
+                onValueChange={field.onChange} 
+                value={field.value?.toString()}
+              >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Danh mục cha" />
+                    <SelectValue placeholder="Chọn danh mục cha (nếu có)" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {
-                    categories?.filter(category => category.level && category.level < 3)
-                      .map(category => {
-                        return(
-                          <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>
-                        )
-                      })
-                  }
+                  {parentCategories.map((category) => (
+                    <SelectItem key={category.id} value={category.id.toString()}>
+                      {category.name} {category.path && `(${category.path})`}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -85,7 +104,7 @@ export default function CategoryForm({ categories }: { categories: Category[] })
             <FormItem>
               <FormLabel>Ghi chú</FormLabel>
               <FormControl>
-                <Input placeholder="Ghi chú" {...field} />
+                <Input placeholder="Ghi chú" {...field} value={field.value || ''} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,17 +117,20 @@ export default function CategoryForm({ categories }: { categories: Category[] })
             <FormItem>
               <FormLabel>Slug</FormLabel>
               <FormControl>
-                <Input required placeholder="slug" {...field} />
+                <Input required placeholder="Nhập lại tên danh mục không dấu (ví dụ: 'tieu-de-bai-viet')" {...field} value={field.value || ''} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" className='w-full'>Lưu</Button>
-        <FormMessage>{state?.message}</FormMessage>
+        <div className="flex justify-end gap-4">
+          <Button type="submit" disabled={isPending}>
+            {isPending ? 'Đang lưu...' : submitLabel}
+          </Button>
+        </div>
       </form>
     </Form>
-  )
+  );
 }
 
 

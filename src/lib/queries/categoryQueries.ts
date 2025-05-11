@@ -54,8 +54,8 @@ export async function getCategoryBySlug(slug: string) {
   return result[0];
 }
 
-export async function updateCategory(id: number, name: string, parentId: number | null, note: string | null) {
-  await db.update(categoriesTable).set({ name, parentId, note }).where(eq(categoriesTable.id, id));
+export async function updateCategory(id: number, name: string, parentId: number | null, note: string | null, slug: string | null, path: string | null) {
+  await db.update(categoriesTable).set({ name, parentId, note, slug, path }).where(eq(categoriesTable.id, id));
 }
 
 export async function deleteCategory(id: number) {
