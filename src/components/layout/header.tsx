@@ -3,7 +3,6 @@ import { SidebarTrigger } from '../ui/sidebar';
 import { Separator } from '../ui/separator';
 import { Breadcrumbs } from '../breadcumbs';
 import { UserNav } from './user-nav';
-import ThemeToggle from './ThemeToggle/theme-toggle';
 
 export default function Header() {
   return (
@@ -16,7 +15,6 @@ export default function Header() {
 
       <div className='flex items-center gap-2 px-4'>
         <UserNav />
-        <ThemeToggle />
       </div>
     </header>
   );
