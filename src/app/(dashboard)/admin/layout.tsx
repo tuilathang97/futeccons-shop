@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import React from 'react';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
+import AdminProtectedRoute from '@/components/auth/AdminProtectedRoute';
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,9 +37,11 @@ export default async function AdminLayout({
           <SidebarInset>
             <Header />
             <PageContainer>
-              <div className='flex flex-1 flex-col space-y-2'>
-                {children}
-              </div>
+              <AdminProtectedRoute>
+                <div className='flex flex-1 flex-col space-y-2'>
+                  {children}
+                </div>
+              </AdminProtectedRoute>
             </PageContainer>
           </SidebarInset>
         </SidebarProvider>

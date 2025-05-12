@@ -7,36 +7,27 @@ import FilterPrice from "@/components/filterComponent/FilterPrice";
 import ProductsListWithFilter from "@/components/filterComponent/ProductsListWithFilter";
 import ProductCard from "@/components/products/ProductCard";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, getCategoryByPath, getCategoryBySlug } from "@/lib/queries/categoryQueries";
+import { getCategories, getCategoryByPath } from "@/lib/queries/categoryQueries";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default async function Page2({ params }: { params: Promise<{ categoryLevel1: string, categoryLevel2: string }> }) {
     const { categoryLevel1, categoryLevel2 } = await params;
     const parentCategory = await getCategoryByPath(`/${categoryLevel1}`)
     const currentCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}`)
+
+    if (!parentCategory || !currentCategory) {
+        notFound();
+    }
+
     const categories = await getCategories()
-    const filteredCategories = categories.filter((e) => e.level === parentCategory.level)
+    const filteredCategories = categories.filter((e) => e.level === parentCategory?.level)
     const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === parentCategory.id)
     const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory?.id)
     console.log({parentCategory, currentCategory})
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2)
-    // Validate
 
-    if (!parentCategory || !currentCategory) {
-        return (
-            <div>
-                <span>
-                    Danh mục không tồn tại{" "}:
-                    <Link href="/" className="text-red-600">
-                        Quay về trang chủ
-                    </Link>
-                </span>
-            </div>
-        )
-    }
-
-
-    return (parentCategory ?
+    return(
         <div className="flex flex-col gap-8">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <ProductsListWithFilter />
@@ -61,9 +52,6 @@ export default async function Page2({ params }: { params: Promise<{ categoryLeve
                 </div>
                 <div className="col-span-2"></div>
             </div>
-        </div>
-        : <div>
-            <span>Slug is not available <Link href={"/"} className="text-red-600">Click me to return to the homepage</Link></span>
         </div>
     )
 }

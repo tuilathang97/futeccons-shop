@@ -8,29 +8,31 @@ import ProductsListWithFilter from "@/components/filterComponent/ProductsListWit
 import ProductsContainer from "@/components/post/ProductsContainer";
 import { Button } from "@/components/ui/button";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, getCategoryBySlug } from "@/lib/queries/categoryQueries";
+import { getCategories, getCategoryByPath } from "@/lib/queries/categoryQueries";
 import { ArrowDownIcon } from "lucide-react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-
-interface paramsI {
-    categoryLevel1: string
+interface PageProps {
+    params: Promise<{ categoryLevel1: string }>;
+    searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function Page1({ params,searchParams }: { params: Promise<paramsI>,searchParams:any}) {
+export default async function Page({ params, searchParams }: PageProps) {
     const { categoryLevel1 } = await params;
     const result = await getPostByCategoryPath(categoryLevel1);
-    const searchParam = await searchParams
-    const currentParentCategory = await getCategoryBySlug(`/${categoryLevel1}`)
-    if(!currentParentCategory){return (
-        <div>
-            <span>Slug is not available <Link href={"/"} className="text-red-600">Click me to return to the homepage</Link></span>
-        </div>
-    )}
-    const categories = await getCategories()
-    const filteredCategories = categories.filter((e) => e.level === currentParentCategory.level)
-    const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === currentParentCategory.id )
-    return currentParentCategory ?
+    const searchParam = await searchParams;
+    const currentParentCategory = await getCategoryByPath(`/${categoryLevel1}`);
+
+    if (!currentParentCategory) {
+        notFound();
+    }
+
+    const categories = await getCategories();
+    const filteredCategories = categories.filter((e) => e.level === currentParentCategory.level);
+    const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === currentParentCategory.id);
+
+    return (
         <section className="flex flex-col w-full gap-4">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <Button variant={"outline"}>Lọc <ArrowDownIcon/></Button>
@@ -49,8 +51,6 @@ export default async function Page1({ params,searchParams }: { params: Promise<p
                 <ProductsContainer data={result} searchParam={searchParam} cardVariant="horizontal"/>
                 <div className="col-span-2"></div>
             </div>
-        </section> :
-        <div>
-            <span>Slug is not available <Link href={"/"} className="text-red-600">Click me to return to the homepage</Link></span>
-        </div>
+        </section>
+    );
 }

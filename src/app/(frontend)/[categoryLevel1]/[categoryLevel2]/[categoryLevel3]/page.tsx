@@ -7,11 +7,12 @@ import FilterPrice from '@/components/filterComponent/FilterPrice'
 import ProductsListWithFilter from '@/components/filterComponent/ProductsListWithFilter'
 import ProductCard from '@/components/products/ProductCard'
 import { getPostByCategoryPath } from '@/lib/queries'
-import { getCategories, getCategoryByPath, getCategoryBySlug } from '@/lib/queries/categoryQueries'
+import { getCategories, getCategoryByPath } from '@/lib/queries/categoryQueries'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import React from 'react'
 
-async function page({ params }: { params: Promise<{ categoryLevel1: string, categoryLevel2: string, categoryLevel3: string }> }) {
+export default async function Page3({ params }: { params: Promise<{ categoryLevel1: string, categoryLevel2: string, categoryLevel3: string }> }) {
     const { categoryLevel1, categoryLevel2, categoryLevel3 } = await params
     const parentCategory = await getCategoryByPath(`/${categoryLevel1}`)
     const currentCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}`)
@@ -22,7 +23,7 @@ async function page({ params }: { params: Promise<{ categoryLevel1: string, cate
     const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory.id)
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2, categoryLevel3)
     if (!currentSubChildCategory) {
-        return <span>Slug is not available <Link href={"/"} className="text-red-600">Click me to return to the homepage</Link></span>
+        notFound();
     }
     return (
         <div className='flex flex-col gap-4'>
@@ -52,5 +53,3 @@ async function page({ params }: { params: Promise<{ categoryLevel1: string, cate
         </div>
     )
 }
-
-export default page

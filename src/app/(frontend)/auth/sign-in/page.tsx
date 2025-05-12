@@ -5,14 +5,25 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { signIn } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
+import { authClient, signIn } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
+  const router = useRouter();
+  const { 
+      data: session,
+  } = authClient.useSession();
+  
+  useEffect(() => {
+    if (session) {
+      router.push('/account');
+    }
+  }, [session, router]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -84,7 +95,7 @@ export default function SignIn() {
                 {
                     email,
                     password,
-                    callbackURL: "/",
+                    callbackURL: "/account",
                     rememberMe: false
                 },
                 {
@@ -123,7 +134,7 @@ export default function SignIn() {
                     await signIn.social(
                     {
                       provider: "google",
-                      callbackURL: "/dashboard"
+                      callbackURL: "/account"
                     },
                     {
                       onRequest: (ctx) => {
@@ -154,7 +165,7 @@ export default function SignIn() {
                     await signIn.social(
                     {
                       provider: "github",
-                      callbackURL: "/dashboard"
+                      callbackURL: "/account"
                     },
                     {
                       onRequest: (ctx) => {
