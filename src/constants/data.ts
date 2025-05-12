@@ -59,6 +59,12 @@ export const navItems: NavItem[] = [
                 icon: 'category',
                 shortcut: ['d', 'd']
             },
+            {
+                title: 'Bài viết',
+                url: '/admin/articles',
+                icon: 'post',
+                shortcut: ['a', 'a']
+            },
         ]
     },
     {

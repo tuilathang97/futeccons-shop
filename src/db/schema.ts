@@ -1,6 +1,5 @@
-
 import { relations } from 'drizzle-orm';
-import { pgTable, integer,serial,varchar, uuid, text, timestamp, decimal, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, integer, serial, varchar, uuid, text, timestamp, decimal, boolean, index } from 'drizzle-orm/pg-core';
 
 export const categoriesTable = pgTable("categories", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -130,3 +129,54 @@ expiresAt: timestamp('expires_at').notNull(),
 createdAt: timestamp('created_at'),
 updatedAt: timestamp('updated_at')
 });
+
+export const articlesTable = pgTable('articles', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 255 }).unique().notNull(),
+  content: text('content').notNull(),
+  level1CategoryId: integer('level1_category_id').references(() => categoriesTable.id, { onDelete: 'set null' }),
+  level2CategoryId: integer('level2_category_id').references(() => categoriesTable.id, { onDelete: 'set null' }),
+  level3CategoryId: integer('level3_category_id').references(() => categoriesTable.id, { onDelete: 'set null' }),
+  targetState: varchar('target_state', { length: 100 }),
+  targetCity: varchar('target_city', { length: 100 }),
+  metaDescription: varchar('meta_description', { length: 300 }),
+  metaKeywords: text('meta_keywords'),
+  authorId: text('author_id').references(() => user.id, { onDelete: 'set null' }),
+  status: varchar('status', { length: 50 }).default('draft').notNull(),
+  publishedAt: timestamp('published_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => {
+  return {
+    slugIdx: index('articles_slug_idx').on(table.slug),
+    categoryStatusIdx: index('articles_category_status_idx').on(table.level1CategoryId, table.level2CategoryId, table.level3CategoryId, table.status),
+    locationStatusIdx: index('articles_location_status_idx').on(table.targetState, table.targetCity, table.status),
+    authorIdx: index('articles_author_idx').on(table.authorId),
+  };
+});
+
+export const articlesRelations = relations(articlesTable, ({ one }) => ({
+  author: one(user, {
+    fields: [articlesTable.authorId],
+    references: [user.id],
+  }),
+  level1Category: one(categoriesTable, {
+    fields: [articlesTable.level1CategoryId],
+    references: [categoriesTable.id],
+    relationName: 'article_level1_category',
+  }),
+  level2Category: one(categoriesTable, {
+    fields: [articlesTable.level2CategoryId],
+    references: [categoriesTable.id],
+    relationName: 'article_level2_category',
+  }),
+  level3Category: one(categoriesTable, {
+    fields: [articlesTable.level3CategoryId],
+    references: [categoriesTable.id],
+    relationName: 'article_level3_category',
+  }),
+}));
+
+export type Article = typeof articlesTable.$inferSelect;
+export type NewArticle = typeof articlesTable.$inferInsert;

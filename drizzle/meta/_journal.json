@@ -22,6 +22,13 @@
       "when": 1746642612768,
       "tag": "0002_shiny_squadron_sinister",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1747059594291,
+      "tag": "0003_lean_thundra",
+      "breakpoints": true
     }
   ]
 }

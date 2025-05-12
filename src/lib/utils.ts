@@ -43,23 +43,32 @@ export function getParentCategories(categories: Category[]) {
   return categories.filter(c => c.level === 1 || c.level === 2);
 }
 
+// Action result utility function
 export function handleActionResult(
-  result: { success: boolean; message: string; data?: Category[] },
-  toast: (props: ToastProps) => void,
+  result: { success: boolean; message: string; data?: any },
+  toast: (props: { title: string; description: string; variant?: "default" | "destructive" }) => void,
   onSuccess?: () => void
-) {
+): any | undefined {
   if (result.success) {
-    toast({
-      title: "Thành công",
-      description: result.message,
-    });
+    toast({ title: "Thành công", description: result.message });
     onSuccess?.();
+    return result.data;
   } else {
     toast({
       variant: "destructive",
       title: "Lỗi",
-      description: result.message || "Đã xảy ra lỗi",
+      description: result.message || "Đã xảy ra lỗi"
     });
   }
-  return result.data;
+}
+
+// Date utility functions
+export function formatDate(date: Date): string {
+  return new Date(date).toLocaleDateString('vi-VN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 }
