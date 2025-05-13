@@ -29,6 +29,20 @@
       "when": 1747059594291,
       "tag": "0003_lean_thundra",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1747117780860,
+      "tag": "0004_early_vulture",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1747123718341,
+      "tag": "0005_cheerful_stardust",
+      "breakpoints": true
     }
   ]
 }

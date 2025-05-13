@@ -1,6 +1,7 @@
 import CategoryPicker from "@/components/homepage/CategoryPicker";
 import ProductsContainer from "@/components/products/ProductsContainer";
-import { getCategories, getPosts } from "@/lib/queries/categoryQueries";
+import { getCategories } from "@/lib/queries/categoryQueries";
+import { getPosts } from "@/lib/queries/postQueries";
 import { Metadata } from "next";
 
 export default async function Home() {

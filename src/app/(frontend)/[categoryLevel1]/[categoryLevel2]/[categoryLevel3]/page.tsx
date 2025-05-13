@@ -16,12 +16,18 @@ export default async function Page3({ params }: { params: Promise<{ categoryLeve
     const { categoryLevel1, categoryLevel2, categoryLevel3 } = await params
     const parentCategory = await getCategoryByPath(`/${categoryLevel1}`)
     const currentCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}`)
+
+    if (!parentCategory && !currentCategory) {
+        notFound();
+    }
+
     const categories = await getCategories()
     const currentSubChildCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}/${categoryLevel3}`)
-    const filteredCategories = categories.filter((e) => e.level === parentCategory.level)
-    const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === parentCategory.id)
-    const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory.id)
+    const filteredCategories = categories.filter((e) => e.level === parentCategory?.level)
+    const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === parentCategory?.id)
+    const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory?.id)
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2, categoryLevel3)
+    
     if (!currentSubChildCategory) {
         notFound();
     }

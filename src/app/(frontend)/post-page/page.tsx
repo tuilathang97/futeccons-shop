@@ -6,7 +6,8 @@ import BasicInfoServer from '@/components/post/BasicInfoServer';
 import PostInfo from '@/components/post/PostInfo';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-import UploadWidget from '@/components/UploadWidget';
+import { UploadForm } from '@/components/image-upload-form';
+import { ImageUploadProvider } from '@/contexts/ImageUploadContext';
 
 async function PostPage() {
 	const session = await auth.api.getSession({
@@ -16,20 +17,22 @@ async function PostPage() {
 	const user = session?.user
 	if(currentSection && user){
 		return (
-			<ProductPostForm>
-				<Suspense fallback={<div>Đang tải...</div>}>
-					<GeneralInfoServer />
-				</Suspense>
-				<Suspense fallback={<div>Đang tải...</div>}>
-					<BasicInfoServer />
-				</Suspense>
-				<Suspense fallback={<div>Đang tải...</div>}>
-					<PostInfo />
-				</Suspense>
-				<Suspense>
-					<UploadWidget/>
-				</Suspense>
-			</ProductPostForm> 
+			<ImageUploadProvider>
+				<ProductPostForm>
+					<Suspense fallback={<div>Đang tải...</div>}>
+						<GeneralInfoServer />
+					</Suspense>
+					<Suspense fallback={<div>Đang tải...</div>}>
+						<BasicInfoServer />
+					</Suspense>
+					<Suspense fallback={<div>Đang tải...</div>}>
+						<PostInfo />
+					</Suspense>
+					<Suspense>
+						<UploadForm/>
+					</Suspense>
+				</ProductPostForm>
+			</ImageUploadProvider>
 		)
 	}
 	return <>No user or session found</>

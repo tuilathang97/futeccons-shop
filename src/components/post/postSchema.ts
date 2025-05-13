@@ -6,7 +6,7 @@ export const PostSchema = z.object({
   level2Category: z.string().min(1,{message: "Vui lòng loại bất động sản"} ),
   level3Category: z.string().min(1,{message: "Vui lòng kiểu bất động sản"} ),
   path: z.string().optional(),
-  giaTien: z.string({message: "Vui lòng nhập giá tiền"}),
+  giaTien: z.number({message: "Vui lòng nhập giá tiền"}).min(1000000000,{message: "Giá tiền quá thấp"}).max(1000000000000000,{message: "Giá tiền quá cao"}),
   duong: z.string().min(1,{message: "Vui lòng nhập tên đường"}),
   phuong: z.string().min(1,{message: "Vui lòng nhập phường ( phải nhập quận trước )"}),
   quan: z.string().min(1,{message: "Vui lòng nhập tên quận ( phải nhập tp trước )"}),
@@ -25,7 +25,7 @@ export const PostSchema = z.object({
   soPhongNgu: z.number().min(1,{message: "Vui lòng nhập số phòng ngủ"}),
   soPhongVeSinh: z.number().min(1,{message:"Ít nhất phải có 1 nhà vệ sinh"}),
   giayToPhapLy: z.string().min(1, {message: "Vui lòng nhập giấy tờ pháp lý"}),
-  noiDung: z.string().min(30, {message: "Bài viết phải nội dung"}),
+  noiDung: z.string().min(30, {message: "Nội dung quá ngắn, vui lòng nhập thêm"}),
 })
 
 export type Post = z.infer<typeof PostSchema> & {id: string};

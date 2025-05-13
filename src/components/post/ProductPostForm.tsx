@@ -4,23 +4,28 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormMessage } from "@/components/ui/form";
-import { useActionState, useRef } from "react";
+import { startTransition, useActionState, useEffect, useRef } from "react";
 import { createPost } from "@/actions/authActions";
 import { FaqSection } from "../blocks/faq";
 import { Post, PostSchema } from "./postSchema";
 import React from "react";
+import { useImageUpload } from "@/contexts/ImageUploadContext";
+import { toast } from "@/hooks/use-toast";
 
 
 export function ProductPostForm({ children }: { children: React.ReactNode }) {
   const [state, formAction] = useActionState(createPost, { message: "" });
   const formRef = useRef<HTMLFormElement>(null);
+  
+  const { previews, previewsFiles } = useImageUpload();
+
   const form = useForm<Post>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
       level1Category: "",
       level2Category: "",
       level3Category: "",
-      giaTien: "",
+      giaTien: 0,
       duong: "",
       phuong: "",
       quan: "",
@@ -32,17 +37,39 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
       soPhongVeSinh: 0,
       giayToPhapLy: "",
       noiDung: "",
-      tieuDeBaiViet:""
+      tieuDeBaiViet: ""
     },
+  });
+  useEffect(() => {
+    if (state.message)
+      toast({
+        description: state.message,
+      })
+    return
+  }, [state.message])
+  const handleSubmit = form.handleSubmit(async (data) => {
+    const formElement = formRef?.current;
+    if (formElement) {
+      const formData = new FormData(formElement);
+      
+      if (previewsFiles.length > 0) {
+        previewsFiles.forEach((file, index) => {
+          formData.append(`image${index}`, file);
+        });
+        
+        formData.append('imagesCount', previewsFiles.length.toString());
+      }
+      
+      startTransition(() => {
+        formAction(formData);
+      });
+    }
   });
   return (
     <Form {...form}>
       <form
         ref={formRef}
-        action={formRef ? formAction : () => {}}
-        onSubmit={form.handleSubmit(() => {
-          formRef?.current?.submit();
-        })}
+        onSubmit={handleSubmit}
         className="w-full space-y-6"
       >
         <FaqSection
@@ -54,12 +81,11 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
           </div>
         </FaqSection>
         <div className="w-full max-w-2xl py-6 mx-auto">
-          <Button className="w-full" type="submit">
+          <Button  className="w-full" type="submit">
             Đăng tin
           </Button>
         </div>
       </form>
-      <FormMessage>{state.message}</FormMessage>
     </Form>
   );
 }

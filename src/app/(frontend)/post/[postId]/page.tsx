@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import PostDetail from '@/components/products/PostDetail'
 import { Phone } from 'lucide-react'
-import { getPostById } from '@/lib/queries/categoryQueries'
+import { getPostById } from '@/lib/queries/postQueries'
 
 export default async function Page({ params }: { params: { postId: string[] } }) {
     const postId = await params.postId;

@@ -15,7 +15,7 @@ export type Category = typeof categoriesTable.$inferSelect;
 
 export const postsTable = pgTable('posts', {
   id: serial('id').primaryKey(),
-  userId:varchar('userId',{ length: 255 }).notNull(),
+  userId:varchar('userId',{ length: 255 }).notNull().references(() => user.id, { onDelete: 'cascade' }),
   active: boolean('active').notNull().default(false),
   level1Category: integer('level1_category').notNull(),
   level2Category: integer('level2_category').notNull(),
@@ -86,6 +86,17 @@ export const user = pgTable("user", {
 
 
 export type User = typeof user.$inferSelect;
+
+export const userRelations = relations(user, ({ many }) => ({
+  posts: many(postsTable)
+}));
+
+export const postsRelations = relations(postsTable, ({ one }) => ({
+  user: one(user, {
+    fields: [postsTable.userId],
+    references: [user.id]
+  })
+}));
 
 export const session = pgTable("session", {
   id: text('id').primaryKey(),
@@ -180,3 +191,31 @@ export const articlesRelations = relations(articlesTable, ({ one }) => ({
 
 export type Article = typeof articlesTable.$inferSelect;
 export type NewArticle = typeof articlesTable.$inferInsert;
+
+export const postImagesTable = pgTable('postImages',{
+  id: serial('id').primaryKey(),
+  assetId: varchar('asset_id', { length: 255 }).notNull(),
+  publicId: varchar('public_id', { length: 255 }).notNull().unique(),
+  version: integer('version').notNull(),
+  versionId: varchar('version_id', { length: 255 }).notNull(),
+  signature: varchar('signature', { length: 255 }).notNull(),
+  width: integer('width').notNull(),
+  height: integer('height').notNull(),
+  format: varchar('format', { length: 50 }).notNull(),
+  resourceType: varchar('resource_type', { length: 50 }).notNull(),
+  createdAt: timestamp('created_at').notNull(),
+  tags: text('tags').array(),
+  bytes: integer('bytes').notNull(),
+  type: varchar('type', { length: 50 }).notNull(),
+  etag: varchar('etag', { length: 255 }).notNull(),
+  placeholder: boolean('placeholder').notNull().default(false),
+  url: text('url').notNull(),
+  secureUrl: text('secure_url').notNull(),
+  assetFolder: varchar('asset_folder', { length: 255 }),
+  displayName: varchar('display_name', { length: 255 }),
+  originalFilename: text('original_filename'),
+  postId: integer('post_id').references(() => postsTable.id, { onDelete: 'cascade' }),
+});
+
+export type Image = typeof postImagesTable.$inferSelect;
+export type NewImage = typeof postImagesTable.$inferInsert;

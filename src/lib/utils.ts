@@ -60,7 +60,9 @@ export function handleActionResult(
       description: result.message || "Đã xảy ra lỗi"
     });
   }
+  return result.data;
 }
+
 
 // Date utility functions
 export function formatDate(date: Date): string {

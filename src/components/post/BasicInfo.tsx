@@ -92,15 +92,28 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
     soPhongVeSinh
   ]);
 
-  function handleCurrency(currencyString: string) {
-    const withoutSeparators = currencyString.replace(/\./g, '');
-    const normalizedString = withoutSeparators.replace(',', '.');
-    const numValue = Number(normalizedString);
-    if (!isNaN(numValue)) {
-      return new Intl.NumberFormat("vi-VN").format(numValue)
-    }
-    form.setError("giaTien", { message: "giá tiền không được bao gồm chữ" })
-    return ""
+  // Handle currency conversion for display and storage
+  function formatCurrency(value: number | string | null | undefined): string {
+    if (value === null || value === undefined || value === '') return '';
+    
+    // Convert to string if it's a number
+    const stringValue = typeof value === 'number' ? value.toString() : value;
+    
+    // Remove any non-numeric characters
+    const numericValue = stringValue.replace(/[^\d]/g, '');
+    
+    // Convert to number and format
+    const number = Number(numericValue);
+    if (isNaN(number)) return '';
+    
+    return new Intl.NumberFormat("vi-VN").format(number);
+  }
+
+  function parseCurrency(formattedValue: string): number {
+    // Remove all dots and replace comma with dot for decimal
+    const numericString = formattedValue.replace(/\./g, '');
+    const number = Number(numericString);
+    return isNaN(number) ? 0 : number;
   }
 
   useEffect(() => {
@@ -355,15 +368,19 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
             <FormField
               control={form.control}
               name="giaTien"
-              render={({ field: { ...fieldProps } }) => (
+              render={({ field: { onChange, value, ...fieldProps } }) => (
                 <FormItem>
                   <FormLabel>Giá tiền <span className="text-red-500">*</span></FormLabel>
                   <FormControl>
                     <Input
                       {...fieldProps}
                       placeholder="Nhập giá tiền"
-                      type='currency'
-                      value={handleCurrency(fieldProps.value)}
+                      value={formatCurrency(value)}
+                      onChange={(e) => {
+                        const formatted = e.target.value.replace(/[^\d.]/g, '');
+                        const numericValue = parseCurrency(formatted);
+                        onChange(numericValue);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
