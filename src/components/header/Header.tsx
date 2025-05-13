@@ -11,71 +11,74 @@ import UserActionGroup from "./userActionGroup"
 import UserDropDown from "./UserDropDown"
 import { Session, User } from "@/db/schema"
 
+
 export default function Header({ user, session }: { user: User, session: Session }) {
     return (
-        <header className="fixed z-50 bg-gray-50 border-b-[0.1px] gap-4 border-gray-500 top-0 left-0 flex justify-between md:justify-around h-16 min-w-full shrink-0 items-center px-4 md:px-6">
-            <NavigationSubMenu></NavigationSubMenu>
-            <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
-                <Home className="h-6 w-6" />
-                <span className="sr-only">Futeccons</span>
-            </Link>
-            <NavigationMenu className="hidden lg:flex">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant={"outline"} className="flex gap-2">
-                            <p>Danh mục</p>
-                            <ArrowDownIcon size={16} />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        <DropdownMenuLabel>Bất Động Sản</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            {
-                                OPTIONS.categories.map((category, index) => {
-                                    return (
-                                        <DropdownMenuSub key={index}>
-                                            <DropdownMenuSubTrigger>
-                                                <Link href={category.slug}>
-                                                    {category.label}
-                                                </Link>
-                                            </DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent>
-                                                    {category.options.map((option: optionI, index: number) => {
-                                                        return (
-                                                            <DropdownMenuItem
-                                                                key={`${index}`} // Key unique
-                                                            >
-                                                                <Link href={`${category.slug}${option.slug}`}>{option.label}</Link>
-                                                            </DropdownMenuItem>
-                                                        )
-                                                    })}
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-                                    )
-                                })
-                            }
-                        </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </NavigationMenu>
-            <SearchBar />
-            <div className="flex gap-4 items-center">
-                {user?.id && session?.id ? (
-                    <UserDropDown user={user} />
-                ) : <UserActionGroup />
-                }
-                <Link
-                    href="/post-page"
-                >
-                    <Button variant={"destructive"} className="flex gap-2">
-                        <p>Đăng tin</p>
-                        <SquarePen size={16} />
-                    </Button>
+        <header className="fixed max-w-7xl  bg-gray-100 z-50  gap-4 top-0 px-4 lg:px-8  md:top-8 left-0 flex  h-16 min-w-full  items-center ">
+            <nav className=" items-center shadow-xl gap-2 rounded-xl flex justify-between container border py-2 ">
+                <NavigationSubMenu></NavigationSubMenu>
+                <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
+                    <Home className="h-6 w-6" />
+                    <span className="sr-only">Futeccons</span>
                 </Link>
-            </div>
+                <NavigationMenu className="hidden lg:flex">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant={"outline"} className="flex gap-2">
+                                <p>Danh mục</p>
+                                <ArrowDownIcon size={16} />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                            <DropdownMenuLabel>Bất Động Sản</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuGroup>
+                                {
+                                    OPTIONS.categories.map((category, index) => {
+                                        return (
+                                            <DropdownMenuSub key={index}>
+                                                <DropdownMenuSubTrigger>
+                                                    <Link href={category.slug}>
+                                                        {category.label}
+                                                    </Link>
+                                                </DropdownMenuSubTrigger>
+                                                <DropdownMenuPortal>
+                                                    <DropdownMenuSubContent>
+                                                        {category.options.map((option: optionI, index: number) => {
+                                                            return (
+                                                                <DropdownMenuItem
+                                                                    key={`${index}`} // Key unique
+                                                                >
+                                                                    <Link href={`${category.slug}${option.slug}`}>{option.label}</Link>
+                                                                </DropdownMenuItem>
+                                                            )
+                                                        })}
+                                                    </DropdownMenuSubContent>
+                                                </DropdownMenuPortal>
+                                            </DropdownMenuSub>
+                                        )
+                                    })
+                                }
+                            </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </NavigationMenu>
+                <SearchBar />
+                <div className="flex gap-4 items-center">
+                    {user?.id && session?.id ? (
+                        <UserDropDown user={user} />
+                    ) : <UserActionGroup />
+                    }
+                    <Link
+                        href="/post-page"
+                    >
+                        <Button variant={"destructive"} className="flex gap-2">
+                            <p>Đăng tin</p>
+                            <SquarePen size={16} />
+                        </Button>
+                    </Link>
+                </div>
+            </nav>
         </header>
     )
 }

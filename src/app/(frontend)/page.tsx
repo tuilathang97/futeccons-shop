@@ -7,7 +7,7 @@ export default async function Home() {
   const categories = await getCategories()
   const posts = await getPosts()
   return (
-    <div className="flex flex-col container justify-center min-w-full items-center gap-4">
+    <div className="flex flex-col container px-0 justify-center min-w-full items-center gap-4">
       <CategoryPicker categories={categories}/>
       <ProductsContainer title="Tin đăng" posts={posts}  />
     </div>
