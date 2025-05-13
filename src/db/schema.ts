@@ -7,7 +7,7 @@ export const categoriesTable = pgTable("categories", {
   parentId: integer("parent_id"),
   level: integer("level").notNull().$type < 1 | 2 | 3 > (),
   note: varchar("note", { length: 255 }).default(""),
-  path: varchar("path", { length: 255 }),
+  path: varchar("path", { length: 255 }).unique(),
   slug: varchar("slug", { length: 255 }),
 });
 
