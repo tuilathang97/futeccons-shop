@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { ReactScan } from "@/components/ReactScan";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default async function RootLayout({children,}: Readonly<{children: React.
   })
   return (
     <html lang="vi" className="h-svh">
+      {/* <ReactScan /> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] min-w-full antialiased mx-0 max-w-[80rem] !pt-[7rem] px-4 lg:px-8 md:pt-[5rem] `}
       >
