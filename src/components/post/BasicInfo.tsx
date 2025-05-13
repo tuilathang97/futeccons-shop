@@ -95,17 +95,17 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
   // Handle currency conversion for display and storage
   function formatCurrency(value: number | string | null | undefined): string {
     if (value === null || value === undefined || value === '') return '';
-    
+
     // Convert to string if it's a number
     const stringValue = typeof value === 'number' ? value.toString() : value;
-    
+
     // Remove any non-numeric characters
     const numericValue = stringValue.replace(/[^\d]/g, '');
-    
+
     // Convert to number and format
     const number = Number(numericValue);
     if (isNaN(number)) return '';
-    
+
     return new Intl.NumberFormat("vi-VN").format(number);
   }
 

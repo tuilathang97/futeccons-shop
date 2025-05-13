@@ -12,6 +12,10 @@ import {
 } from '@/lib/queries/articleQueries';
 import { getCategories } from '@/lib/queries/categoryQueries';
 import { getServerSession } from '@/lib/auth-utils';
+import { db } from "@/db/drizzle";
+import { articlesTable } from "@/db/schema";
+import { and, eq, isNull } from "drizzle-orm";
+import { getCategoryByPath } from "@/lib/queries/categoryQueries";
 
 const ArticleSchema = z.object({
   title: z.string().min(1, { message: "Tiêu đề không được để trống" }),
@@ -91,8 +95,29 @@ export async function createArticleAction(formData: FormData): Promise<ActionRes
 
 
     revalidatePath('/admin/articles');
+    
     revalidatePath('/');
-
+    
+    if (articleData.level1CategoryId) {
+      const category1 = await getCategoryByPath(`/${articleData.slug?.split('/')[1] || ''}`);
+      if (category1?.slug) {
+        revalidatePath(`/${category1.slug}`);
+        
+        if (articleData.level2CategoryId) {
+          const category2 = await getCategoryByPath(`/${category1.slug}/${articleData.slug?.split('/')[2] || ''}`);
+          if (category2?.slug) {
+            revalidatePath(`/${category1.slug}/${category2.slug}`);
+            
+            if (articleData.level3CategoryId) {
+              const category3 = await getCategoryByPath(`/${category1.slug}/${category2.slug}/${articleData.slug?.split('/')[3] || ''}`);
+              if (category3?.slug) {
+                revalidatePath(`/${category1.slug}/${category2.slug}/${category3.slug}`);
+              }
+            }
+          }
+        }
+      }
+    }
 
     const categoriesWithStatus = await getCategoriesWithArticleStatus();
     return {
@@ -157,8 +182,29 @@ export async function updateArticleAction(formData: FormData): Promise<ActionRes
 
 
     revalidatePath('/admin/articles');
+    
     revalidatePath('/');
-
+    
+    if (validationResult.data.level1CategoryId) {
+      const category1 = await getCategoryByPath(`/${validationResult.data.slug?.split('/')[1] || ''}`);
+      if (category1?.slug) {
+        revalidatePath(`/${category1.slug}`);
+        
+        if (validationResult.data.level2CategoryId) {
+          const category2 = await getCategoryByPath(`/${category1.slug}/${validationResult.data.slug?.split('/')[2] || ''}`);
+          if (category2?.slug) {
+            revalidatePath(`/${category1.slug}/${category2.slug}`);
+            
+            if (validationResult.data.level3CategoryId) {
+              const category3 = await getCategoryByPath(`/${category1.slug}/${category2.slug}/${validationResult.data.slug?.split('/')[3] || ''}`);
+              if (category3?.slug) {
+                revalidatePath(`/${category1.slug}/${category2.slug}/${category3.slug}`);
+              }
+            }
+          }
+        }
+      }
+    }
 
     const categoriesWithStatus = await getCategoriesWithArticleStatus();
     return {
@@ -196,10 +242,33 @@ export async function deleteArticleAction(id: number): Promise<ActionResult> {
 
     await deleteArticleInDb(id);
 
-    // Revalidate paths
+    // Revalidate admin paths
     revalidatePath('/admin/articles');
+    
+    // Revalidate frontend paths
     revalidatePath('/');
-
+    
+    // Get the categories to revalidate specific paths
+    if (article.level1CategoryId) {
+      const category1 = await getCategoryByPath(`/${article.slug?.split('/')[1] || ''}`);
+      if (category1?.slug) {
+        revalidatePath(`/${category1.slug}`);
+        
+        if (article.level2CategoryId) {
+          const category2 = await getCategoryByPath(`/${category1.slug}/${article.slug?.split('/')[2] || ''}`);
+          if (category2?.slug) {
+            revalidatePath(`/${category1.slug}/${category2.slug}`);
+            
+            if (article.level3CategoryId) {
+              const category3 = await getCategoryByPath(`/${category1.slug}/${category2.slug}/${article.slug?.split('/')[3] || ''}`);
+              if (category3?.slug) {
+                revalidatePath(`/${category1.slug}/${category2.slug}/${category3.slug}`);
+              }
+            }
+          }
+        }
+      }
+    }
 
     const categoriesWithStatus = await getCategoriesWithArticleStatus();
     return {
@@ -268,5 +337,70 @@ export async function getCategoriesWithArticleStatusAction(): Promise<ActionResu
       success: false,
       message: error instanceof Error ? error.message : "Đã xảy ra lỗi khi lấy dữ liệu danh mục",
     };
+  }
+}
+
+interface ArticleQueryParams {
+  level1Slug?: string;
+  level2Slug?: string;
+  level3Slug?: string;
+  state?: string;
+  city?: string;
+}
+
+export async function getPublishedArticleByParams({
+  level1Slug,
+  level2Slug,
+  level3Slug,
+  state,
+  city
+}: ArticleQueryParams) {
+  try {
+    let level1Category = null;
+    let level2Category = null;
+    let level3Category = null;
+
+    if (level1Slug) {
+      level1Category = await getCategoryByPath(`/${level1Slug}`);
+      if (!level1Category) return null;
+    }
+
+    if (level2Slug) {
+      if (level2Slug.startsWith('/')) {
+        level2Category = await getCategoryByPath(level2Slug);
+      } else {
+        level2Category = await getCategoryByPath(`/${level1Slug}/${level2Slug}`);
+      }
+      if (!level2Category) return null;
+    }
+
+    if (level3Slug) {
+      if (level3Slug.startsWith('/')) {
+        level3Category = await getCategoryByPath(level3Slug);
+      } else if (level2Slug && !level2Slug.startsWith('/')) {
+        level3Category = await getCategoryByPath(`/${level1Slug}/${level2Slug}/${level3Slug}`);
+      } else {
+        // If level2Slug contains full path, extract just the slug part
+        const level2Parts = level2Slug?.split('/') || [];
+        const level2SlugOnly = level2Parts[level2Parts.length - 1];
+        level3Category = await getCategoryByPath(`/${level1Slug}/${level2SlugOnly}/${level3Slug}`);
+      }
+      if (!level3Category) return null;
+    }
+
+    // For now, ignore state and city and just fetch the general article for the category
+    const generalArticle = await db.query.articlesTable.findFirst({
+      where: and(
+        level1Category ? eq(articlesTable.level1CategoryId, level1Category.id) : isNull(articlesTable.level1CategoryId),
+        level2Category ? eq(articlesTable.level2CategoryId, level2Category.id) : isNull(articlesTable.level2CategoryId),
+        level3Category ? eq(articlesTable.level3CategoryId, level3Category.id) : isNull(articlesTable.level3CategoryId),
+        eq(articlesTable.status, 'published')
+      ),
+    });
+    
+    return generalArticle;
+  } catch (error) {
+    console.error("Error fetching article:", error);
+    return null;
   }
 } 

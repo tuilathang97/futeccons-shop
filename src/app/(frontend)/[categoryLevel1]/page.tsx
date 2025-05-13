@@ -12,13 +12,15 @@ import { getCategories, getCategoryByPath } from "@/lib/queries/categoryQueries"
 import { ArrowDownIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getPublishedArticleByParams } from "@/actions/articleActions";
+import ArticleContent from "@/components/articles/ArticleContent";
 
 interface PageProps {
     params: Promise<{ categoryLevel1: string }>;
     searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function Page({ params, searchParams }: PageProps) {
+export default async function ProductListing1LevelDeep({ params, searchParams }: PageProps) {
     const { categoryLevel1 } = await params;
     const result = await getPostByCategoryPath(categoryLevel1);
     const searchParam = await searchParams;
@@ -27,6 +29,10 @@ export default async function Page({ params, searchParams }: PageProps) {
     if (!currentParentCategory) {
         notFound();
     }
+
+    const article = await getPublishedArticleByParams({
+        level1Slug: categoryLevel1
+    });
 
     const categories = await getCategories();
     const filteredCategories = categories.filter((e) => e.level === currentParentCategory.level);
@@ -48,9 +54,16 @@ export default async function Page({ params, searchParams }: PageProps) {
                 <h1 className='text-xl font-bold'>Mua bán nhà đất chính chủ T3/2025</h1>
             </div>
             <div className="flex flex-col grid-cols-6 gap-4 md:grid">
-                <ProductsContainer data={result} searchParam={searchParam} cardVariant="horizontal"/>
+                <ProductsContainer data={result || []} searchParam={searchParam} cardVariant="horizontal"/>
                 <div className="col-span-2"></div>
             </div>
+            
+            {/* Display article content if available */}
+            {article && (
+                <div className="mt-8">
+                    <ArticleContent article={article} />
+                </div>
+            )}
         </section>
     );
 }

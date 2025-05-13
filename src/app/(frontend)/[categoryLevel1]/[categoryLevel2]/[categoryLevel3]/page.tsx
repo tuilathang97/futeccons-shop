@@ -11,8 +11,13 @@ import { getCategories, getCategoryByPath } from '@/lib/queries/categoryQueries'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import React from 'react'
+import { getPublishedArticleByParams } from '@/actions/articleActions'
+import ArticleContent from '@/components/articles/ArticleContent'
 
-export default async function Page3({ params }: { params: Promise<{ categoryLevel1: string, categoryLevel2: string, categoryLevel3: string }> }) {
+export default async function ProductListing3LevelDeep({ params, searchParams }: { 
+    params: Promise<{ categoryLevel1: string, categoryLevel2: string, categoryLevel3: string }>;
+    searchParams: { [key: string]: string | string[] | undefined };
+}) {
     const { categoryLevel1, categoryLevel2, categoryLevel3 } = await params
     const parentCategory = await getCategoryByPath(`/${categoryLevel1}`)
     const currentCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}`)
@@ -23,14 +28,22 @@ export default async function Page3({ params }: { params: Promise<{ categoryLeve
 
     const categories = await getCategories()
     const currentSubChildCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}/${categoryLevel3}`)
+    
+    if (!currentSubChildCategory) {
+        notFound();
+    }
+
+    const article = await getPublishedArticleByParams({
+        level1Slug: categoryLevel1,
+        level2Slug: categoryLevel2,
+        level3Slug: categoryLevel3
+    });
+
     const filteredCategories = categories.filter((e) => e.level === parentCategory?.level)
     const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === parentCategory?.id)
     const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory?.id)
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2, categoryLevel3)
     
-    if (!currentSubChildCategory) {
-        notFound();
-    }
     return (
         <div className='flex flex-col gap-4'>
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
@@ -56,6 +69,13 @@ export default async function Page3({ params }: { params: Promise<{ categoryLeve
                 </div>
                 <div className="col-span-2"></div>
             </div>
+
+            {/* Display article content if available */}
+            {article && (
+                <div className="mt-8">
+                    <ArticleContent article={article} />
+                </div>
+            )}
         </div>
     )
 }

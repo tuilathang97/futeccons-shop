@@ -23,12 +23,17 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
     return null
 }
 
-
+// TODO: fix type
 function ProductsContainer({ data, searchParam,cardVariant="vertical" }: { data: any[], searchParam: any,cardVariant?:"horizontal" | "vertical" }) {
+
+    if (!data || data.length === 0) {
+        return <div>Không có bài viết phù hợp với yêu cầu </div>
+    }
+
     const { gia, area, bedrooms, phuong, quan, thanhPho } = searchParam
     const formatedPrice = handleFormatPriceToNumber({ gia })
 
-    const filteredResult = data.filter((post: Post) => {
+    const filteredResult = data?.filter((post: Post) => {
         let areaCondition = true;
         let bedroomsCondition = true;
         let priceCondition = true;
@@ -52,30 +57,23 @@ function ProductsContainer({ data, searchParam,cardVariant="vertical" }: { data:
             }
         }
 
-        // Check price condition
         if (gia && formatedPrice) {
             priceCondition = Number(post.giaTien) >= formatedPrice.min &&
                 Number(post.giaTien) <= formatedPrice.max;
         }
 
-        // Check location condition
         if (thanhPho || quan || phuong) {
             locationCondition = true;
-
             if (thanhPho) {
                 locationCondition = locationCondition && post.thanhPhoCodeName === thanhPho;
             }
-
             if (quan) {
                 locationCondition = locationCondition && post.quanCodeName === quan;
             }
-
             if (phuong) {
                 locationCondition = locationCondition && post.phuongCodeName === phuong;
             }
         }
-
-        // Post must satisfy all applicable conditions
         return areaCondition && bedroomsCondition && priceCondition && locationCondition;
     });
 

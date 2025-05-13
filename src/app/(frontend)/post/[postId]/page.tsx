@@ -11,7 +11,6 @@ import { getPostById } from '@/lib/queries/postQueries'
 export default async function Page({ params }: { params: { postId: string[] } }) {
     const postId = await params.postId;
     const postFound = await getPostById(Number(postId))
-    console.log("its me im thanh nguyen")
     return (
         <div className='max-w-[70rem] mx-auto'>
             {

@@ -8,10 +8,14 @@ import ProductsListWithFilter from "@/components/filterComponent/ProductsListWit
 import ProductCard from "@/components/products/ProductCard";
 import { getPostByCategoryPath } from "@/lib/queries";
 import { getCategories, getCategoryByPath } from "@/lib/queries/categoryQueries";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getPublishedArticleByParams } from "@/actions/articleActions";
+import ArticleContent from "@/components/articles/ArticleContent";
 
-export default async function Page2({ params }: { params: Promise<{ categoryLevel1: string, categoryLevel2: string }> }) {
+export default async function ProductListing2LevelDeep({ params, searchParams }: { 
+    params: Promise<{ categoryLevel1: string, categoryLevel2: string }>;
+    searchParams: { [key: string]: string | string[] | undefined };
+}) {
     const { categoryLevel1, categoryLevel2 } = await params;
     const parentCategory = await getCategoryByPath(`/${categoryLevel1}`)
     const currentCategory = await getCategoryByPath(`/${categoryLevel1}/${categoryLevel2}`)
@@ -20,11 +24,17 @@ export default async function Page2({ params }: { params: Promise<{ categoryLeve
         notFound();
     }
 
+    // Fetch article based only on category path
+    const article = await getPublishedArticleByParams({
+        level1Slug: categoryLevel1,
+        level2Slug: categoryLevel2
+    });
+
     const categories = await getCategories()
     const filteredCategories = categories.filter((e) => e.level === parentCategory?.level)
     const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === parentCategory.id)
     const filteredSubChildCategories = categories.filter((e) => e.parentId === currentCategory?.id)
-    console.log({parentCategory, currentCategory})
+
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2)
 
     return(
@@ -52,6 +62,13 @@ export default async function Page2({ params }: { params: Promise<{ categoryLeve
                 </div>
                 <div className="col-span-2"></div>
             </div>
+
+            {/* Display article content if available */}
+            {article && (
+                <div className="mt-8">
+                    <ArticleContent article={article} />
+                </div>
+            )}
         </div>
     )
 }
