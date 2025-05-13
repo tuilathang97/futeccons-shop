@@ -1,8 +1,9 @@
 import {db} from "@/db/drizzle";
 import { eq, ilike, or, and } from 'drizzle-orm';
 import { categoriesTable, postsTable } from "@/db/schema";
+import { cache } from "react";
 
-export async function getPostByCategoryPath(slug1?: string, slug2?: string, slug3?: string,) {
+export const getPostByCategoryPath = cache(async (slug1?: string, slug2?: string, slug3?: string,) => {
     const path1 = `${slug1 ? '/' + slug1 : ''}`;
     const path2 = path1 + `${slug2 ? '/' + slug2 : ''}`
     const path3 = path2 + `${slug3 ? '/' + slug3 : ''}`
@@ -25,7 +26,7 @@ export async function getPostByCategoryPath(slug1?: string, slug2?: string, slug
     for (let i = 0; i < segmentsLength; i++) {
         const level = i + 1;
         if (!categoryNameByLevel[level]) {
-            throw new Error(`Category not found for slug at level ${level}`);
+           return null;
         }
     }
 
@@ -46,4 +47,4 @@ export async function getPostByCategoryPath(slug1?: string, slug2?: string, slug
     return await db.select()
         .from(postsTable)
         .where(and(...postConditions));
-}
+});

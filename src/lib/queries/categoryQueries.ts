@@ -1,26 +1,31 @@
 'use server'
 
 import { db } from '@/db/drizzle';
-import { categoriesTable, postImagesTable, postsTable } from '@/db/schema';
+import { categoriesTable, Category, postImagesTable, postsTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
+import { cache } from 'react';
 
 export async function createCategory(name: string, parentId: number | null, level: any, slug: string, path: string, note: string = '') {
   await db.insert(categoriesTable).values({ name, parentId, level, note, path, slug });
 }
 
-export async function getCategories() {
+export const getCategories = cache(async (): Promise<Category[]> => {
+  console.log(`Executing DB query for getCategories`); // For debugging, remove in production
+
   return await db.select().from(categoriesTable);
-}
+})
 
 export async function getCategoryById(id: number) {
   const result = await db.select().from(categoriesTable).where(eq(categoriesTable.id, id));
   return result[0];
 }
 
-export async function getCategoryByPath(path: string) {
+export const getCategoryByPath = cache(async (path: string): Promise<Category | null> => {
+  console.log(`Executing DB query for getCategoryByPath: ${path}`); // For debugging, remove in production
   const result = await db.select().from(categoriesTable).where(eq(categoriesTable.path, path));
-  return result[0];
-}
+  return result[0] || null;
+})
+
 export async function getCategoryBySlug(slug: string) {
   const result = await db.select().from(categoriesTable).where(eq(categoriesTable.slug, slug));
   return result[0];

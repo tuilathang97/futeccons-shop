@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, integer, serial, varchar, uuid, text, timestamp, decimal, boolean, index } from 'drizzle-orm/pg-core';
+import { pgTable, integer, serial, varchar, uuid, text, timestamp, decimal, boolean, index, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const categoriesTable = pgTable("categories", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -9,7 +9,10 @@ export const categoriesTable = pgTable("categories", {
   note: varchar("note", { length: 255 }).default(""),
   path: varchar("path", { length: 255 }).unique(),
   slug: varchar("slug", { length: 255 }),
-});
+}, (table) => [  
+  uniqueIndex('categories_path_idx').on(table.path),
+  index('categories_slug_idx').on(table.slug),
+]);
 
 export type Category = typeof categoriesTable.$inferSelect;
 
