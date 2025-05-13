@@ -53,10 +53,6 @@ export function UploadForm() {
           ))}
         </div>
       </Card>
-      <Button onClick={() => console.log("toi dang up hinh + format hinh ")}>
-        Upload Images
-      </Button>
-
     </FaqItem>
   );
 }

@@ -25,7 +25,6 @@ export async function getPosts() {
 export async function createPostToDb(postData: Omit<typeof postsTable.$inferInsert, 'id' | 'createdAt' | 'updatedAt'>) {
   try {
     const [result] = await db.insert(postsTable).values(postData).returning();
-    console.log(result.id)
     return { 
       success: true,
       postId: result.id,

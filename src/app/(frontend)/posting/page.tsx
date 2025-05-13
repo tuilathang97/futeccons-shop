@@ -88,7 +88,6 @@ function Page() {
             setError("danhMucPhu", { message: "Danh mục phụ là bắt buộc" })
             return
         }
-        console.log(values)
     }
     return (
         <div className='container pt-4'>
