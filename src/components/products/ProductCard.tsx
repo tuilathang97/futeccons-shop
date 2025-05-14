@@ -10,14 +10,15 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getCategoryById } from '@/lib/queries/categoryQueries';
 import { Skeleton } from '../ui/skeleton';
-
+import { Image as ImageType } from '@/db/schema';
 interface ProductCardProps {
     post: Post;
     variant?: "horizontal" | "vertical";
     badge?: string;
+    thumbnailImg?: ImageType;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", badge = "Hot" }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", badge = "Hot", thumbnailImg }) => {
     const path = usePathname()
     const [isLiked, setIsLiked] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -137,7 +138,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                             : "h-[200px] md:h-full md:w-[280px] flex-shrink-0 p-0 md:p-4"
                     )}>
                         <Image
-                            src={`https://picsum.photos/200/300.jpg`}
+                            src={thumbnailImg?.secureUrl ? thumbnailImg?.secureUrl : ``}
                             fill
                             alt={post.tieuDeBaiViet || "Property image"}
                             className={`object-cover rounded-md ${variant === "vertical" ? "p-0" : "p-0 md:p-4"}`}

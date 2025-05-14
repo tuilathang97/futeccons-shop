@@ -21,7 +21,6 @@ export async function getCategoryById(id: number) {
 }
 
 export const getCategoryByPath = cache(async (path: string): Promise<Category | null> => {
-  console.log(`Executing DB query for getCategoryByPath: ${path}`); // For debugging, remove in production
   const result = await db.select().from(categoriesTable).where(eq(categoriesTable.path, path));
   return result[0] || null;
 })

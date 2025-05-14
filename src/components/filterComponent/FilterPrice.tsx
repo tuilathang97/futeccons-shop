@@ -95,7 +95,6 @@ function FilterPrice({ priceType }: FilterPriceProps) {
             if (predefinedRange) {
                 setDisplayValue(predefinedRange.label)
             } else {
-                console.log(setSelectedPrice)
                 setDisplayValue(formatPriceForDisplay(min, max))
                 setCustomMinPrice(min.toString())
                 setCustomMaxPrice(max ? max.toString() : '')

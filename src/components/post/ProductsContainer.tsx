@@ -23,8 +23,7 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
     return null
 }
 
-// TODO: fix type
-function ProductsContainer({ data, searchParam,cardVariant="vertical" }: { data: any[], searchParam: any,cardVariant?:"horizontal" | "vertical" }) {
+function ProductsContainer({ data, searchParam,cardVariant="vertical" }: { data: Post[], searchParam: any,cardVariant?:"horizontal" | "vertical" }) {
 
     if (!data || data.length === 0) {
         return <div>Không có bài viết phù hợp với yêu cầu </div>

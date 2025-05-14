@@ -72,7 +72,6 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
       }
     }
 
-    const imageFiles: File[] = [];
     const imagesCount = Number(formDataEntries.imagesCount || 0);
     const uploadedImageUrls: UploadApiResponse[] = [];
 
@@ -147,13 +146,13 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
           await db.insert(postImagesTable).values(imageData)
           return {
             success:true,
-            message: "Lưu ảnh lên đám mây thành công "
+            message: "Đăng tải bài viết thành công "
           }
         } catch (error) {
           console.error("Failed to save image to database:", error);
           return {
             success: false,
-            message: "Lưu ảnh lên đám mây thất bại"
+            message: "Đăng tải bài viết thất bại vì hình ảnh chưa được lưu trên đám mây"
           }
         }
       }

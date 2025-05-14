@@ -6,7 +6,7 @@ type ImageUploadContextType = {
   previews: string[];
   setPreviews: (previews: string[]) => void;
   addPreviews: (newPreviews: string[]) => void;
-  removePreviews: (indexesToRemove: number[]) => void;
+  removePreviews: (indexesToRemove: number) => void;
   clearPreviews: () => void;
   previewsFiles: File[]; // Store actual File objects
   setFiles: (files: File[]) => void;
@@ -23,10 +23,15 @@ export function ImageUploadProvider({ children }: { children: ReactNode }) {
     setPreviews((prev) => [...prev, ...newPreviews]);
   };
 
-  const removePreviews = (indexesToRemove: number[]) => {
-    setPreviews((prev) => prev.filter((_, index) => !indexesToRemove.includes(index)));
-    setPreviewsFiles((prev) => prev.filter((_, index) => !indexesToRemove.includes(index)));
+  // const removePreviews = (indexesToRemove: number[]) => {
+  //   setPreviews((prev) => prev.filter((_, index) => !indexesToRemove.includes(index)));
+  //   setPreviewsFiles((prev) => prev.filter((_, index) => !indexesToRemove.includes(index)));
+  // };
+  const removePreviews = (indexToRemove: number) => { 
+    setPreviews((prev) => prev.filter((_, index) => index !== indexToRemove));
+    setPreviewsFiles((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
+
 
   const clearPreviews = () => {
     // Clean up object URLs to prevent memory leaks

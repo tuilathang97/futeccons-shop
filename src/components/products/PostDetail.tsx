@@ -3,15 +3,20 @@ import PostSectionWrapper from '@/components/postSectionWrapper'
 import { Bed, Clock, LandPlot, Layers, MapPin, Toilet, Home, BuildingIcon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Post } from '../post/postSchema'
+import { Card, CardContent } from '../ui/card'
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '../ui/carousel'
+import { Image as ImageType } from '@/db/schema'
+import Image from 'next/image'
 
 interface PostDetailProps {
     post: Post & {
         mediaItems?: { url: string, type: string }[] | string;
         createdAt?: string;
     }
+    images: ImageType[]
 }
 
-function PostDetail({ post }: PostDetailProps) {
+function PostDetail({ post, images }: PostDetailProps) {
     // Format price from raw number to formatted string
     const formatPrice = () => {
         const numPrice = parseInt(post.giaTien);
@@ -34,18 +39,25 @@ function PostDetail({ post }: PostDetailProps) {
         const date = new Date(post.createdAt);
         return date.toLocaleDateString('vi-VN');
     };
-
     return (
         <div className='flex flex-col gap-4'>
             <div className='flex flex-col gap-3'>
                 <div className='rounded-md overflow-hidden'>
-                    {/* <Carousel>
+                    <Carousel className="w-full">
                         <CarouselContent>
-                            <CarouselItem>
-                                <MediaCarousel mediaItems={post.mediaItems} />
-                            </CarouselItem>
+                            {images.map((image, index) => (
+                                <CarouselItem key={index}>
+                                    <div >
+                                        <Image src={image.secureUrl} alt={image.type} className='min-w-full h-auto' width={500} height={1000} />
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                            
                         </CarouselContent>
-                    </Carousel> */}
+                        <CarouselPrevious className='z-50' />
+                        <CarouselNext className='bg-black text-black' />
+                    </Carousel>
+
                 </div>
                 <PostSectionWrapper>
                     <div className='flex flex-col gap-4'>

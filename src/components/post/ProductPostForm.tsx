@@ -4,19 +4,20 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormMessage } from "@/components/ui/form";
-import { startTransition, useActionState, useEffect, useRef } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { createPost } from "@/actions/authActions";
 import { FaqSection } from "../blocks/faq";
 import { Post, PostSchema } from "./postSchema";
 import React from "react";
 import { useImageUpload } from "@/contexts/ImageUploadContext";
 import { toast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 
 export function ProductPostForm({ children }: { children: React.ReactNode }) {
   const [state, formAction] = useActionState(createPost, { message: "" });
   const formRef = useRef<HTMLFormElement>(null);
-  
+  const [isLoading, setIsLoading] = useState(false);
   const { previews, previewsFiles } = useImageUpload();
 
   const form = useForm<Post>({
@@ -48,22 +49,27 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
     return
   }, [state.message])
   const handleSubmit = form.handleSubmit(async (data) => {
+    setIsLoading(true);
     const formElement = formRef?.current;
     if (formElement) {
       const formData = new FormData(formElement);
-      
+
       if (previewsFiles.length > 0) {
         previewsFiles.forEach((file, index) => {
           formData.append(`image${index}`, file);
         });
-        
+
         formData.append('imagesCount', previewsFiles.length.toString());
       }
-      
+
       startTransition(() => {
         formAction(formData);
       });
     }
+    setTimeout(() => { 
+      setIsLoading(false);
+      form.reset(); },
+    1500);
   });
   return (
     <Form {...form}>
@@ -81,8 +87,8 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
           </div>
         </FaqSection>
         <div className="w-full max-w-2xl py-6 mx-auto">
-          <Button  className="w-full" type="submit">
-            Đăng tin
+          <Button className="w-full flex items-center justify-center gap-2" type="submit" disabled={isLoading}>
+            {isLoading ? <p>Đang đăng tin...<Loader2 className="animate-spin" /></p> : "Đăng tin"}
           </Button>
         </div>
       </form>

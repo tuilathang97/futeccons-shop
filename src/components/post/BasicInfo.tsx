@@ -11,7 +11,6 @@ import { useEffect, useMemo } from "react";
 
 const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: string }) => {
   const form = useFormContext<Post>();
-
   // Watch all required fields to determine section completion status
   const [
     selectedProvince,
@@ -280,6 +279,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
                     )}
                   />
                 </FormItem>
+
               )}
             />
           </div>
@@ -289,23 +289,16 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
         <FormField
           control={form.control}
           name="duong"
-          render={({ field }) => (
+          render={({ field: { value, onChange, ...fieldProps } }) => (
             <FormItem className="w-full md:w-[200px]">
               <FormLabel className="w-full md:w-[200px]">Đường <span className="text-red-500">*</span></FormLabel>
-              <Select {...field} onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Chọn đường" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="duong-1">Đường 1</SelectItem>
-                    <SelectItem value="duong-2">Đường 2</SelectItem>
-                    <SelectItem value="duong-3">Đường 3</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+
+              <Input
+                {...fieldProps}
+                placeholder="Nhập tên đường"
+                type="text"
+                onChange={(e) => onChange(e.target.value === '' ? '' : e.target.value)}
+              />
               <FormMessage />
             </FormItem>
           )}

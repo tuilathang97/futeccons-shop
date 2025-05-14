@@ -3,6 +3,7 @@ import { Button } from '../ui/button'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
 import { Post } from '@/db/schema'
+import { getPostImageyById } from '@/lib/queries/postImagesQueries'
 
 interface Container {
     title: string
@@ -28,9 +29,10 @@ function ProductsContainer({ title,posts }: Container) {
                 max-w-[1200px]
                 mx-auto'
             >
-                {posts?.map((postData,index) => {
+                {posts?.map(async (postData,index) => {
+                    const thumbnailImg = await getPostImageyById(postData.id,true)
                     return (
-                        <ProductCard variant="vertical" post={postData} key={index} />
+                        <ProductCard thumbnailImg={thumbnailImg} variant="vertical" post={postData} key={index} />
                     )
                 })}
             </div>
