@@ -11,7 +11,7 @@ import { getPostImageyById } from '@/lib/queries/postImagesQueries'
 
 export default async function Page({ params }: { params: { postId: string[] } }) {
     if(!params) return <div>Không tìm thấy bài viết</div>
-    const postId = await params?.postId;
+    const { postId } = await params;
     const postFound = await getPostById(Number(postId))
     const postImages = await getPostImageyById(Number(postId))
 

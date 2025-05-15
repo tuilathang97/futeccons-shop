@@ -1,9 +1,9 @@
+import { ActionResult } from "@/actions/postActions";
 import { db } from "@/db/drizzle";
-import { postImagesTable, postsTable } from "@/db/schema";
-import { UploadApiResponse } from "cloudinary";
+import { Image, postImagesTable, postsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function createPostImages(image: UploadApiResponse) {
+export async function createPostImages(image: Image) {
   try{
     await db.insert(postImagesTable).values(image);
     return {
@@ -31,7 +31,6 @@ export async function createPostToDb(postData: Omit<typeof postsTable.$inferInse
       message: "Post created successfully"
     };
   } catch (error) {
-    console.error("Failed to create post:", error);
     return {
       success: false,
       message: error instanceof Error ? error.message : "Database error"
@@ -42,4 +41,20 @@ export async function createPostToDb(postData: Omit<typeof postsTable.$inferInse
 export async function getPostById(id: number) {
   const result = await db.select().from(postsTable).where(eq(postsTable.id, id));
   return result[0];
+}
+
+export async function savePostImageToDb(imageData: typeof postImagesTable.$inferInsert): Promise<ActionResult> {
+  try {
+    await db.insert(postImagesTable).values(imageData);
+    return {
+      success: true,
+      message: "Image saved to database successfully"
+    };
+  } catch (error) {
+    console.error("Failed to save image to database:", error);
+    return {
+      success: false,
+      message: "Failed to save image to database"
+    };
+  }
 }

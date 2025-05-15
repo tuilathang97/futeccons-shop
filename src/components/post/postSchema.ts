@@ -11,14 +11,13 @@ export const PostSchema = z.object({
   phuong: z.string().min(1,{message: "Vui lòng nhập phường ( phải nhập quận trước )"}),
   quan: z.string().min(1,{message: "Vui lòng nhập tên quận ( phải nhập tp trước )"}),
   thanhPho: z.string().min(1,{message: "Vui lòng nhập tên thành phố"}),
-  //
   userId:z.string().optional(),
   phuongCodeName: z.string().min(1).optional(),
   quanCodeName: z.string().min(1).optional(),
   thanhPhoCodeName: z.string().min(1).optional(),
-  //
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
   tieuDeBaiViet:z.string().min(1,{message:"Vui lòng nhập tiêu đề cho bài viết"}),
-  //
   loaiHinhNhaO: z.string().min(1,{message:"Loại hình nhà ở là bắt buộc"}),
   dienTichDat: z.number().min(10,{message:"Diện tích đất quá nhỏ"}).max(1000000,{message:"Diện tích đất quá lớn so với hạn mức"}),
   soTang: z.number({message: "Vui lòng nhập số tầng"}).max(20),

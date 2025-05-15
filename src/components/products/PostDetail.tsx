@@ -3,15 +3,17 @@ import PostSectionWrapper from '@/components/postSectionWrapper'
 import { Bed, Clock, LandPlot, Layers, MapPin, Toilet, Home, BuildingIcon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Post } from '../post/postSchema'
-import { Card, CardContent } from '../ui/card'
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '../ui/carousel'
 import { Image as ImageType } from '@/db/schema'
 import Image from 'next/image'
+import LocationMapServer from './LocationMapServer'
 
 interface PostDetailProps {
     post: Post & {
         mediaItems?: { url: string, type: string }[] | string;
         createdAt?: string;
+        latitude?: number | null;
+        longitude?: number | null;
     }
     images: ImageType[]
 }
@@ -19,7 +21,7 @@ interface PostDetailProps {
 function PostDetail({ post, images }: PostDetailProps) {
     // Format price from raw number to formatted string
     const formatPrice = () => {
-        const numPrice = parseInt(post.giaTien);
+        const numPrice = typeof post.giaTien === 'string' ? parseInt(post.giaTien) : post.giaTien;
         if (numPrice >= 1000000000) {
             return `${(numPrice / 1000000000).toFixed(1)} tỷ`;
         } else if (numPrice >= 1000000) {
@@ -86,6 +88,17 @@ function PostDetail({ post, images }: PostDetailProps) {
                             <p className='flex gap-2 items-center'> <span><Home size={16} /></span> Loại hình nhà ở: {post.loaiHinhNhaO} </p>
                             <p className='flex gap-2 items-center'> <span><BuildingIcon size={16} /></span> Giấy tờ pháp lý: {post.giayToPhapLy} </p>
                         </div>
+                    </div>
+                </PostSectionWrapper>
+                <PostSectionWrapper>
+                    <div className='flex flex-col gap-4'>
+                        <h2 className='font-semibold text-lg'>Vị trí bất động sản</h2>
+                        <Separator className='w-full' />
+                        <LocationMapServer 
+                            latitude={post.latitude} 
+                            longitude={post.longitude} 
+                            popupText={post.tieuDeBaiViet}
+                        />
                     </div>
                 </PostSectionWrapper>
             </div>

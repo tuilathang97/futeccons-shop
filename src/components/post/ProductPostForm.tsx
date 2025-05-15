@@ -3,22 +3,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormMessage } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { startTransition, useActionState, useEffect, useRef, useState } from "react";
-import { createPost } from "@/actions/authActions";
 import { FaqSection } from "../blocks/faq";
 import { Post, PostSchema } from "./postSchema";
 import React from "react";
 import { useImageUpload } from "@/contexts/ImageUploadContext";
 import { toast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { createPost } from "@/actions/postActions";
 
 
 export function ProductPostForm({ children }: { children: React.ReactNode }) {
-  const [state, formAction] = useActionState(createPost, { message: "" });
+  const [state, formAction] = useActionState(createPost, { success: false, message: "", data: null});
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { previews, previewsFiles } = useImageUpload();
+  const { previewsFiles } = useImageUpload();
 
   const form = useForm<Post>({
     resolver: zodResolver(PostSchema),
@@ -48,7 +48,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
       })
     return
   }, [state.message])
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async () => {
     setIsLoading(true);
     const formElement = formRef?.current;
     if (formElement) {

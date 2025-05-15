@@ -8,6 +8,7 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { UploadForm } from '@/components/image-upload-form';
 import { ImageUploadProvider } from '@/contexts/ImageUploadContext';
+import LocationPickerServer from '@/components/post/LocationPickerServer';
 
 async function PostPage() {
 	const session = await auth.api.getSession({
@@ -27,6 +28,9 @@ async function PostPage() {
 					</Suspense>
 					<Suspense fallback={<div>Đang tải...</div>}>
 						<PostInfo />
+					</Suspense>
+					<Suspense fallback={<div>Đang tải bản đồ...</div>}>
+						<LocationPickerServer />
 					</Suspense>
 					<Suspense>
 						<UploadForm/>

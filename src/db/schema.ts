@@ -32,6 +32,8 @@ export const postsTable = pgTable('posts', {
   phuong: varchar('phuong', { length: 255 }).notNull(),
   phuongCodeName: varchar('phuong_code_name', { length: 255 }).notNull(),
   duong: varchar('duong', { length: 255 }).notNull(),
+  latitude: decimal('latitude', { precision: 10, scale: 7 }),
+  longitude: decimal('longitude', { precision: 10, scale: 7 }),
   giaTien: decimal('gia_tien', { precision: 15, scale: 2 }).notNull(),
   dienTichDat: decimal('dien_tich_dat', { precision: 10, scale: 2 }).notNull(),
   soTang: integer('so_tang').notNull(),
