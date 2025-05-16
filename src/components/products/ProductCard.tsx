@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Heart, MapPin } from "lucide-react";
@@ -91,9 +91,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
         router.push(`/post/${postId}`);
     }
     const formatAddress = () => {
-        if(!level1Ref){
-            return (<Skeleton className="w-[200px] h-[20px] rounded-full" />)
-        }
         // neu path = / la dang o trang chu thi redirect = level 1
         // /ban-nha-dat/ban-nha => !== "/" =>
         // neu co path roi /abc/xxx/yyy thi de nguyen path thay doi query params
@@ -101,19 +98,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
             <div className='flex flex-wrap items-center gap-1' onClick={(e) => { e.stopPropagation(); }}>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path !== "/" ? path : level1Ref }?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
+                    href={`${path !== "/" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
                 >
                     {post.phuong}
                 </Link>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path !== "/" ? path : level1Ref }?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
+                    href={`${path !== "/" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
                 >
                     {post.quan}
                 </Link>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path !== "/" ? path : level1Ref }?thanhPho=${post.thanhPhoCodeName}`}
+                    href={`${path !== "/" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}`}
                 >
                     {post.thanhPho}
                 </Link>
@@ -121,9 +118,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
         );
     };
 
-
     return (
-        <Card className={`shadow-md  ${variant === "vertical" ? "h-full max-w-[20rem]" : "w-full md:max-h-[17rem] "} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
+        <Card className={`shadow-md  ${variant === "vertical" ? "h-full w-full" : "w-full md:max-h-[17rem] "} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
             <button onClick={() => handleRedirectToPost(post.id)} className="block w-full h-full">
                 <div className={cn(
                     "flex",
@@ -137,12 +133,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                             ? "h-[200px] w-full "
                             : "h-[200px] md:h-full md:w-[280px] flex-shrink-0 p-0 md:p-4"
                     )}>
-                        <Image
-                            src={thumbnailImg?.secureUrl ? thumbnailImg?.secureUrl : ``}
-                            fill
-                            alt={post.tieuDeBaiViet || "Property image"}
-                            className={`object-cover rounded-md ${variant === "vertical" ? "p-0" : "p-0 md:p-4"}`}
-                        />
+                        {thumbnailImg?.secureUrl &&
+                            <Suspense fallback={<Skeleton className="w-full h-[200px] rounded-full" />}>
+                                <Image
+                                    src={thumbnailImg?.secureUrl}
+                                    fill
+                                    sizes='w-[300px] h-[200px]'
+                                    alt={post.tieuDeBaiViet || "Property image"}
+                                    className={`object-cover rounded-md ${variant === "vertical" ? "p-0" : "p-0 md:p-4"}`}
+                                />
+                            </Suspense>
+                        }
                         <Badge className={`absolute text-white  bg-red-500 border border-gray-500 shadow-md top-2 left-2 ${variant === "vertical" ? "" : "md:top-6 md:left-6"}`}>
                             {badge}
                         </Badge>

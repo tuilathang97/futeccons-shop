@@ -18,7 +18,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
   const [state, formAction] = useActionState(createPost, { success: false, message: "", data: null});
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { previewsFiles } = useImageUpload();
+  const { previews, previewsFiles, clearPreviews } = useImageUpload();
 
   const form = useForm<Post>({
     resolver: zodResolver(PostSchema),
@@ -42,13 +42,20 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
     },
   });
   useEffect(() => {
-    if (state.message)
+    if (state?.message)
       toast({
-        description: state.message,
+        description: state?.message,
       })
-    return
-  }, [state.message])
-  const handleSubmit = form.handleSubmit(async () => {
+      if (state.success) { 
+        form.reset();
+        clearPreviews(); 
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
+      return
+  }, [state?.message])
+  const handleSubmit = form.handleSubmit(async (data) => {
     setIsLoading(true);
     const formElement = formRef?.current;
     if (formElement) {
@@ -59,17 +66,13 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
           formData.append(`image${index}`, file);
         });
 
-        formData.append('imagesCount', previewsFiles.length.toString());
+        formData.append('imagesCount', previewsFiles?.length?.toString());
       }
 
       startTransition(() => {
         formAction(formData);
       });
     }
-    setTimeout(() => { 
-      setIsLoading(false);
-      form.reset(); },
-    1500);
   });
   return (
     <Form {...form}>
@@ -87,8 +90,8 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
           </div>
         </FaqSection>
         <div className="w-full max-w-2xl py-6 mx-auto">
-          <Button className="w-full flex items-center justify-center gap-2" type="submit" disabled={isLoading}>
-            {isLoading ? <p>Đang đăng tin...<Loader2 className="animate-spin" /></p> : "Đăng tin"}
+          <Button className="w-full flex items-center justify-center" type="submit" disabled={isLoading}>
+            {isLoading ? <p className="flex items-center gap-2">Đang đăng tin...<Loader2 className="animate-spin" /></p> : "Đăng tin"}
           </Button>
         </div>
       </form>
