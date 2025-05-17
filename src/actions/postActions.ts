@@ -7,7 +7,8 @@ import { tmpdir } from 'os';
 import { postsTable } from "@/db/schema";
 import { cloudinaryInstance } from "@/lib/cloudinary";
 import { UploadApiResponse } from "cloudinary";
-import { createPostToDb, savePostImageToDb } from "@/lib/queries/postQueries";
+import { createPostToDb, savePostImageToDb, approvePost, deletePost } from "@/lib/queries/postQueries";
+import { isAdminUser, requireAdmin } from "@/lib/auth-utils";
 
 export interface ActionResult {
   success: boolean;
@@ -107,7 +108,7 @@ function extractFormData(formData: FormData): Record<string, string> {
   return formDataEntries;
 }
 
-function preparePostData(formDataEntries: Record<string, string>, userId: string): Omit<typeof postsTable.$inferInsert, 'id' | 'createdAt' | 'updatedAt'> {
+function preparePostData(formDataEntries: Record<string, string>, userId: string, isAdmin: boolean): Omit<typeof postsTable.$inferInsert, 'id' | 'createdAt' | 'updatedAt'> {
   const latitude = processCoordinates(formDataEntries.latitude);
   const longitude = processCoordinates(formDataEntries.longitude);
   
@@ -115,7 +116,7 @@ function preparePostData(formDataEntries: Record<string, string>, userId: string
 
   return {
     userId: userId,
-    active: formDataEntries.active === 'true' || false,
+    active: isAdmin ? true : (formDataEntries.active === 'true' || false),
     level1Category: Number(formDataEntries.level1Category),
     level2Category: Number(formDataEntries.level2Category),
     level3Category: Number(formDataEntries.level3Category),
@@ -148,6 +149,7 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
   });
   
   const user = session?.user;
+  const isAdmin = user ? await isAdminUser() : false;
 
   try {
     if (!user?.id) {
@@ -161,7 +163,7 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
     const imagesCount = Number(formDataEntries.imagesCount || 0);
     const uploadedImageUrls = await processAndUploadImages(formData, imagesCount);
     
-    const postData = preparePostData(formDataEntries, user.id);
+    const postData = preparePostData(formDataEntries, user.id, isAdmin);
     const result = await createPostToDb(postData);
     
     if(result.postId && result.success && uploadedImageUrls.length > 0){
@@ -187,19 +189,47 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
     if (!result.success) {
       return {
         success: false,
-        message: `Post creation failed: ${result.message}`
+        message: `Đăng tải bài viết thất bại: ${result.message}`
       };
     }
     
     return {
       success: true,
-      message: "Post created successfully with images"
+      message: "Đăng tải bài viết thành công"
     };
   } catch (error) {
-    console.error("Post creation error:", error);
+    console.error("Đăng tải bài viết thất bại:", error);
     return {
       success: false,
-      message: `Post creation failed: ${error instanceof Error ? error.message : String(error)}`
+      message: `Đăng tải bài viết thất bại: ${error instanceof Error ? error.message : String(error)}`
+    };
+  }
+}
+
+export async function approvePostAction(postId: number): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+    const result = await approvePost(postId);
+    return result;
+  } catch (error) {
+    console.error("Phê duyệt bài viết thất bại:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Phê duyệt bài viết thất bại vì lỗi không xác định."
+    };
+  }
+}
+
+export async function deletePostAction(postId: number): Promise<ActionResult> {
+  try {
+    await requireAdmin();
+    const result = await deletePost(postId);
+    return result;
+  } catch (error) {
+    console.error("Xóa bài viết thất bại:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Xóa bài viết thất bại vì lỗi không xác định."
     };
   }
 }
