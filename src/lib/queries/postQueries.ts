@@ -19,8 +19,51 @@ export async function createPostImages(image: Image) {
   }
 }
 
-export async function getPosts() {
-  return await db.select().from(postsTable);
+export async function getPosts(
+  params?: PaginationParams
+): Promise<PaginatedResult<Post>> {
+  const page = params?.page ? Number(params.page) : 1;
+  const pageSize = params?.pageSize ? Number(params.pageSize) : 10;
+  const sortBy = params?.sortBy || 'createdAt';
+  const sortOrder = params?.sortOrder || 'desc';
+  const offset = (page - 1) * pageSize;
+
+  const whereClause = eq(postsTable.active, true);
+
+  let dataQueryBase = db
+    .select()
+    .from(postsTable)
+    .where(whereClause);
+
+  const sortTable = postsTable as typeof postsTable & { [key: string]: any }; 
+  const sortColumn = sortTable[sortBy];
+  
+  let orderedQuery;
+  if (sortColumn) {
+    orderedQuery = dataQueryBase.orderBy(sortOrder === 'desc' ? desc(sortColumn) : asc(sortColumn));
+  } else {
+    orderedQuery = dataQueryBase.orderBy(desc(postsTable.createdAt));
+  }
+
+  const countResult = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(postsTable)
+    .where(whereClause);
+  
+  const totalItems = countResult[0].count;
+  const totalPages = Math.ceil(totalItems / pageSize);
+
+  const resultData = await orderedQuery.limit(pageSize).offset(offset);
+
+  return {
+    data: resultData as Post[],
+    metadata: {
+      currentPage: page,
+      pageSize,
+      totalPages,
+      totalItems,
+    },
+  };
 }
 
 export async function createPostToDb(postData: Omit<typeof postsTable.$inferInsert, 'id' | 'createdAt' | 'updatedAt'>) {

@@ -65,6 +65,12 @@ export const navItems: NavItem[] = [
                 icon: 'post',
                 shortcut: ['a', 'a']
             },
+            {
+                title: 'Duyệt bài đăng',
+                url: '/admin/posts-management',
+                icon: 'post',
+                shortcut: ['p', 'm']
+            }
         ]
     },
     {
