@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         pathname: '/**/**',
         search: '',
       },
+      {
+        protocol: 'http',
+        hostname: 'res.cloudinary.com',
+        pathname: '/**/**',
+        search: '',
+      },
     ],
   },
   experimental: {

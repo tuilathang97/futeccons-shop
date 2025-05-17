@@ -2,7 +2,7 @@ import React from 'react'
 import PostSectionWrapper from '@/components/postSectionWrapper'
 import { Bed, Clock, LandPlot, Layers, MapPin, Toilet, Home, BuildingIcon, Heart, AlertTriangle, Share2 } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
-import { Image as ImageType, Post } from '@/db/schema'
+import { Image as ImageType, Post, Article } from '@/db/schema'
 import LocationMapServer from './LocationMapServer'
 import { getPublishedArticleByParams } from '@/actions/articleActions'
 import ArticleContent from '../articles/ArticleContent'
@@ -17,13 +17,19 @@ interface PostDetailProps {
         longitude?: number | null;
     }
     images: ImageType[]
+    article?: Article | null
+    fetchArticle?: boolean
 }
 
-async function PostDetail({ post, images }: PostDetailProps) {
+async function PostDetail({ post, images, article: initialArticle, fetchArticle = true }: PostDetailProps) {
     const { giaTien, duong, phuong, quan, thanhPho, createdAt } = post;
-    const article = await getPublishedArticleByParams({
-        level1Slug: post.level1Category.toString()
-    });
+    
+    const article = (!initialArticle && fetchArticle) 
+        ? await getPublishedArticleByParams({
+            level1Slug: post.level1Category.toString()
+        })
+        : initialArticle;
+
     const formatPrice = () => {
         const numPrice = parseInt(giaTien.toString());
         if (numPrice >= 1000000000) {

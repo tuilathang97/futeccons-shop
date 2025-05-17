@@ -107,78 +107,72 @@ export type InactivePostWithUser = Post & {
   user: Pick<User, 'id' | 'name' | 'email'> | null;
 };
 
+export type InactivePostWithUserAndImages = Post & {
+  user: Pick<User, 'id' | 'name' | 'email'> | null;
+  images: Image[];
+};
+
+export type PostWithUserAndImages = Post & {
+  user: Pick<User, 'id' | 'name' | 'email'> | null;
+  images: Image[];
+};
+
 export async function getInactivePosts(
   params: PaginationParams
-): Promise<PaginatedResult<InactivePostWithUser>> {
+): Promise<PaginatedResult<InactivePostWithUserAndImages>> {
   const page = params.page ? Number(params.page) : 1;
-  const pageSize = params.pageSize ? Number(params.pageSize) : 2;
+  const pageSize = params.pageSize ? Number(params.pageSize) : 10;
   const sortBy = params.sortBy || 'createdAt';
   const sortOrder = params.sortOrder || 'desc';
   const offset = (page - 1) * pageSize;
 
   const whereClause = eq(postsTable.active, false);
 
-  let dataQueryBase = db
-    .select({
-      id: postsTable.id,
-      userId: postsTable.userId,
-      active: postsTable.active,
-      level1Category: postsTable.level1Category,
-      level2Category: postsTable.level2Category,
-      level3Category: postsTable.level3Category,
-      path: postsTable.path,
-      thanhPho: postsTable.thanhPho,
-      thanhPhoCodeName: postsTable.thanhPhoCodeName,
-      quan: postsTable.quan,
-      tieuDeBaiViet: postsTable.tieuDeBaiViet,
-      quanCodeName: postsTable.quanCodeName,
-      phuong: postsTable.phuong,
-      phuongCodeName: postsTable.phuongCodeName,
-      duong: postsTable.duong,
-      latitude: postsTable.latitude,
-      longitude: postsTable.longitude,
-      giaTien: postsTable.giaTien,
-      dienTichDat: postsTable.dienTichDat,
-      soTang: postsTable.soTang,
-      soPhongNgu: postsTable.soPhongNgu,
-      soPhongVeSinh: postsTable.soPhongVeSinh,
-      giayToPhapLy: postsTable.giayToPhapLy,
-      loaiHinhNhaO: postsTable.loaiHinhNhaO,
-      noiDung: postsTable.noiDung,
-      createdAt: postsTable.createdAt,
-      updatedAt: postsTable.updatedAt,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
-    })
-    .from(postsTable)
-    .leftJoin(user, eq(postsTable.userId, user.id))
-    .where(whereClause);
-
-  const sortTable = postsTable as any; 
-  const sortColumn = sortTable[sortBy];
-  
-  let orderedQuery;
-  if (sortColumn) {
-    orderedQuery = dataQueryBase.orderBy(sortOrder === 'desc' ? desc(sortColumn) : asc(sortColumn));
-  } else {
-    orderedQuery = dataQueryBase.orderBy(desc(postsTable.createdAt));
-  }
-
   const countResult = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(postsTable)
     .where(whereClause);
-
-  const totalItems = countResult[0].count;
+  
+  const totalItems = countResult[0]?.count || 0;
   const totalPages = Math.ceil(totalItems / pageSize);
 
-  const resultData = await orderedQuery.limit(pageSize).offset(offset);
+  if (totalItems === 0) {
+    return {
+      data: [],
+      metadata: {
+        currentPage: page,
+        pageSize,
+        totalPages: 0,
+        totalItems: 0,
+      },
+    };
+  }
+  
+  const resultData = await db.query.postsTable.findMany({
+    where: whereClause,
+    with: {
+      user: {
+        columns: {
+          id: true,
+          name: true,
+          email: true,
+        }
+      },
+      images: true
+    },
+    orderBy: (posts, { asc, desc }) => {
+      const sortKey = sortBy as keyof typeof posts;
+      if (posts[sortKey]) {
+        return sortOrder === 'desc' ? [desc(posts[sortKey])] : [asc(posts[sortKey])];
+      }
+      return [desc(posts.createdAt)];
+    },
+    limit: pageSize,
+    offset: offset,
+  });
 
   return {
-    data: resultData as InactivePostWithUser[],
+    data: resultData as InactivePostWithUserAndImages[],
     metadata: {
       currentPage: page,
       pageSize,
@@ -186,6 +180,32 @@ export async function getInactivePosts(
       totalItems,
     },
   };
+}
+
+export async function getPostDetailsById(postId: number): Promise<PostWithUserAndImages | null> {
+  if (isNaN(postId)) {
+    return null;
+  }
+
+  const postData = await db.query.postsTable.findFirst({
+    where: eq(postsTable.id, postId),
+    with: {
+      user: {
+        columns: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      images: true,
+    },
+  });
+
+  if (!postData) {
+    return null;
+  }
+
+  return postData as PostWithUserAndImages;
 }
 
 export async function approvePost(postId: number): Promise<ActionResult> {

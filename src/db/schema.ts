@@ -49,6 +49,14 @@ export const postsTable = pgTable('posts', {
 
 export type Post = typeof postsTable.$inferSelect;
 
+export const postsRelations = relations(postsTable, ({ one, many }) => ({
+  user: one(user, {
+    fields: [postsTable.userId],
+    references: [user.id]
+  }),
+  images: many(postImagesTable)
+}));
+
 export const categoriesRelation = relations(categoriesTable, ({one}) => ({
   parent: one(categoriesTable, {
     fields: [categoriesTable.parentId],
@@ -94,13 +102,6 @@ export type User = typeof user.$inferSelect;
 
 export const userRelations = relations(user, ({ many }) => ({
   posts: many(postsTable)
-}));
-
-export const postsRelations = relations(postsTable, ({ one }) => ({
-  user: one(user, {
-    fields: [postsTable.userId],
-    references: [user.id]
-  })
 }));
 
 export const session = pgTable("session", {
@@ -224,3 +225,10 @@ export const postImagesTable = pgTable('postImages',{
 
 export type Image = typeof postImagesTable.$inferSelect;
 export type NewImage = typeof postImagesTable.$inferInsert;
+
+export const postImagesRelations = relations(postImagesTable, ({ one }) => ({
+  post: one(postsTable, {
+    fields: [postImagesTable.postId],
+    references: [postsTable.id],
+  }),
+}));

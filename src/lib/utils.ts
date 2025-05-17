@@ -65,12 +65,16 @@ export function handleActionResult(
 
 
 // Date utility functions
-export function formatDate(date: Date): string {
-  return new Date(date).toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+export function formatDate(date: Date | string | number, locale: string = 'vi-VN'): string {
+  try {
+    const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
+    return dateObj.toLocaleDateString(locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return "Invalid Date";
+  }
 }
