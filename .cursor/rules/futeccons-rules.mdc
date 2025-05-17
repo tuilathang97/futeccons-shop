@@ -398,6 +398,244 @@ const CategorySchema = z.object({
 type CategoryFormData = z.infer<typeof CategorySchema>;
 ```
 
+#### Pagination Handling with Server and Client Components
+
+When implementing pagination:
+
+1.  **Define `PaginationParams` and `PaginatedResult` types** (e.g., in a shared `paginateQuery.ts` or similar):
+
+    ```typescript
+    export interface PaginationParams {
+      page?: number;
+      pageSize?: number;
+      sortBy?: string;
+      sortOrder?: 'asc' | 'desc';
+    }
+
+    export interface PaginatedResult<T> {
+      data: T[];
+      metadata: {
+        currentPage: number;
+        pageSize: number;
+        totalPages: number;
+        totalItems: number;
+      };
+    }
+    ```
+
+2.  **Handle `searchParams` in Server Components (`page.tsx`)**:
+    - Define props for the page to receive `searchParams`.
+    - Parse `page` and `pageSize` (and other relevant params like `sortBy`, `sortOrder`) from `searchParams`.
+    - Provide default values (e.g., `DEFAULT_PAGE_SIZE = 10`).
+
+    ```typescript
+    // src/app/(group)/feature/page.tsx
+    import { fetchDataWithPagination } from '@/lib/queries/featureQueries';
+    import FeatureClientUI from '@/components/features/FeatureClientUI';
+    import { PaginationParams } from '@/lib/queries/paginateQuery'; // Adjust path
+
+    interface FeaturePageProps {
+      searchParams: {
+        page?: string;
+        pageSize?: string;
+        sortBy?: string;
+        sortOrder?: 'asc' | 'desc';
+        // other filter params
+      };
+    }
+
+    const DEFAULT_PAGE_SIZE = 10;
+
+    export default async function FeaturePage({ searchParams }: FeaturePageProps) {
+      const page = searchParams.page ? parseInt(searchParams.page, 10) : 1;
+      const pageSize = searchParams.pageSize ? parseInt(searchParams.pageSize, 10) : DEFAULT_PAGE_SIZE;
+      const sortBy = searchParams.sortBy;
+      const sortOrder = searchParams.sortOrder as 'asc' | 'desc' | undefined;
+
+      const paginationParams: PaginationParams = {
+        page: isNaN(page) ? 1 : page,
+        pageSize: isNaN(pageSize) ? DEFAULT_PAGE_SIZE : pageSize,
+        sortBy,
+        sortOrder,
+      };
+
+      const paginatedData = await fetchDataWithPagination(paginationParams /*, otherFilters */);
+
+      return <FeatureClientUI paginatedData={paginatedData} />;
+    }
+    ```
+    *Note on `await searchParams`*: While `searchParams` is typically a direct prop, if you encounter errors like "`searchParams` should be awaited" and find that `const { page } = await searchParams;` resolves it in your specific Next.js setup, be mindful this is an unconventional pattern. Ensure it's truly necessary and understood within your project's context.
+
+3.  **Implement Data Fetching Function**:
+    - The function should accept `PaginationParams`.
+    - It should perform the database query, applying offset, limit, and sorting.
+    - It must also fetch the total count of items for the given filters to calculate `totalPages`.
+    - Return data in the `PaginatedResult<T>` structure.
+
+    ```typescript
+    // src/lib/queries/featureQueries.ts
+    import { db } from '@/db/drizzle';
+    import { featureTable } from '@/db/schema';
+    import { PaginationParams, PaginatedResult } from './paginateQuery'; // Adjust path
+    import { sql, eq, asc, desc } from 'drizzle-orm';
+
+    // Define YourItemType based on your query result
+    export type YourItemType = typeof featureTable.$inferSelect & { /* any joined fields */ };
+
+    export async function fetchDataWithPagination(
+      params: PaginationParams,
+      // other filters
+    ): Promise<PaginatedResult<YourItemType>> {
+      const page = params.page || 1;
+      const pageSize = params.pageSize || 10;
+      const sortBy = params.sortBy || 'createdAt'; // Default sort column
+      const sortOrder = params.sortOrder || 'desc';
+      const offset = (page - 1) * pageSize;
+
+      const whereClause = eq(featureTable.someField, 'someValue'); // Example filter
+
+      // Fetch total items
+      const countResult = await db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(featureTable)
+        .where(whereClause); // Apply same filters for count
+      const totalItems = countResult[0].count;
+      const totalPages = Math.ceil(totalItems / pageSize);
+
+      // Fetch paginated data
+      let query = db.select(/* ... specify selected fields ... */)
+        .from(featureTable)
+        // .leftJoin(...) // If joining
+        .where(whereClause);
+
+      const sortColumn = (featureTable as any)[sortBy];
+      if (sortColumn) {
+        query = query.orderBy(sortOrder === 'desc' ? desc(sortColumn) : asc(sortColumn));
+      } else {
+        query = query.orderBy(desc(featureTable.createdAt)); // Default sort
+      }
+      
+      const data = await query.limit(pageSize).offset(offset);
+
+      return {
+        data: data as YourItemType[], // Cast to your specific type
+        metadata: {
+          currentPage: page,
+          pageSize,
+          totalPages,
+          totalItems,
+        },
+      };
+    }
+    ```
+
+4.  **Client Component (`*ClientUI.tsx`) for Rendering**:
+    - Receive `PaginatedResult` as a prop.
+    - Use `useState` to manage the current list of items if local interactions (like delete/approve without full re-fetch) modify it.
+    - Use `useEffect` to update local state if `paginatedData` prop changes (e.g., after navigation).
+    - Render the Shadcn UI `Pagination` component.
+    - Use `useRouter` and `useSearchParams` from `next/navigation` to handle page changes by updating URL query parameters.
+
+    ```typescript
+    // src/components/features/FeatureClientUI.tsx
+    'use client';
+
+    import { useState, useEffect, useTransition } from 'react';
+    import { useRouter, useSearchParams } from 'next/navigation';
+    import { PaginatedResult } from '@/lib/queries/paginateQuery'; // Adjust path
+    import { YourItemType } from '@/lib/queries/featureQueries'; // Adjust path
+    import FeatureTable from './FeatureTable'; // Your table component
+    import {
+      Pagination,
+      PaginationContent,
+      PaginationItem,
+      PaginationLink,
+      PaginationNext,
+      PaginationPrevious,
+      PaginationEllipsis, // Optional: for more complex pagination UI
+    } from '@/components/ui/pagination'; // Ensure Shadcn Pagination is installed
+
+    interface FeatureClientUIProps {
+      paginatedData: PaginatedResult<YourItemType>;
+    }
+
+    export default function FeatureClientUI({ paginatedData }: FeatureClientUIProps) {
+      const [items, setItems] = useState<YourItemType[]>(paginatedData.data);
+      const [isPending, startTransition] = useTransition();
+      const router = useRouter();
+      const searchParams = useSearchParams();
+      const { currentPage, totalPages, pageSize } = paginatedData.metadata;
+
+      useEffect(() => {
+        setItems(paginatedData.data);
+      }, [paginatedData.data]);
+
+      const handlePageChange = (newPage: number) => {
+        const currentParams = new URLSearchParams(Array.from(searchParams.entries()));
+        currentParams.set('page', String(newPage));
+        // Persist other search params like filters, pageSize, sortBy, sortOrder
+        router.push(`/features?${currentParams.toString()}`); // Adjust route as needed
+      };
+      
+      // ... (handlers for approve, delete, etc. which might update `items` locally)
+
+      return (
+        <div className="w-full space-y-6">
+          <FeatureTable items={items} /* ... other props ... */ />
+
+          {totalPages > 1 && (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e: React.MouseEvent) => {
+                      e.preventDefault();
+                      if (currentPage > 1) handlePageChange(currentPage - 1);
+                    }}
+                    aria-disabled={currentPage <= 1}
+                    className={currentPage <= 1 ? "pointer-events-none opacity-50" : undefined}
+                  />
+                </PaginationItem>
+                {/* Implement logic for displaying page numbers, possibly with ellipsis */}
+                {/* Example: always show current, prev, next, first, last */}
+                {[...Array(totalPages)].map((_, i) => {
+                   const pageNum = i + 1;
+                   // Add more sophisticated logic here for large number of pages
+                   return (
+                    <PaginationItem key={pageNum}>
+                      <PaginationLink
+                        href="#"
+                        onClick={(e: React.MouseEvent) => {
+                          e.preventDefault();
+                          handlePageChange(pageNum);
+                        }}
+                        isActive={currentPage === pageNum}
+                      >
+                        {pageNum}
+                      </PaginationLink>
+                    </PaginationItem>
+                   );
+                })}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e: React.MouseEvent) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) handlePageChange(currentPage + 1);
+                    }}
+                    aria-disabled={currentPage >= totalPages}
+                    className={currentPage >= totalPages ? "pointer-events-none opacity-50" : undefined}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          )}
+        </div>
+      );
+    }
+    ```
+    Ensure Shadcn UI `Pagination` component is installed (`npx shadcn-ui@latest add pagination`). The example above provides basic page number rendering; for many pages, implement ellipsis logic.
 
 # Project directory structure
 
