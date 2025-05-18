@@ -7,3 +7,9 @@ export async function getPostImageyById(id: number,getOne:boolean = false) {
   if(getOne) return result[0];
   return result;
 }
+
+
+export async function getPostImages() {
+  const result = await db.select().from(postImagesTable);
+  return result;
+}

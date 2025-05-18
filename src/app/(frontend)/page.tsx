@@ -4,6 +4,8 @@ import { getCategories } from "@/lib/queries/categoryQueries";
 import { getPosts } from "@/lib/queries/postQueries";
 import { Metadata } from "next";
 import { PaginationParams } from '@/lib/queries/paginateQuery';
+import { getPostImages } from "@/lib/queries/postImagesQueries";
+import { CategoriesProvider } from "@/contexts/CategoriesContext";
 
 interface HomePageProps {
   searchParams: {
@@ -16,9 +18,9 @@ const DEFAULT_PAGE_SIZE = 10;
 
 export default async function Home({ searchParams }: HomePageProps) {
   const categories = await getCategories();
-
-  const page = searchParams.page ? parseInt(searchParams.page, 10) : 1;
-  const pageSize = searchParams.pageSize ? parseInt(searchParams.pageSize, 10) : DEFAULT_PAGE_SIZE;
+  const searchParamsValue = await searchParams;
+  const page = searchParamsValue.page ? parseInt( searchParamsValue.page, 10) : 1;
+  const pageSize = searchParamsValue.pageSize ? parseInt(searchParamsValue.pageSize, 10) : DEFAULT_PAGE_SIZE;
 
   const paginationParams: PaginationParams = {
     page: isNaN(page) ? 1 : page,
@@ -26,12 +28,14 @@ export default async function Home({ searchParams }: HomePageProps) {
   };
 
   const paginatedPosts = await getPosts(paginationParams);
-
+  const postImages = await getPostImages();
   return (
-    <div className="flex flex-col container px-0 justify-center min-w-full items-center gap-4">
-      <CategoryPicker categories={categories}/>
-      <ProductsContainer title="Tin đăng" posts={paginatedPosts.data}  />
-    </div>
+    <CategoriesProvider initialCategories={categories}>
+      <div className="flex flex-col container px-0 justify-center min-w-full items-center gap-4">
+        <CategoryPicker categories={categories}/>
+        <ProductsContainer title="Tin đăng" posts={paginatedPosts.data} postImages={postImages} />
+      </div>
+    </CategoriesProvider>
   );
 }
 

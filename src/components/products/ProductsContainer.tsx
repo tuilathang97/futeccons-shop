@@ -3,14 +3,15 @@ import { Button } from '../ui/button'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
 import { Post } from '@/db/schema'
-import { getPostImageyById } from '@/lib/queries/postImagesQueries'
+import { Image } from '@/db/schema'
 
 interface Container {
     title: string
     posts?:Post[]
+    postImages?:Image[]
 }
 
-function ProductsContainer({ title,posts }: Container) {
+function ProductsContainer({ title,posts,postImages }: Container) {
     return (
         <div className='min-h-[5rem] flex flex-col bg-white container gap-4 w-full border border-gray-100 rounded-md p-4'>
             <div className='flex justify-center'>
@@ -29,8 +30,8 @@ function ProductsContainer({ title,posts }: Container) {
                 max-w-[1200px]
                 mx-auto'
             >
-                {posts?.map(async (postData,index) => {
-                    const thumbnailImg = await getPostImageyById(postData.id,true)
+                {posts?.map((postData,index) => {
+                    const thumbnailImg = postImages?.find(image => image.postId === postData.id)
                     return (
                         <ProductCard thumbnailImg={thumbnailImg} variant="vertical" post={postData} key={index} />
                     )

@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { getCategoryById } from '@/lib/queries/categoryQueries';
 import { Skeleton } from '../ui/skeleton';
 import { Image as ImageType } from '@/db/schema';
+import { useCategories } from '@/contexts/CategoriesContext';
 interface ProductCardProps {
     post: Post;
     variant?: "horizontal" | "vertical";
@@ -24,6 +25,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
     const [isMounted, setIsMounted] = useState(false);
     const [level1Ref, setLevel1Ref] = useState("");
     const router = useRouter();
+    const { categories } = useCategories()
     useEffect(() => {
         setIsMounted(true);
         try {
@@ -36,16 +38,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
             console.error('Error loading liked posts:', error);
         }
     }, [post.id]);
+    
     useEffect(() => {
-        const getAndSetData = async () => {
-            try {
-                const result = await getCategoryById(post.level1Category)
-                setLevel1Ref(result.slug || "");
-            } catch (err) {
-                console.error('Error:', err);
-            }
-        };
-        getAndSetData();
+        const result = categories.find(category => category.id === post.level1Category)
+        if(result)
+        setLevel1Ref(result?.slug || "");
     }, [post.level1Category]);
 
 
