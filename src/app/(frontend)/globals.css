@@ -60,6 +60,10 @@
   }
 }
 
+[data-scroll-locked][data-scroll-locked] {
+  overflow: scroll !important;
+}
+
 
 @layer base {
   * {
