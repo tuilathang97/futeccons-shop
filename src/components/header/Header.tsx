@@ -14,8 +14,8 @@ import { Session, User } from "@/db/schema"
 
 export default function Header({ user, session }: { user: User, session: Session }) {
     return (
-        <header className="fixed max-w-7xl  bg-gray-100 z-50  gap-4 top-0 px-4 lg:px-8  md:top-8 left-0 flex  h-16 min-w-full  items-center ">
-            <nav className=" items-center shadow-xl gap-2 rounded-xl flex justify-between container border py-2 ">
+        <header className="fixed max-w-7xl z-[500] gap-4 top-0 px-4 lg:px-8  md:top-8 left-0 flex  h-16 min-w-full items-center ">
+            <nav className=" items-center  bg-gray-100 shadow-xl gap-2 rounded-xl flex justify-between container border py-2 ">
                 <NavigationSubMenu></NavigationSubMenu>
                 <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
                     <Home className="h-6 w-6" />
