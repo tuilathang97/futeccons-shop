@@ -21,11 +21,11 @@ function SearchBar() {
     }, [inputValue]);
 
     return (
-        <div className="fixed container px-4 md:px-0 top-14 h-12 w-full max-w-[900px] left-0 flex items-center md:static md:min-w-[300px] space-y-2">
+        <div className="fixed container px-4 md:px-0 top-14 h-12 w-full left-0 flex items-center md:static md:min-w-[300px] space-y-2">
             <div className="relative min-w-full">
                 <Input
                     id={id}
-                    className="peer pe-9 ps-9"
+                    className="peer pe-9 ps-9 rounded-none md:rounded-md"
                     placeholder="Search..."
                     type="search"
                     value={inputValue}
