@@ -137,13 +137,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                                 />
                             </Suspense>
                         }
-                        <Badge className={`absolute text-white  bg-red-500 border border-gray-500 shadow-md top-2 left-2 ${variant === "vertical" ? "" : "md:top-6 md:left-6"}`}>
+                        <Badge className={`absolute text-white bg-red-500 border border-gray-500 shadow-md ${variant === "vertical" ? "top-2 left-2" : "md:top-4 md:left-2 "}`}>
                             {badge}
                         </Badge>
                         {isMounted && (
                             <Heart
                                 strokeWidth={0.5}
-                                className={`absolute top-2 right-2 ${variant === "vertical" ? "" : "sm:top-6 sm:right-6 "} cursor-pointer transition-all duration-300 hover:scale-110
+                                className={`absolute top-2 right-2 ${variant === "vertical" ? "" : "sm:top-4 sm:right-2 "} cursor-pointer transition-all duration-300 hover:scale-110
                                 ${isLiked ? 'fill-red-500 stroke-red-500' : 'fill-white stroke-gray-400'}`}
                                 onClick={toggleLike}
                             />
