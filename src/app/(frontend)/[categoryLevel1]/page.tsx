@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button";
 import { getPostByCategoryPath } from "@/lib/queries";
 import { getCategories, getCategoryByPath } from "@/lib/queries/categoryQueries";
 import { ArrowDownIcon } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
+import { CategoriesProvider } from "@/contexts/CategoriesContext";
+import { getPostImages } from "@/lib/queries/postImagesQueries";
 
 interface PageProps {
     params: Promise<{ categoryLevel1: string }>;
@@ -33,37 +34,39 @@ export default async function ProductListing1LevelDeep({ params, searchParams }:
     const article = await getPublishedArticleByParams({
         level1Slug: categoryLevel1
     });
-
+    const postImages = await getPostImages();
     const categories = await getCategories();
     const filteredCategories = categories.filter((e) => e.level === currentParentCategory.level);
     const filteredChildCategories = categories.filter((e) => e.level === 2 && e.parentId === currentParentCategory.id);
 
     return (
-        <section className="flex flex-col w-full gap-4">
-            <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
-                <Button variant={"outline"}>Lọc <ArrowDownIcon/></Button>
-                <ProductsListWithFilter />
-                <FilterEstateTransaction currentCategory={currentParentCategory} categories={filteredCategories}/>
-                <FilterEstateType childCategories={filteredChildCategories}/>
-                <FilterEstateKind />
-                <FilterPrice priceType="sale" />
-                <FilterArea/>
-                <FilterBedrooms/>
-            </div>
-            <div>
-                <h1 className='text-xl font-bold'>Mua bán nhà đất chính chủ T3/2025</h1>
-            </div>
-            <div className="flex flex-col grid-cols-6 gap-4 md:grid">
-                <ProductsContainer data={result || []} searchParam={searchParam} cardVariant="horizontal"/>
-                <div className="col-span-2"></div>
-            </div>
-            
-            {/* Display article content if available */}
-            {article && (
-                <div className="mt-8">
-                    <ArticleContent article={article} />
+        <CategoriesProvider initialCategories={categories}>
+            <section className="flex flex-col w-full gap-4">
+                <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
+                    <Button variant={"outline"}>Lọc <ArrowDownIcon /></Button>
+                    <ProductsListWithFilter />
+                    <FilterEstateTransaction currentCategory={currentParentCategory} categories={filteredCategories} />
+                    <FilterEstateType childCategories={filteredChildCategories} />
+                    <FilterEstateKind />
+                    <FilterPrice priceType="sale" />
+                    <FilterArea />
+                    <FilterBedrooms />
                 </div>
-            )}
-        </section>
+                <div>
+                    <h1 className='text-xl font-bold'>Mua bán nhà đất chính chủ T3/2025</h1>
+                </div>
+                <div className="flex flex-col grid-cols-6 gap-4 md:grid">
+                    <ProductsContainer data={result || []} postImages={postImages} searchParam={searchParam} cardVariant="horizontal" />
+                    <div className="col-span-2"></div>
+                </div>
+
+                {/* Display article content if available */}
+                {article && (
+                    <div className="mt-8">
+                        <ArticleContent article={article} />
+                    </div>
+                )}
+            </section>
+        </CategoriesProvider>
     );
 }

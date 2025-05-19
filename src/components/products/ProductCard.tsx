@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils';
 import { Post } from '@/db/schema';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getCategoryById } from '@/lib/queries/categoryQueries';
 import { Skeleton } from '../ui/skeleton';
 import { Image as ImageType } from '@/db/schema';
 import { useCategories } from '@/contexts/CategoriesContext';
@@ -88,9 +87,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
         router.push(`/post/${postId}`);
     }
     const formatAddress = () => {
-        // neu path = / la dang o trang chu thi redirect = level 1
-        // /ban-nha-dat/ban-nha => !== "/" =>
-        // neu co path roi /abc/xxx/yyy thi de nguyen path thay doi query params
         return (
             <div className='flex flex-wrap items-center gap-1' onClick={(e) => { e.stopPropagation(); }}>
                 <Link
@@ -116,7 +112,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
     };
 
     return (
-        <Card className={`shadow-md  ${variant === "vertical" ? "h-full w-full" : "w-full md:max-h-[17rem] "} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
+        <Card className={`shadow-xl  ${variant === "vertical" ? "h-full w-full" : "w-full md:max-h-[20rem] "} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
             <button onClick={() => handleRedirectToPost(post.id)} className="block w-full h-full">
                 <div className={cn(
                     "flex",
@@ -125,10 +121,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                         : "flex-col md:flex-row md:h-full"
                 )}>
                     <div className={cn(
-                        "relative overflow-hidden rounded-md",
+                        "relative overflow-hidden",
                         variant === "vertical"
-                            ? "h-[200px] w-full "
-                            : "h-[200px] md:h-full md:w-[280px] flex-shrink-0 p-0 md:p-4"
+                            ? "h-[200px] w-full rounded-t-md "
+                            : "h-[200px] md:h-full rounded-l-md md:w-[200px] flex-shrink-0 p-0 md:p-4"
                     )}>
                         {thumbnailImg?.secureUrl &&
                             <Suspense fallback={<Skeleton className="w-full h-[200px] rounded-full" />}>
@@ -137,7 +133,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                                     fill
                                     sizes='w-[300px] h-[200px]'
                                     alt={post.tieuDeBaiViet || "Property image"}
-                                    className={`object-cover rounded-md ${variant === "vertical" ? "p-0" : "p-0 md:p-4"}`}
+                                    className={`object-cover ${variant === "vertical" ? "rounded-t-md" : "rounded-l-md"}`}
                                 />
                             </Suspense>
                         }
@@ -161,7 +157,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                         <CardTitle className="flex mb-2 text-base font-semibold text-start md:text-lg group-hover:text-red-500 line-clamp-2">
                             {post.tieuDeBaiViet}
                         </CardTitle>
-                        <div className="flex items-center gap-2 mb-2">
+                        <div className="flex flex-wrap items-center gap-4 mb-2">
                             <span className="text-lg font-bold text-red-600">{formatPrice()}</span>
                             <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
                                 {post.dienTichDat} m²
