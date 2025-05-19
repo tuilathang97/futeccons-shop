@@ -41,7 +41,7 @@ export default async function ProductListing2LevelDeep({ params, searchParams }:
 
     return (
         <CategoriesProvider initialCategories={categories}>
-            <div className="flex flex-col gap-8 container md:px-0">
+            <div className="flex flex-col gap-8 container px-0">
                 <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                     <ProductsListWithFilter />
                     <FilterEstateTransaction currentCategory={parentCategory} categories={filteredCategories} />

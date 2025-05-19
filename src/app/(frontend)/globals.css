@@ -62,6 +62,7 @@
 
 [data-scroll-locked][data-scroll-locked] {
   overflow: scroll !important;
+  pointer-events: none !important;
 }
 
 
