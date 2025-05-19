@@ -41,7 +41,7 @@ export default async function ProductListing1LevelDeep({ params, searchParams }:
 
     return (
         <CategoriesProvider initialCategories={categories}>
-            <section className="flex flex-col w-full gap-4">
+            <section className="flex flex-col w-full gap-4 container sm:px-0 ">
                 <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                     <Button variant={"outline"}>Lọc <ArrowDownIcon /></Button>
                     <ProductsListWithFilter />
@@ -55,12 +55,10 @@ export default async function ProductListing1LevelDeep({ params, searchParams }:
                 <div>
                     <h1 className='text-xl font-bold'>Mua bán nhà đất chính chủ T3/2025</h1>
                 </div>
-                <div className="flex flex-col grid-cols-6 gap-4 md:grid">
+                <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
                     <ProductsContainer data={result || []} postImages={postImages} searchParam={searchParam} cardVariant="horizontal" />
                     <div className="col-span-2"></div>
                 </div>
-
-                {/* Display article content if available */}
                 {article && (
                     <div className="mt-8">
                         <ArticleContent article={article} />

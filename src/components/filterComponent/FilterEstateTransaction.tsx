@@ -22,6 +22,7 @@ function FilterEstateKind({
     categories: Category[]
 }) {
     const router = useRouter()
+    
     const searchParams = useSearchParams();
     const [selectedValue, setSelectedValue] = useState<string>('')
     const [isChanged, setIsChanged] = useState(false)

@@ -5,22 +5,23 @@ import { Category } from '@/db/schema'
 import { getCategoryById } from '@/lib/queries/categoryQueries'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useCategories } from '@/contexts/CategoriesContext'
 
 function FilterEstateKind({ childSubCategories, CurrentSubCategory }: { childSubCategories?: Category[], CurrentSubCategory?: Category }) {
     const router = useRouter()
     const searchParams = useSearchParams()
+    const {categories} = useCategories()
+
 
     async function handleSubChildCatChange(id: string) {
-        const currentSubChildCat = await getCategoryById(Number(id))
-
-        if (currentSubChildCat && currentSubChildCat.slug) {
-            const currentParams = new URLSearchParams(searchParams.toString())
-            const newUrl = currentParams.toString()
-                ? `${currentSubChildCat.slug}?${currentParams.toString()}`
-                : currentSubChildCat.slug
-
-            router.push(newUrl)
-            router.prefetch(newUrl)
+        const value = categories.find(category => category.id === Number(id))
+        if(value){
+            const currentParams = new URLSearchParams(searchParams.toString()).toString()          
+            const newUrl = currentParams.length > 0 ? `${value?.path}&${currentParams.toString()}` : value?.path
+            if(newUrl){
+                router.push(newUrl)
+                router.prefetch(newUrl)
+            }
         }
     }
 

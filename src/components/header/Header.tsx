@@ -45,7 +45,6 @@ export default function Header({ user, session, categories }: { user?: User, ses
                                                 <DropdownMenuPortal>
                                                     <DropdownMenuSubContent>
                                                         {level2Categories.filter((option) => option.parentId === category.id).map((option, level2Index) => {
-                                                            // Kiểm tra có category cấp 3 không
                                                             const level3s = level3Categories.filter((lv3) => lv3.parentId === option.id);
                                                             if (level3s.length > 0) {
                                                                 return (
