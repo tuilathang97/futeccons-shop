@@ -2,9 +2,7 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext, type CarouselApi } from "@/components/ui/carousel";
 import { Image as ImageType } from "@/db/schema";
 import Image from "next/image";
-import useCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "../ui/button";
 
 export default function PostCarousel({ images }: { images: ImageType[] }) {
     const [api, setApi] = useState<CarouselApi>()
@@ -36,12 +34,12 @@ export default function PostCarousel({ images }: { images: ImageType[] }) {
     );
 
     return (
-        <div className="relative w-full">
+        <div className="relative w-full ">
             <Carousel className="w-full" setApi={setApi} opts={{ loop: true }}>
-                <CarouselContent className="max-h-[62.5rem]">
+                <CarouselContent >
                     {images.map((image, index) => (
-                        <CarouselItem className="flex items-center justify-center max-h-[62.5rem]" key={index}>
-                          <Image src={image.secureUrl} alt={image.type || `Image ${index + 1}`} className='min-w-full rounded-md h-auto' width={500} height={1000} />
+                        <CarouselItem className="flex items-center justify-center" key={index}>
+                          <Image src={image.secureUrl} alt={image.type || `Image ${index + 1}`} className='min-w-full h-[31.25rem] aspect-4/3 rounded-md h-auto' width={500} height={1000} />
                         </CarouselItem>
                     ))}
                 </CarouselContent>
