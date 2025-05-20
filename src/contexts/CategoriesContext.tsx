@@ -25,7 +25,7 @@ export function CategoriesProvider({ children, initialCategories }: CategoriesPr
 export function useCategories(): CategoriesContextType {
   const context = useContext(CategoriesContext);
   if (context === undefined) {
-    throw new Error('CategoriesContext not found');
+    return {categories: []} 
   }
   return context;
 } 
