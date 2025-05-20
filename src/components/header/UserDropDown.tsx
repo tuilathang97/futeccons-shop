@@ -7,25 +7,23 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
 import { LogOut, Settings, User2 } from "lucide-react"
+import { User } from '@/db/schema'
+import Image from 'next/image'
+import Link from 'next/link'
 
-function UserDropdown({user}:{user: any}) {
+
+function UserDropdown({user}:{user: User}) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button
-                    variant="outline"
-                    className="relative h-8 w-8 rounded-full"
-                >
-                    {user.fullName?.charAt(0).toUpperCase()}
-                </Button>
+                <Image className={"rounded-full w-10 h-10 border border-gray-900/10 cursor-pointer "} src={user?.image ?? ""} height={50} width={50} alt={user.name}></Image>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end">
+            <DropdownMenuContent className="w-56 mt-12 md:mt-4 ml-12 " align="end">
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                     <User2 className="mr-2 h-4 w-4" />
-                    <span>Thông tin cá nhân</span>
+                    <Link href={`/account`}>Thông tin cá nhân</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>

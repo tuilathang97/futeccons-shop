@@ -102,7 +102,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                         <h2 className='font-semibold text-lg'>Chức năng khác </h2>
                         <div className='flex gap-2 flex-wrap sm:flex-nowrap'>
                             <Button className='w-full h-12'> <Heart size={16} /> Lưu tin</Button>
-                            <Button className='w-full h-12'> <Share2 size={16} /> Chia sẽ </Button>
+                            <Button className='w-full h-12'> <Share2 size={16} /> Chia sẻ </Button>
                             <Button className='w-full h-12'> <AlertTriangle size={16} /> Báo cáo tin</Button>
                         </div>
                         {/* todo: thêm chức năng cho 3 nút này */}

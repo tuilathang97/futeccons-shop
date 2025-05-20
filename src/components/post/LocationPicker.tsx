@@ -114,7 +114,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
           )}
         />
         
-        <div className="h-[400px] w-full border border-gray-200 rounded-md overflow-hidden">
+        <div className="h-[400px] z-40 w-full border border-gray-200 rounded-md overflow-hidden">
           {mapLoaded && (
             <MapContainer
               center={position}

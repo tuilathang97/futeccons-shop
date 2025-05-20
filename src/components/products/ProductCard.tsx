@@ -124,7 +124,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                         "relative overflow-hidden",
                         variant === "vertical"
                             ? "h-[200px] w-full rounded-t-md "
-                            : "h-[200px] md:h-full rounded-l-md md:w-[200px] flex-shrink-0 p-0 md:p-4"
+                            : "h-[200px] md:min-h-full rounded-l-md md:w-[200px] flex-shrink-0 p-0 md:p-4"
                     )}>
                         {thumbnailImg?.secureUrl &&
                             <Suspense fallback={<Skeleton className="w-full h-[200px] rounded-full" />}>
