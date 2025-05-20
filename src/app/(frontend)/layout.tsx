@@ -33,7 +33,7 @@ export default async function RootLayout({children,}: Readonly<{children: React.
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] min-w-full antialiased mx-0 max-w-[80rem] !pt-[7rem] px-4 lg:px-8 md:pt-[5rem] `}
       >
-        <Header user={session.user} session={session?.session} categories={categories}/>
+        <Header user={session?.user} session={session?.session} categories={categories}/>
         <Toaster />
         {children} 
       </body>
