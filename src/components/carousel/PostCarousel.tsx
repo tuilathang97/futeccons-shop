@@ -34,12 +34,12 @@ export default function PostCarousel({ images }: { images: ImageType[] }) {
     );
 
     return (
-        <div className="relative w-full max-h-[31.25rem]">
-            <Carousel className="w-full" setApi={setApi} opts={{ loop: true }}>
+        <div className="relative w-full">
+            <Carousel className="w-full max-h-[31.25rem]" setApi={setApi} opts={{ loop: true }}>
                 <CarouselContent >
                     {images.map((image, index) => (
                         <CarouselItem className="flex items-center justify-center" key={index}>
-                          <Image src={image.secureUrl} alt={image.type || `Image ${index + 1}`} className='min-w-full max-h-[31.25rem] object-fill aspect-4/3 rounded-md h-auto' width={500} height={1000} />
+                          <Image src={image.secureUrl} alt={image.type || `Image ${index + 1}`} className='min-w-full h-auto max-h-[31.25rem] aspect-4/3 rounded-md ' width={500} height={1000} />
                         </CarouselItem>
                     ))}
                 </CarouselContent>

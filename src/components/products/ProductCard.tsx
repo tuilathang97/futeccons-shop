@@ -91,19 +91,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
             <div className='flex flex-wrap items-center gap-1' onClick={(e) => { e.stopPropagation(); }}>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path !== "/" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
+                    href={`${path !== "/" && path !== "/account" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
                 >
                     {post.phuong}
                 </Link>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path !== "/" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
+                    href={`${path !== "/" && path !== "/account" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
                 >
                     {post.quan}
                 </Link>
                 <Link
                     className='hover:text-red-500'
-                    href={`${path !== "/" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}`}
+                    href={`${path !== "/" && path !== "/account" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}`}
                 >
                     {post.thanhPho}
                 </Link>

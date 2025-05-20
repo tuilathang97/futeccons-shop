@@ -318,9 +318,9 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
                 </FormControl>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="chung-cu">Chung cư</SelectItem>
-                    <SelectItem value="nha-rieng">Nhà riêng</SelectItem>
-                    <SelectItem value="dat">Đất</SelectItem>
+                    <SelectItem value="Chung cư">Chung cư</SelectItem>
+                    <SelectItem value="Nhà riêng">Nhà riêng</SelectItem>
+                    <SelectItem value="Đất">Đất</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -343,9 +343,8 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
                 </FormControl>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="so-hong">Sổ hồng</SelectItem>
-                    <SelectItem value="so-do">Sổ đỏ</SelectItem>
-                    <SelectItem value="giay-to-khac">Giấy tờ khác</SelectItem>
+                    <SelectItem value="Sổ hồng">Sổ hồng</SelectItem>
+                    <SelectItem value="Sổ đỏ">Sổ đỏ</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

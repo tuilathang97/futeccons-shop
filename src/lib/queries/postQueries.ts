@@ -87,6 +87,11 @@ export async function getPostById(id: number) {
   return result[0];
 }
 
+export async function getPostBelongToUser(userId: string) {
+  const result = await db.select().from(postsTable).where(eq(postsTable.userId, userId));
+  return result;
+}
+
 export async function savePostImageToDb(imageData: typeof postImagesTable.$inferInsert): Promise<ActionResult> {
   try {
     await db.insert(postImagesTable).values(imageData);
