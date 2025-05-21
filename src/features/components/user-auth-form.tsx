@@ -11,11 +11,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
+import { useRouter } from 'next/navigation';
 const formSchema = z.object({
   email: z.string().email({ message: 'Enter a valid email address' })
 });
@@ -23,8 +22,8 @@ const formSchema = z.object({
 type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
-  const searchParams = useSearchParams();
   const { toast } = useToast();
+  const router = useRouter()
   const [loading, startTransition] = useTransition();
   const defaultValues = {
     email: 'demo@gmail.com'
@@ -40,7 +39,8 @@ export default function UserAuthForm() {
         toast({
           title: "Đăng nhập thành công",
         })
-      }, 1500);
+        router.push("/")
+      }, 700);
     });
   };
 

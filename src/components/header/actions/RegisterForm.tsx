@@ -7,6 +7,9 @@ export const registerFormSchema = z.object({
     email: z.string()
         .min(2, { message: "Email không được để trống" })
         .email({ message: "Email không hợp lệ" }),
+    number: z.string()
+        .min(10, { message: "Số điện thoại không hợp lệ" })
+        .max(12, { message: "Số điện thoại không hợp lệ" }),
     password: z.string()
         .min(8, { message: "Mật khẩu phải có ít nhất 8 ký tự" }),
     confirmPassword: z.string()
@@ -36,6 +39,9 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { signUp } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 function RegisterForm() {
     const [isLoading, setIsLoading] = useState(false)
@@ -46,6 +52,7 @@ function RegisterForm() {
         defaultValues: {
             fullName: "",
             email: "",
+            number: "",
             password: "",
             confirmPassword: "",
         },
@@ -58,7 +65,15 @@ function RegisterForm() {
             Object.entries(values).forEach(([key, value]) => {
                 formData.append(key, value)
             })
-            // await signUp(formData)
+            console.log({ conmemay: values.number })
+            const dataToSignUp = {
+                email: values.email,
+                password: values.password,
+                name: values.fullName,
+                number: values.number,
+            }
+            await signUp.email(dataToSignUp)
+            
             form.reset()
             setOpen(false)
         } catch (error) {
@@ -69,6 +84,7 @@ function RegisterForm() {
             })
         } finally {
             setIsLoading(false)
+            redirect("/")
         }
     }
 
@@ -101,7 +117,26 @@ function RegisterForm() {
                                     </FormItem>
                                 )}
                             />
-
+                            <FormField
+                                control={form.control}
+                                name="number"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex flex-col gap-2">
+                                                <Label htmlFor="number">Số điện thoại</Label>
+                                                <Input
+                                                    {...field}
+                                                    id="number"
+                                                    placeholder="Nhập số điện thoại"
+                                                    disabled={isLoading}
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             {/* Email field */}
                             <FormField
                                 control={form.control}

@@ -49,14 +49,6 @@ function LoginHeaderForm() {
                     email: values.email,
                     password: values.password
                 },
-                {
-                    onRequest: (ctx) => {
-                        console.log("req login through header")
-                    },
-                    onResponse: (ctx) => {
-                        console.log("res login through header")
-                    },
-                },
             );
         } catch (error) {
             console.error("Login failed:", error);
