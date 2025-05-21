@@ -41,7 +41,7 @@ export default async function ProductListing1LevelDeep({ params, searchParams }:
 
     return (
         <CategoriesProvider initialCategories={categories}>
-            <section className="flex flex-col w-full gap-4 container sm:px-0 ">
+            <section className="flex flex-col w-full gap-4 container mx-0">
                 <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                     <Button variant={"outline"}>Lọc <ArrowDownIcon /></Button>
                     <ProductsListWithFilter />
