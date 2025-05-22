@@ -1,17 +1,19 @@
-import { getCategories } from '@/lib/queries/categoryQueries'
+"use client"
+import { useCategories } from '@/contexts/CategoriesContext'
 import { HouseIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import PageWrapper from '../PageWrapper'
 
-async function CategoryPicker() {
-    const categories = await getCategories()
+function CategoryPicker() {
+    const {categories} = useCategories()
     if(!categories) return <></>
     const firstLevelCategories = categories.filter((category) => category.level === 1)
     if(!firstLevelCategories){
         return <></>
     }
     return (
-        <div className='bg-white container  py-4 flex flex-col gap-4 rounded-md'>
+        <PageWrapper className='bg-white py-4 flex flex-col gap-4 rounded-md'>
             <h1 className='text-lg font-semibold px-4'>Bất động sản: Mua bán, cho thuê nhà đất toàn quốc T2/2025</h1>
             <div className='flex flex-grow   gap-4 items-center justify-around'>
                 {
@@ -25,7 +27,7 @@ async function CategoryPicker() {
                     })
                 }
             </div>
-        </div>
+        </PageWrapper>
     )
 }
 
