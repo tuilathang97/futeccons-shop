@@ -1,9 +1,11 @@
-import { Category } from '@/db/schema'
+import { getCategories } from '@/lib/queries/categoryQueries'
 import { HouseIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-function CategoryPicker({categories}:{categories:Category[]}) {
+async function CategoryPicker() {
+    const categories = await getCategories()
+    if(!categories) return <></>
     const firstLevelCategories = categories.filter((category) => category.level === 1)
     if(!firstLevelCategories){
         return <></>

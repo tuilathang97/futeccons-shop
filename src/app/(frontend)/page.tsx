@@ -32,7 +32,7 @@ export default async function Home({ searchParams }: HomePageProps) {
   return (
     <CategoriesProvider initialCategories={categories}>
       <div className="flex flex-col container px-0 justify-center min-w-full items-center gap-4">
-        <CategoryPicker categories={categories}/>
+        <CategoryPicker />
         <ProductsContainer title="Tin đăng" posts={paginatedPosts.data} postImages={postImages} />
       </div>
     </CategoriesProvider>
