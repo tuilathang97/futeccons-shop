@@ -14,6 +14,7 @@ import { getPublishedArticleByParams } from '@/actions/articleActions'
 import ArticleContent from '@/components/articles/ArticleContent'
 import { getPostImages } from '@/lib/queries/postImagesQueries'
 import { CategoriesProvider } from '@/contexts/CategoriesContext'
+import PageWrapper from '@/components/PageWrapper'
 
 export default async function ProductListing3LevelDeep({ params, searchParams }: {
     params: Promise<{ categoryLevel1: string, categoryLevel2: string, categoryLevel3: string }>;
@@ -47,7 +48,7 @@ export default async function ProductListing3LevelDeep({ params, searchParams }:
     const postImages = await getPostImages()
     return (
         <CategoriesProvider initialCategories={categories}>
-            <div className='flex flex-col gap-4 container px-0'>
+            <PageWrapper className='flex flex-col gap-4 '>
                 <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                     <ProductsListWithFilter />
                     <FilterEstateTransaction currentCategory={parentCategory} categories={filteredCategories} />
@@ -79,7 +80,7 @@ export default async function ProductListing3LevelDeep({ params, searchParams }:
                         <ArticleContent article={article} />
                     </div>
                 )}
-            </div>
+            </PageWrapper>
         </CategoriesProvider>
     )
 }

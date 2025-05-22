@@ -13,6 +13,7 @@ import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import { getPostImages } from "@/lib/queries/postImagesQueries";
+import PageWrapper from "@/components/PageWrapper";
 
 export default async function ProductListing2LevelDeep({ params, searchParams }: {
     params: Promise<{ categoryLevel1: string, categoryLevel2: string }>;
@@ -41,7 +42,7 @@ export default async function ProductListing2LevelDeep({ params, searchParams }:
 
     return (
         <CategoriesProvider initialCategories={categories}>
-            <div className="flex flex-col gap-8 container px-0">
+            <PageWrapper className="flex flex-col gap-8 ">
                 <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                     <ProductsListWithFilter />
                     <FilterEstateTransaction currentCategory={parentCategory} categories={filteredCategories} />
@@ -73,7 +74,7 @@ export default async function ProductListing2LevelDeep({ params, searchParams }:
                         <ArticleContent article={article} />
                     </div>
                 )}
-            </div>
+            </PageWrapper>
         </CategoriesProvider>
     )
 }

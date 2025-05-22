@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { PaginationParams } from '@/lib/queries/paginateQuery';
 import { getPostImages } from "@/lib/queries/postImagesQueries";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
+import PageWrapper from "@/components/PageWrapper";
 
 interface HomePageProps {
   searchParams: {
@@ -31,10 +32,10 @@ export default async function Home({ searchParams }: HomePageProps) {
   const postImages = await getPostImages();
   return (
     <CategoriesProvider initialCategories={categories}>
-      <div className="flex flex-col container px-0 justify-center min-w-full items-center gap-4">
+      <PageWrapper className="flex flex-col justify-center min-w-full items-center gap-4">
         <CategoryPicker />
         <ProductsContainer title="Tin đăng" posts={paginatedPosts.data} postImages={postImages} />
-      </div>
+      </PageWrapper>
     </CategoriesProvider>
   );
 }

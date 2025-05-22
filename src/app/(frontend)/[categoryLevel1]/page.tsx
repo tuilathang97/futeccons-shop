@@ -15,6 +15,7 @@ import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import { getPostImages } from "@/lib/queries/postImagesQueries";
+import PageWrapper from "@/components/PageWrapper";
 
 interface PageProps {
     params: Promise<{ categoryLevel1: string }>;
@@ -41,7 +42,7 @@ export default async function ProductListing1LevelDeep({ params, searchParams }:
 
     return (
         <CategoriesProvider initialCategories={categories}>
-            <section className="flex px-4 lg:px-8 flex-col 2xl:px-0  w-full gap-4 container">
+            <PageWrapper className="flex flex-col 2xl:px-0  w-full gap-4 ">
                 <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                     <Button variant={"outline"}>Lọc <ArrowDownIcon /></Button>
                     <ProductsListWithFilter />
@@ -64,7 +65,7 @@ export default async function ProductListing1LevelDeep({ params, searchParams }:
                         <ArticleContent article={article} />
                     </div>
                 )}
-            </section>
+            </PageWrapper>
         </CategoriesProvider>
     );
 }
