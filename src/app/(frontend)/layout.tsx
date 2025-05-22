@@ -6,6 +6,8 @@ import Header from "@/components/header/Header";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { getCategories } from "@/lib/queries/categoryQueries";
+import { SessionProvider } from "@/contexts/SessionContext";
+import { Session, User } from "@/db/schema";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -22,18 +24,20 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
+  const dataSession = await auth.api.getSession({ headers: await headers() })
+  const session = dataSession?.session
 
-  const session = await auth.api.getSession({
-    headers: await headers()
-  })
+  const user = dataSession?.user
   const categories = await getCategories()
+  
   return (
     <html lang="vi" className="h-svh">
-      {/* <ReactScan /> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] min-w-full antialiased mx-0 max-w-[80rem] !pt-[7rem] md:pt-[5rem] `}
       >
-        <Header user={session?.user} session={session?.session} categories={categories}/>
+        <SessionProvider session={session as Session} user={user as User}>
+          <Header categories={categories}/>
+        </SessionProvider>
         <Toaster />
         {children} 
       </body>

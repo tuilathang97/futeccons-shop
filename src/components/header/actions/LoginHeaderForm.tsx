@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn } from "@/lib/auth-client"
+import { useToast } from "@/hooks/use-toast"
+
 
 const loginFormSchema = z.object({
     email: z.string()
@@ -30,6 +32,7 @@ const loginFormSchema = z.object({
 
 function LoginHeaderForm() {
     const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast()
     const form = useForm<z.infer<typeof loginFormSchema>>({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -37,7 +40,6 @@ function LoginHeaderForm() {
             password: ""
         },
     })
-
     const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
         try {
             setIsLoading(true);
@@ -47,8 +49,29 @@ function LoginHeaderForm() {
             await signIn.email(
                 {
                     email: values.email,
-                    password: values.password
+                    password: values.password,
+                    callbackURL:"/"
                 },
+                {
+                    onRequest: () => {
+                        toast({
+                            title: "Đang đăng nhập...",
+                            description: "Vui lòng đợi..."
+                        })
+                    },
+                    onSuccess: () => {
+                        toast({
+                            title: "Đăng nhập thành công",
+                            description: "Bạn đã đăng nhập thành công"
+                        })
+                    },
+                    onError: () => {
+                        toast({
+                            title: "Đăng nhập thất bại",
+                            description: "Bạn đã đăng nhập thất bại"
+                        })
+                    }
+                }
             );
         } catch (error) {
             console.error("Login failed:", error);

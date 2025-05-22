@@ -7,13 +7,14 @@ import SearchBar from "./SearchBar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import UserActionGroup from "./userActionGroup"
 import UserDropDown from "./UserDropDown"
-import { Category, Session, User } from "@/db/schema"
+import { Category } from "@/db/schema"
+import { useSession } from "@/contexts/SessionContext"
 
-
-export default function Header({ user, session, categories }: { user?: User, session?: Session, categories: Category[] }) {
+export default function Header({categories }: { categories: Category[] }) {
     const level1Categories = categories.filter((category) => category.level === 1)
     const level2Categories = categories.filter((category) => category.level === 2)
     const level3Categories = categories.filter((category) => category.level === 3)
+    const { user, session } = useSession()
     return (
         <header className="fixed max-w-7xl z-[50] gap-4 top-0 px-4 lg:px-8  md:top-8 left-0 flex  h-16 min-w-full items-center ">
             <nav className=" items-center px-4 bg-gray-100 shadow-xl gap-2 rounded-xl flex justify-between container border py-2 ">

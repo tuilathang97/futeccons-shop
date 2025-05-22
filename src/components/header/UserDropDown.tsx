@@ -9,21 +9,26 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { LogOut, Settings, User2 } from "lucide-react"
 import { User } from '@/db/schema'
-import Image from 'next/image'
 import Link from 'next/link'
 import { signOut } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
+import { useSession } from '@/contexts/SessionContext'
+import { useToast } from '@/hooks/use-toast'
+import { Avatar, AvatarImage } from '../ui/avatar'
 
 
 function UserDropdown({ user }: { user: User }) {
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
+    const { setSession, setUser } = useSession();
+    const { toast } = useToast()
+    if(!user) return <></>
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                {user.image ?
-                    <Image className={"rounded-full w-10 h-10 border border-gray-900/10 cursor-pointer "} src={user?.image} height={50} width={50} alt={user.name}></Image>
-                    : <User2 strokeWidth={1} className="mr-2 h-8 w-8 border border-gray-900 cursor-pointer rounded-full" />}
+            <Avatar className="h-10 w-10 rounded-full cursor-pointer">
+                <AvatarImage src={user?.image || "https://picsum.photos/200/300"} alt={user.name || "User avatar"} />
+              </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 mt-12 md:mt-4 ml-12 " align="end">
                 <DropdownMenuSeparator />
@@ -42,7 +47,15 @@ function UserDropdown({ user }: { user: User }) {
                 <DropdownMenuItem onClick={() => {
                     setIsLoading(true)
                     signOut()
-                    router.push('/')
+                    setTimeout(() => {
+                        setSession(null)
+                        setUser(null)
+                        toast({
+                            title: "Đăng xuất thành công",
+                            description: "Bạn đã đăng xuất thành công"
+                        })
+                        router.push('/')
+                    }, 500)
                 }}
                     className="text-red-600 focus:text-red-600"
                 >

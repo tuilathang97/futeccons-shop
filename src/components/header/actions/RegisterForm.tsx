@@ -39,14 +39,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { signUp } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
-import { toast } from "sonner";
+import { signUp,signIn } from "@/lib/auth-client";
+import { useToast } from "@/hooks/use-toast";
 
 function RegisterForm() {
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
-
+    const { toast } = useToast()
     const form = useForm<RegisterFormValues>({
         resolver: zodResolver(registerFormSchema),
         defaultValues: {
@@ -65,14 +64,34 @@ function RegisterForm() {
             Object.entries(values).forEach(([key, value]) => {
                 formData.append(key, value)
             })
-            console.log({ conmemay: values.number })
             const dataToSignUp = {
                 email: values.email,
                 password: values.password,
                 name: values.fullName,
                 number: values.number,
             }
-            await signUp.email(dataToSignUp)
+            await signUp.email(dataToSignUp,
+                {
+                    onRequest: () => {
+                        toast({
+                            title: "Đang đăng ký...",
+                            description: "Vui lòng đợi..."
+                        })
+                    },
+                    onSuccess: () => {
+                        toast({
+                            title: "Đăng ký thành công",
+                            description: "Bạn đã đăng ký thành công"
+                        })
+                    },
+                    onError: () => {
+                        toast({
+                            title: "Đăng ký thất bại",
+                            description: "Bạn đã đăng ký thất bại"
+                        })
+                    }
+                }
+            )
             
             form.reset()
             setOpen(false)
@@ -83,8 +102,12 @@ function RegisterForm() {
                 message: "Đăng ký thất bại. Vui lòng thử lại.",
             })
         } finally {
+            await signIn.email({
+                email: values.email,
+                password: values.password,
+                callbackURL:"/"
+            })
             setIsLoading(false)
-            redirect("/")
         }
     }
 
