@@ -22,6 +22,7 @@ type UserSession = {
     email: string;
     role?: string | null;
     emailVerified: boolean;
+    number?: string | null;
     [key: string]: unknown;
   };
 };
