@@ -8,6 +8,7 @@ import { headers } from "next/headers";
 import { getCategories } from "@/lib/queries/categoryQueries";
 import { SessionProvider } from "@/contexts/SessionContext";
 import { Session, User } from "@/db/schema";
+import { CategoriesProvider } from "@/contexts/CategoriesContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,7 +37,9 @@ export default async function RootLayout({children,}: Readonly<{children: React.
         className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] min-w-full antialiased mx-0 max-w-[80rem] !pt-[7rem] md:pt-[5rem] `}
       >
         <SessionProvider session={session as Session} user={user as User}>
-          <Header categories={categories}/>
+          <CategoriesProvider initialCategories={categories}>
+            <Header />
+          </CategoriesProvider>
         </SessionProvider>
         <Toaster />
         {children} 
