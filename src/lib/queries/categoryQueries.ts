@@ -37,3 +37,12 @@ export async function updateCategory(id: number, name: string, parentId: number 
 export async function deleteCategory(id: number) {
   await db.delete(categoriesTable).where(eq(categoriesTable.id, id));
 }
+
+/**
+ * Validates if a category path exists and returns 404 if not.
+ * More efficient than fetching all categories when we just need to validate a path.
+ */
+export async function validateCategoryPath(path: string): Promise<boolean> {
+  const category = await getCategoryByPath(path);
+  return category !== null && category !== undefined;
+}

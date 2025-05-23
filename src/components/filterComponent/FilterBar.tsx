@@ -8,21 +8,21 @@ import FilterEstateKind from './FilterEstateKind';
 import FilterPrice from './FilterPrice';
 import FilterArea from './FilterArea';
 import FilterBedrooms from './FilterBedrooms';
-import type { Category } from '@/db/schema';
+import { useCategories } from '@/contexts/CategoriesContext';
 
 interface FilterBarProps {
-  allCategories: Category[];
   level1Slug?: string;
   level2Slug?: string;
   level3Slug?: string;
 }
 
 export default function FilterBar({
-  allCategories,
   level1Slug,
   level2Slug,
   level3Slug,
 }: FilterBarProps) {
+  const { categories: allCategories } = useCategories();
+
   const parentCategory = level1Slug
     ? allCategories.find(c => c.path === `/${level1Slug}`)
     : undefined;

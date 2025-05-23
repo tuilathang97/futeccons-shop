@@ -44,10 +44,10 @@ export default async function RootLayout({
           <SessionProvider session={session as Session} user={user as User}>
             <CategoriesProvider initialCategories={categories}>
               <Header />
+              <main>{children}</main>
             </CategoriesProvider>
           </SessionProvider>
           <Toaster />
-          {children}
         </PostHogProvider>
       </body>
     </html>
