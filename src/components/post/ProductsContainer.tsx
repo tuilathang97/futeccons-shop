@@ -1,7 +1,6 @@
 import React from 'react'
 import ProductCard from '../products/ProductCard'
-import { Post } from './postSchema'
-import { Image } from '@/db/schema'
+import { Image, Post } from '@/db/schema'
 function convertCurrency(valueStr: string) {
     if (valueStr.includes("tr")) {
         return valueStr.replace("tr", "000000");
