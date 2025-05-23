@@ -99,12 +99,11 @@ export default function SignIn() {
                     rememberMe: false
                 },
                 {
-                  onRequest: (ctx) => {
+                  onRequest: () => {
                     setLoading(true);
                   },
-                  onResponse: (ctx) => {
+                  onResponse: () => {
                     setLoading(false);
-                    console.log({ctx})
                   },
                 },
                 );
@@ -137,10 +136,10 @@ export default function SignIn() {
                       callbackURL: "/account"
                     },
                     {
-                      onRequest: (ctx) => {
+                      onRequest: () => {
                          setLoading(true);
                       },
-                      onResponse: (ctx) => {
+                      onResponse: () => {
                          setLoading(false);
                       },
                      },
@@ -168,10 +167,10 @@ export default function SignIn() {
                       callbackURL: "/account"
                     },
                     {
-                      onRequest: (ctx) => {
+                      onRequest: () => {
                          setLoading(true);
                       },
-                      onResponse: (ctx) => {
+                      onResponse: () => {
                          setLoading(false);
                       },
                      },
