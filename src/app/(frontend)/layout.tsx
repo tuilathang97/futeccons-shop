@@ -9,6 +9,8 @@ import { getCategories } from "@/lib/queries/categoryQueries";
 import { SessionProvider } from "@/contexts/SessionContext";
 import { Session, User } from "@/db/schema";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
+import { PostHogProvider } from "@/components/layout/PostHogProvider";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,25 +26,29 @@ export const metadata: Metadata = {
   description: "Mua bán bất động sản",
 };
 
-export default async function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
-  const dataSession = await auth.api.getSession({ headers: await headers() })
-  const session = dataSession?.session
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const dataSession = await auth.api.getSession({ headers: await headers() });
+  const session = dataSession?.session;
 
-  const user = dataSession?.user
-  const categories = await getCategories()
-  
+  const user = dataSession?.user;
+  const categories = await getCategories();
+
   return (
     <html lang="vi" className="h-svh">
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] min-w-full antialiased mx-0 max-w-[80rem] !pt-[7rem] md:pt-[5rem] `}
       >
-        <SessionProvider session={session as Session} user={user as User}>
-          <CategoriesProvider initialCategories={categories}>
-            <Header />
-          </CategoriesProvider>
-        </SessionProvider>
-        <Toaster />
-        {children} 
+        <PostHogProvider>
+          <SessionProvider session={session as Session} user={user as User}>
+            <CategoriesProvider initialCategories={categories}>
+              <Header />
+            </CategoriesProvider>
+          </SessionProvider>
+          <Toaster />
+          {children}
+        </PostHogProvider>
       </body>
     </html>
   );
