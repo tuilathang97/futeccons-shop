@@ -49,7 +49,7 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
                     cardVariant="horizontal"
                 />
                 </div>
-                <div className="col-span-1 h-16 bg-red-500">abc</div>
+                <div></div>
             </div>
             {article && (
                 <div className="mt-8">
