@@ -27,7 +27,7 @@ function UserDropdown({ user }: { user: User }) {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
             <Avatar className="h-10 w-10 rounded-full cursor-pointer">
-                <AvatarImage src={user?.image || "https://picsum.photos/200/300"} alt={user.name || "User avatar"} />
+                <AvatarImage className="object-cover" src={user?.image || "https://picsum.photos/200/300"} alt={user.name || "User avatar"} />
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 mt-12 md:mt-4 ml-12 " align="end">

@@ -32,7 +32,7 @@ export default async function AccountPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-4">
               <Avatar className="h-12 w-12">
-                <AvatarImage src={userImage} alt={user.name || "User avatar"} />
+                <AvatarImage className="object-cover" src={userImage} alt={user.name || "User avatar"} />
                 <AvatarFallback>{user.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
               </Avatar>
               {user.name}

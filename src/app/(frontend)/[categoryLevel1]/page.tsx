@@ -40,9 +40,16 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
             <div>
                 <h1 className='text-xl font-bold'>Mua bán nhà đất chính chủ T3/2025</h1>
             </div>
-            <div className="flex flex-col gap-4 md:grid md:grid-cols-2">
-                <ProductsContainer data={result || []} postImages={postImages} searchParam={{}} cardVariant="horizontal" />
-                <div className="col-span-2"></div>
+            <div className="flex flex-col gap-4 my-4 md:grid md:grid-cols-[70%_30%] ">
+                <div className="min-w-full">
+                <ProductsContainer 
+                    data={result || []} 
+                    postImages={postImages} 
+                    searchParam={{}} 
+                    cardVariant="horizontal"
+                />
+                </div>
+                <div className="col-span-1 h-16 bg-red-500">abc</div>
             </div>
             {article && (
                 <div className="mt-8">

@@ -55,9 +55,9 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
         <div>
             <div className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-3'>
-                    <PostSectionWrapper className='rounded-md p-0 max-h-[1000px] overflow-hidden min-w-full'>
+                    <div className='bg-gray-200/50 border border-gray-200 rounded-md rounded-md p-0 max-h-[1000px] overflow-hidden min-w-full'>
                         <PostCarousel images={images}/>
-                    </PostSectionWrapper>
+                    </div>
                     <PostSectionWrapper>
                         <div className='flex flex-col gap-4'>
                             <h1 className='font-bold text-md md:text-xl lg:text-2xl'>{post.tieuDeBaiViet}</h1>
