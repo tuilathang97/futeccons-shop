@@ -132,14 +132,14 @@ export default function MobileMenuToggle() {
           <AlignJustify strokeWidth={1.5} size={24} />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className=" flex overflow-scroll flex-col gap-4">
+      <SheetContent side="left" className=" flex overflow-scroll min-w-full flex-col gap-4">
         <SheetHeader>
-          <SheetTitle className="flex items-center gap-2">
+          <SheetTitle className="flex flex-col items-center gap-2">
             {user?.id ? (
               <>
                 <Link href="/account" className="text-base gap-4 p-2 rounded-md hover:bg-gray-900/10 min-w-full flex justify-start items-center text-muted-foreground hover:underline">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={user.image || ''} alt={user.name || 'User'} />
+                    <AvatarImage className='rounded-full object-cover' src={user.image || ''} alt={user.name || 'User'} />
                     <AvatarFallback>{user.name?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
@@ -172,15 +172,15 @@ export default function MobileMenuToggle() {
             </SheetClose>
           )}
           {user?.id && (
-            <Button variant="ghost" className="w-full justify-start gap-2 text-red-600" onClick={handleLogout}>
+            <Button className="w-full justify-start gap-2" onClick={handleLogout}>
               <LogOut className="w-4 h-4" />
               Đăng xuất
             </Button>
           )}
         </div>
         <div className="border-t pt-4 mt-2">
-          <div className="font-semibold mb-2">Danh mục</div>
-          <nav>{renderCategories()}</nav>
+          <div className="font-semibold mb-2 px-4">Danh mục :</div>
+          <nav className='px-1'>{renderCategories()}</nav>
         </div>
       </SheetContent>
     </Sheet>
