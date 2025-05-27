@@ -26,7 +26,7 @@ export const getCategoryByPath = cache(async (path: string): Promise<Category | 
 })
 
 export async function getCategoryBySlug(slug: string) {
-  const result = await db.select().from(categoriesTable).where(eq(categoriesTable.slug, slug));
+  const result = await db.select().from(categoriesTable).where(eq(categoriesTable.slug, `/${slug}`));
   return result[0];
 }
 
