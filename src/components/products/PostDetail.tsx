@@ -8,6 +8,7 @@ import { getPublishedArticleByParams } from '@/actions/articleActions'
 import ArticleContent from '../articles/ArticleContent'
 import { Button } from '../ui/button'
 import PostCarousel from '../carousel/PostCarousel'
+import PageWrapper from '../PageWrapper'
 
 interface PostDetailProps {
     post: Post & {
@@ -52,7 +53,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
         return date.toLocaleDateString('vi-VN');
     };
     return (
-        <div>
+        <PageWrapper>
             <div className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-3'>
                     <div className='bg-gray-200/50 border border-gray-200 rounded-md rounded-md p-0 max-h-[1000px] overflow-hidden min-w-full'>
@@ -114,7 +115,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                     <ArticleContent article={article} />
                 </div>
             )}
-        </div>
+        </PageWrapper>
     )
 }
 
