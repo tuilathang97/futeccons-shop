@@ -1,8 +1,6 @@
 import ProductsContainer from "@/components/post/ProductsContainer";
-import { Button } from "@/components/ui/button";
 import { getPostByCategoryPath } from "@/lib/queries";
 import { validateCategoryPath } from "@/lib/queries/categoryQueries";
-import { ArrowDownIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
@@ -32,7 +30,6 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
     return (
         <PageWrapper className="flex flex-col 2xl:px-0 w-full gap-4 ">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
-                <Button variant={"outline"}>Lọc <ArrowDownIcon /></Button>
                 <FilterBar 
                     level1Slug={categoryLevel1}
                 />

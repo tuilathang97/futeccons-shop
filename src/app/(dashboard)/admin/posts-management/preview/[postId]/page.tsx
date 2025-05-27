@@ -1,4 +1,4 @@
-import { getPostDetailsById, PostWithUserAndImages } from "@/lib/queries/postQueries";
+import { getPostDetailsById } from "@/lib/queries/postQueries";
 import { notFound } from "next/navigation";
 import { Metadata } from 'next';
 import PostDetail from "@/components/products/PostDetail";
