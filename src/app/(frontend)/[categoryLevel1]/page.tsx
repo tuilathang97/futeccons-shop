@@ -8,6 +8,7 @@ import { getPostImages } from "@/lib/queries/postImagesQueries";
 import PageWrapper from "@/components/PageWrapper";
 import FilterBar from "@/components/filterComponent/FilterBar";
 import CategoryPicker from "@/components/homepage/CategoryPicker";
+import Sidebar from "@/components/location/Sidebar";
 
 interface PageProps {
     params: Promise<{ categoryLevel1: string }>;
@@ -40,7 +41,7 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
                     <CategoryPicker filterCategories={selectedCategories} className="mt-4" />
                 }
             </div>
-            <div className="flex flex-col gap-4 my-4 md:grid md:grid-cols-[70%_30%] ">
+            <PageWrapper className="flex !px-0 flex-col gap-4 my-4 lg:grid lg:grid-cols-[60%_40%]">
                 <div className="min-w-full">
                     <ProductsContainer
                         data={result || []}
@@ -49,10 +50,10 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
                         cardVariant="horizontal"
                     />
                 </div>
-                <div>
-                    {/* ở đây */}
+                <div className="mt-4 md:mt-0 lg:pr-4">
+                    <Sidebar />
                 </div>
-            </div>
+            </PageWrapper>
             {article && (
                 <div className="mt-8">
                     <ArticleContent article={article} />

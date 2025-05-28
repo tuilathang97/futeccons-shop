@@ -76,7 +76,7 @@ function ProductsContainer({ data, searchParam,cardVariant="vertical", postImage
     });
 
     return (
-        <div className={`flex flex-col col-span-4 ${cardVariant === "horizontal" ? "" : "md:grid md:grid-cols-2"} gap-4 py-4 min-h-fit`}>
+        <div className={`flex flex-col col-span-4 ${cardVariant === "horizontal" ? "" : "md:grid md:grid-cols-2"} gap-4 min-h-fit`}>
             {filteredResult && filteredResult.length > 0 ? filteredResult.map((data: Post, index: number) => {
                 const thumbnailImg = postImages?.find(image => image.postId === Number(data.id))
                 return (

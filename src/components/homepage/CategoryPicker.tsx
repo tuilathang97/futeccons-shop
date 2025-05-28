@@ -38,7 +38,7 @@ function CategoryPicker({ filterCategories, className }: CategoryPickerProps) {
 
     return (
         <>
-            <Card className={cn("w-full", className)}>
+            <Card className={cn("w-full container", className)}>
                 <CardHeader>
                     <CardTitle className="text-lg">
                         Bất động sản: Mua bán, cho thuê nhà đất toàn quốc T2/2025

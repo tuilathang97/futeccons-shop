@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ChevronDown } from 'lucide-react'
+import { useSelectAddress } from '../location/Utils'
 
 
 export const queryMappingString = {
@@ -30,10 +31,12 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>
 
+
 function FilteredProvinces({ provinces }: { provinces: Province[] }) {
     const path = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams()
+    const { handleSelectAddress } = useSelectAddress()
     const [displayText, setDisplayText] = useState("Khu vực")
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
@@ -145,22 +148,6 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
         }
     }, [thanhPho, quan, phuong, provinces])
 
-    function handleSelectAddress() {
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete(queryMappingString.thanhPho);
-        params.delete(queryMappingString.quan);
-        params.delete(queryMappingString.phuong);
-        if (thanhPho) {
-            params.set(queryMappingString.thanhPho, thanhPho);
-            if (quan) {
-                params.set(queryMappingString.quan, quan);
-                if (phuong) {
-                    params.set(queryMappingString.phuong, phuong);
-                }
-            }
-        }
-        router.push(`${path}?${params.toString()}`);
-    }
 
     const handleReset = () => {
         form.reset({
@@ -312,7 +299,7 @@ function FilteredProvinces({ provinces }: { provinces: Province[] }) {
                                 Đặt lại
                             </Button>
                             <DialogClose asChild>
-                                <Button onClick={handleSelectAddress} type="button">
+                                <Button onClick={() => handleSelectAddress(thanhPho || "", quan || "", phuong || "")} type="button">
                                     Áp dụng
                                 </Button>
                             </DialogClose>
