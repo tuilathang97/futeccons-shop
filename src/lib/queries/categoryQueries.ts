@@ -1,11 +1,11 @@
 'use server'
 
 import { db } from '@/db/drizzle';
-import { categoriesTable, Category, postImagesTable, postsTable } from '@/db/schema';
+import { categoriesTable, Category } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { cache } from 'react';
 
-export async function createCategory(name: string, parentId: number | null, level: any, slug: string, path: string, note: string = '') {
+export async function createCategory(name: string, parentId: number | null, level: 1 | 2 | 3, slug: string, path: string, note: string = '') {
   await db.insert(categoriesTable).values({ name, parentId, level, note, path, slug });
 }
 

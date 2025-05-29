@@ -2,8 +2,8 @@
 
 import { db } from '@/db/drizzle';
 import { articlesTable, categoriesTable } from '@/db/schema';
-import { eq, and, isNull, desc, sql } from 'drizzle-orm';
-import { type Article, type NewArticle } from '@/db/schema';
+import { eq, and, isNull, desc } from 'drizzle-orm';
+import { type NewArticle } from '@/db/schema';
 
 export async function getArticles() {
   return await db.select().from(articlesTable);

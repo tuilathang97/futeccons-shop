@@ -1,6 +1,6 @@
 import { ActionResult } from "@/actions/postActions";
 import { db } from "@/db/drizzle";
-import { Image, postImagesTable, postsTable, user, User, Post } from "@/db/schema";
+import { Image, postImagesTable, postsTable, User, Post } from "@/db/schema";
 import { eq, desc, asc, sql } from "drizzle-orm";
 import { PaginationParams, PaginatedResult } from "./paginateQuery";
 
@@ -30,7 +30,7 @@ export async function getPosts(
 
   const whereClause = eq(postsTable.active, true);
 
-  let dataQueryBase = db
+  const dataQueryBase = db
     .select()
     .from(postsTable)
     .where(whereClause);

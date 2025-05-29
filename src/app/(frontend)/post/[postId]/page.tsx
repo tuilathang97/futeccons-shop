@@ -1,20 +1,19 @@
 // Remove the "use client" directive
 import Link from 'next/link'
 import React from 'react'
-import { Separator } from '@/components/ui/separator'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import PostDetail from '@/components/products/PostDetail'
-import { Phone } from 'lucide-react'
 import { getPostById } from '@/lib/queries/postQueries'
 import { getPostImageyById } from '@/lib/queries/postImagesQueries'
-import PostSectionWrapper from '@/components/postSectionWrapper'
+import { getUserById } from '@/lib/queries/userQueries'
+import UserSection from './UserSection'
 
 export default async function Page({ params }: { params: { postId: string[] } }) {
     if (!params) return <div>Không tìm thấy bài viết</div>
     const { postId } = await params
     const postFound = await getPostById(Number(postId))
     const postImages = await getPostImageyById(Number(postId))
+    const user = await getUserById(postFound.userId)
+    if(!user) return <div>Không tìm thấy người dùng</div>
     return (
         <div className='container px-0 '>
             {
@@ -25,19 +24,7 @@ export default async function Page({ params }: { params: { postId: string[] } })
                                 <PostDetail post={postFound} images={postImages} />
                             </div>
                             <div className='col-span-12 md:col-span-4'>
-                                <PostSectionWrapper className='flex flex-col gap-4'>
-                                    <div className='flex gap-4'>
-                                        <Avatar>
-                                            <div className='flex'>
-                                                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                                                <AvatarFallback>User</AvatarFallback>
-                                            </div>
-                                        </Avatar>
-                                        <p>User Name</p>
-                                    </div>
-                                    <Separator className='w-full' />
-                                    <Button> Bấm để hiện số 00000000000 <Phone /></Button>
-                                </PostSectionWrapper>
+                                <UserSection user={user} />
                             </div>
                         </div>
                     </div>
