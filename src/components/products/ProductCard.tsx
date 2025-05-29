@@ -159,9 +159,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                         </CardTitle>
                         <div className="flex flex-wrap items-center gap-4 mb-2">
                             <span className="text-lg font-bold text-red-600">{formatPrice()}</span>
-                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
-                                {post.dienTichDat} m²
-                            </Badge>
                         </div>
                         <CardDescription className="flex mb-3 text-base text-gray-800 text-start md:text-xs line-clamp-1">
                             {post.noiDung}
