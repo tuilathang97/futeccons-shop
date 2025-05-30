@@ -87,7 +87,7 @@ export async function createArticleAction(formData: FormData): Promise<ActionRes
 
     const articleData = {
       ...validationResult.data,
-      authorId: session.user.id,
+      authorId: session.user?.id,
     };
 
 

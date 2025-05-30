@@ -3,6 +3,12 @@ import { eq, ilike, or, and } from 'drizzle-orm';
 import { categoriesTable, postsTable } from "@/db/schema";
 import { cache } from "react";
 
+export * from './categoryQueries';
+export * from './postQueries';
+export * from './articleQueries';
+export * from './messageQueries';
+export * from './paginateQuery';
+
 export const getPostByCategoryPath = cache(async (slug1?: string, slug2?: string, slug3?: string,) => {
     const path1 = `${slug1 ? '/' + slug1 : ''}`;
     const path2 = path1 + `${slug2 ? '/' + slug2 : ''}`

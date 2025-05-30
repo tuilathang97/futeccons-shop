@@ -13,9 +13,9 @@ import PageWrapper from '../PageWrapper'
 interface PostDetailProps {
     post: Post & {
         mediaItems?: { url: string, type: string }[] | string;
-        createdAt?: string;
-        latitude?: number | null;
-        longitude?: number | null;
+        createdAt?: Date | string;
+        latitude?: number | string | null | undefined;
+        longitude?: number | string | null | undefined;
     }
     images: ImageType[]
     article?: Article | null
@@ -52,6 +52,10 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
         const date = new Date(createdAt);
         return date.toLocaleDateString('vi-VN');
     };
+
+    const parsedLatitude = typeof post.latitude === 'string' ? parseFloat(post.latitude) : post.latitude;
+    const parsedLongitude = typeof post.longitude === 'string' ? parseFloat(post.longitude) : post.longitude;
+
     return (
         <PageWrapper>
             <div className='flex flex-col gap-4'>
@@ -93,8 +97,8 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                             <h2 className='font-semibold text-lg'>Vị trí bất động sản</h2>
                             <Separator className='w-full' />
                             <LocationMapServer 
-                                latitude={post.latitude} 
-                                longitude={post.longitude} 
+                                latitude={parsedLatitude} 
+                                longitude={parsedLongitude} 
                                 popupText={post.tieuDeBaiViet}
                             />
                         </div>

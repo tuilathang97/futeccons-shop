@@ -118,13 +118,15 @@ export type InactivePostWithUser = Post & {
 };
 
 export type InactivePostWithUserAndImages = Post & {
-  user: Pick<User, 'id' | 'name' | 'email'> | null;
+  user: User | null;
   images: Image[];
 };
 
 export type PostWithUserAndImages = Post & {
-  user: Pick<User, 'id' | 'name' | 'email'> | null;
+  user: User | null;
   images: Image[];
+  latitude?: number | null;
+  longitude?: number | null;
 };
 
 export async function getInactivePosts(
@@ -161,13 +163,7 @@ export async function getInactivePosts(
   const resultData = await db.query.postsTable.findMany({
     where: whereClause,
     with: {
-      user: {
-        columns: {
-          id: true,
-          name: true,
-          email: true,
-        }
-      },
+      user: true,
       images: true
     },
     orderBy: (posts, { asc, desc }) => {
@@ -200,13 +196,7 @@ export async function getPostDetailsById(postId: number): Promise<PostWithUserAn
   const postData = await db.query.postsTable.findFirst({
     where: eq(postsTable.id, postId),
     with: {
-      user: {
-        columns: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
+      user: true,
       images: true,
     },
   });
@@ -215,7 +205,11 @@ export async function getPostDetailsById(postId: number): Promise<PostWithUserAn
     return null;
   }
 
-  return postData as PostWithUserAndImages;
+  return {
+    ...postData,
+    latitude: postData.latitude ? parseFloat(postData.latitude) : null,
+    longitude: postData.longitude ? parseFloat(postData.longitude) : null,
+  } as PostWithUserAndImages;
 }
 
 export async function approvePost(postId: number): Promise<ActionResult> {

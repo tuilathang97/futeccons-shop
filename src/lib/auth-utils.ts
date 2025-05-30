@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 // Define the session type to match Better Auth's structure
-type UserSession = {
+export type UserSession = {
   session: {
     id: string;
     createdAt: Date;
@@ -23,7 +23,10 @@ type UserSession = {
     role?: string | null;
     emailVerified: boolean;
     number?: string | null;
-    [key: string]: unknown;
+    image?: string | null;
+    banned?: boolean | null;
+    banReason?: string | null;
+    banExpires?: Date | null;
   };
 };
 

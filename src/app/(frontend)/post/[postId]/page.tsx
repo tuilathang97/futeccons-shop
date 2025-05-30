@@ -1,37 +1,92 @@
-// Remove the "use client" directive
 import Link from 'next/link'
 import React from 'react'
 import PostDetail from '@/components/products/PostDetail'
-import { getPostById } from '@/lib/queries/postQueries'
+import { Phone } from 'lucide-react'
+import { getPostDetailsById, type PostWithUserAndImages } from '@/lib/queries/postQueries'
 import { getPostImageyById } from '@/lib/queries/postImagesQueries'
-import { getUserById } from '@/lib/queries/userQueries'
-import UserSection from './UserSection'
+import PostSectionWrapper from '@/components/postSectionWrapper'
+import { getServerSession, type UserSession } from '@/lib/auth-utils'
+import ContactOwnerButton from '@/components/post/ContactOwnerButton'
+import { type User as DbUser, type Image as DbImage } from '@/db/schema';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
 
 export default async function Page({ params }: { params: { postId: string[] } }) {
     if (!params) return <div>Không tìm thấy bài viết</div>
     const { postId } = await params
-    const postFound = await getPostById(Number(postId))
-    const postImages = await getPostImageyById(Number(postId))
-    const user = await getUserById(postFound.userId)
-    if(!user) return <div>Không tìm thấy người dùng</div>
+    const numericPostId = Number(Array.isArray(postId) ? postId[0] : postId);
+
+    if (isNaN(numericPostId)) {
+        return <div>ID bài viết không hợp lệ</div>;
+    }
+
+    const [postFoundResult, postImagesResult, session] = await Promise.all([
+        getPostDetailsById(numericPostId),
+        getPostImageyById(numericPostId),
+        getServerSession() as Promise<UserSession | null>
+    ]);
+    
+    let currentUser: DbUser | null = null;
+    if (session?.user) {
+        const sUser = session.user;
+        currentUser = {
+            id: sUser.id,
+            name: sUser.name, 
+            email: sUser.email, 
+            number: sUser.number ?? "",
+            emailVerified: sUser.emailVerified,
+            image: sUser.image ?? "",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            role: sUser.role ?? null,
+            banned: sUser.banned ?? null,
+            banReason: sUser.banReason ?? null,
+            banExpires: sUser.banExpires ?? null,
+        };
+    }
+
+    const postImagesForDetail: DbImage[] = Array.isArray(postImagesResult)
+        ? postImagesResult
+        : (postImagesResult ? [postImagesResult] : []);
+
+    if (!postFoundResult || !postFoundResult.user) {
+        return <div>Không tìm thấy thông tin bài viết hoặc chủ sở hữu. <Link href={"/"} className='text-red-500'>Quay về trang chủ</Link></div>;
+    }
+    
+    const postForDetail: PostWithUserAndImages & { user: DbUser } = {
+        ...postFoundResult,
+        user: postFoundResult.user, 
+    };
+
+    const ownerUserForButton = postForDetail.user;
+
     return (
         <div className='container px-0 '>
-            {
-                postFound ?
-                    <div className='flex flex-col gap-4'>
-                        <div className='grid grid-cols-12 gap-4 py-2'>
-                            <div className='col-span-12 md:col-span-8 gap-4'>
-                                <PostDetail post={postFound} images={postImages} />
-                            </div>
-                            <div className='col-span-12 md:col-span-4'>
-                                <UserSection user={user} />
-                            </div>
-                        </div>
+            <div className='flex flex-col gap-4'>
+                <div className='grid grid-cols-12 gap-4 py-2'>
+                    <div className='col-span-12 md:col-span-8 gap-4'>
+                        <PostDetail post={postForDetail} images={postImagesForDetail} />
                     </div>
-                    : <div>
-                        Không tìm thấy bài viết, <Link href={"/"} className='text-red-500'>ấn vào đây để quay về trang chủ</Link>
+                    <div className='col-span-12 md:col-span-4'>
+                        <PostSectionWrapper className='flex flex-col gap-4'>
+                            <div className='flex gap-4 items-center'>
+                                <Avatar>
+                                    <AvatarImage src={ownerUserForButton.image || "https://github.com/shadcn.png"} alt={ownerUserForButton.name || "User"} />
+                                    <AvatarFallback>{ownerUserForButton.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                                </Avatar>
+                                <p className="font-semibold">{ownerUserForButton.name || "Không có tên"}</p>
+                            </div>
+                            <Separator className='w-full' />
+                            <Button> Bấm để hiện số {ownerUserForButton.number || "ẩn"} <Phone className="ml-2 h-4 w-4" /></Button>
+                            <ContactOwnerButton 
+                                post={postForDetail}
+                                currentUser={currentUser} 
+                            />
+                        </PostSectionWrapper>
                     </div>
-            }
+                </div>
+            </div>
         </div>
     )
 }

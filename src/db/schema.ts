@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { pgTable, integer, serial, varchar, uuid, text, timestamp, decimal, boolean, index, uniqueIndex } from 'drizzle-orm/pg-core';
+import { pgTable, integer, serial, varchar, uuid, text, timestamp, decimal, boolean, index, uniqueIndex, type AnyPgColumn } from 'drizzle-orm/pg-core';
 
 export const categoriesTable = pgTable("categories", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -54,7 +54,8 @@ export const postsRelations = relations(postsTable, ({ one, many }) => ({
     fields: [postsTable.userId],
     references: [user.id]
   }),
-  images: many(postImagesTable)
+  images: many(postImagesTable),
+  messages: many(messagesTable),
 }));
 
 export const categoriesRelation = relations(categoriesTable, ({one}) => ({
@@ -102,7 +103,13 @@ export const user = pgTable("user", {
 export type User = typeof user.$inferSelect;
 
 export const userRelations = relations(user, ({ many }) => ({
-  posts: many(postsTable)
+  posts: many(postsTable),
+  sentMessages: many(messagesTable, {
+    relationName: 'sent_messages',
+  }),
+  receivedMessages: many(messagesTable, {
+    relationName: 'received_messages',
+  }),
 }));
 
 export const session = pgTable("session", {
@@ -231,5 +238,63 @@ export const postImagesRelations = relations(postImagesTable, ({ one }) => ({
   post: one(postsTable, {
     fields: [postImagesTable.postId],
     references: [postsTable.id],
+  }),
+}));
+
+export const messagesTable = pgTable('messages', {
+  id: serial('id').primaryKey(),
+  subject: varchar('subject', { length: 255 }).notNull(),
+  content: text('content').notNull(),
+  senderContactInfo: varchar('sender_contact_info', { length: 50 }),
+  senderId: text('sender_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  recipientId: text('recipient_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  postId: integer('post_id').notNull().references(() => postsTable.id, { onDelete: 'cascade' }),
+  parentMessageId: integer('parent_message_id').references((): AnyPgColumn => messagesTable.id, { onDelete: 'set null' }),
+  status: varchar('status', { length: 20 }).default('sent').notNull(), // 'sent', 'read', 'replied'
+  readAt: timestamp('read_at'),
+  repliedAt: timestamp('replied_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+}, (table) => ({
+  senderIdx: index('messages_sender_idx').on(table.senderId),
+  recipientIdx: index('messages_recipient_idx').on(table.recipientId),
+  postIdx: index('messages_post_idx').on(table.postId),
+  parentIdx: index('messages_parent_idx').on(table.parentMessageId),
+  statusIdx: index('messages_status_idx').on(table.status),
+  createdIdx: index('messages_created_idx').on(table.createdAt),
+  // Composite indexes for optimized pagination queries
+  senderCreatedIdx: index('messages_sender_created_idx').on(table.senderId, table.createdAt.desc()),
+  recipientCreatedIdx: index('messages_recipient_created_idx').on(table.recipientId, table.createdAt.desc()),
+  // Index for thread queries
+  parentCreatedIdx: index('messages_parent_created_idx').on(table.parentMessageId, table.createdAt.desc()),
+  // Index for status filtering with common patterns
+  recipientStatusIdx: index('messages_recipient_status_idx').on(table.recipientId, table.status),
+}));
+
+export type Message = typeof messagesTable.$inferSelect;
+export type NewMessage = typeof messagesTable.$inferInsert;
+
+export const messagesRelations = relations(messagesTable, ({ one, many }) => ({
+  sender: one(user, {
+    fields: [messagesTable.senderId],
+    references: [user.id],
+    relationName: 'sent_messages',
+  }),
+  recipient: one(user, {
+    fields: [messagesTable.recipientId],
+    references: [user.id],
+    relationName: 'received_messages',
+  }),
+  post: one(postsTable, {
+    fields: [messagesTable.postId],
+    references: [postsTable.id],
+  }),
+  parentMessage: one(messagesTable, {
+    fields: [messagesTable.parentMessageId],
+    references: [messagesTable.id],
+    relationName: 'parent_message',
+  }),
+  replies: many(messagesTable, {
+    relationName: 'parent_message', 
   }),
 }));

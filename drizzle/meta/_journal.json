@@ -64,6 +64,20 @@
       "when": 1747814572194,
       "tag": "0008_supreme_scarlet_spider",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1748269739594,
+      "tag": "0009_free_scrambler",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1748274743205,
+      "tag": "0010_add_composite_indexes_for_messages",
+      "breakpoints": true
     }
   ]
 }
