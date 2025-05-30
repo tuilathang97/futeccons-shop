@@ -13,22 +13,21 @@ interface Container {
 
 function ProductsContainer({ title,posts,postImages }: Container) {
     return (
-        <div className='min-h-[5rem] flex flex-col bg-white container gap-4 w-full border border-gray-100 rounded-md p-4'>
-            <div className='flex justify-center'>
+        <div className='min-h-[5rem] px-4 sm:px-8 md:px-12 flex flex-col bg-white container gap-4 w-full border border-gray-100 rounded-md p-4'>
+            <div className='flex'>
                 <h1 className='text-xl font-semibold md:text-2xl'>{title}</h1>
             </div>
             <div className='
                 grid gap-4
                 md:grid-cols-2
                 lg:grid-cols-3
+                xl:grid-cols-4
                 grid-cols-1
                 sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]
                 place-items-center
                 justify-items-center
                 items-start
-                w-full
-                max-w-[1200px]
-                mx-auto'
+                w-full'
             >
                 {posts?.map((postData,index) => {
                     const thumbnailImg = postImages?.find(image => image.postId === postData.id)

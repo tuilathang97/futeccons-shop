@@ -40,7 +40,7 @@ export default function UserAuthForm() {
           title: "Đăng nhập thành công",
         })
         router.push("/")
-      }, 700);
+      }, 300);
     });
   };
 

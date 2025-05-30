@@ -29,12 +29,25 @@ export default async function Home({ searchParams }: HomePageProps) {
   };
 
   const paginatedPosts = await getPosts(paginationParams);
+
+  const banNhaCategory = categories.find(cat => cat.name === "Bán nhà" && cat.level === 1);
+  const choThueCategory = categories.find(cat => cat.name === "Cho thuê" && cat.level === 1);
+  const duAnCategory = categories.find(cat => cat.name === "Dự án" && cat.level === 1);
+
+  const postsBanNha = banNhaCategory ? await getPosts(paginationParams, banNhaCategory.id) : { data: [], metadata: paginatedPosts.metadata };
+  const postsChoThue = choThueCategory ? await getPosts(paginationParams, choThueCategory.id) : { data: [], metadata: paginatedPosts.metadata };
+  const postsDuAn = duAnCategory ? await getPosts(paginationParams, duAnCategory.id) : { data: [], metadata: paginatedPosts.metadata };
+
   const postImages = await getPostImages();
   return (
     <CategoriesProvider initialCategories={categories}>
       <PageWrapper className="flex flex-col justify-center min-w-full items-center gap-4">
         <CategoryPicker />
-        <ProductsContainer title="Tin đăng" posts={paginatedPosts.data} postImages={postImages} />
+        <ProductsContainer title="Tin nổi bật" posts={paginatedPosts.data} postImages={postImages} />
+        <ProductsContainer title="Tin bán nhà" posts={postsBanNha.data} postImages={postImages} />
+        <ProductsContainer title="Tin cho thuê" posts={postsChoThue.data} postImages={postImages} />
+        <ProductsContainer title="Tin dự án" posts={postsDuAn.data} postImages={postImages} />
+
       </PageWrapper>
     </CategoriesProvider>
   );

@@ -1,7 +1,7 @@
 import { ActionResult } from "@/actions/postActions";
 import { db } from "@/db/drizzle";
 import { Image, postImagesTable, postsTable, User, Post } from "@/db/schema";
-import { eq, desc, asc, sql } from "drizzle-orm";
+import { eq, desc, asc, sql, and } from "drizzle-orm";
 import { PaginationParams, PaginatedResult } from "./paginateQuery";
 
 export async function createPostImages(image: Image) {
@@ -20,7 +20,8 @@ export async function createPostImages(image: Image) {
 }
 
 export async function getPosts(
-  params?: PaginationParams
+  params?: PaginationParams,
+  level1CategoryId?: number
 ): Promise<PaginatedResult<Post>> {
   const page = params?.page ? Number(params.page) : 1;
   const pageSize = params?.pageSize ? Number(params.pageSize) : 10;
@@ -28,12 +29,16 @@ export async function getPosts(
   const sortOrder = params?.sortOrder || 'desc';
   const offset = (page - 1) * pageSize;
 
-  const whereClause = eq(postsTable.active, true);
+  const baseWhereClause = eq(postsTable.active, true);
+  const categoryWhereClause = level1CategoryId ? eq(postsTable.level1Category, level1CategoryId) : undefined;
+
+  const whereClauses = [baseWhereClause, categoryWhereClause].filter(Boolean) as NonNullable<typeof baseWhereClause | typeof categoryWhereClause>[];
+  const finalWhereClause = and(...whereClauses);
 
   const dataQueryBase = db
     .select()
     .from(postsTable)
-    .where(whereClause);
+    .where(finalWhereClause);
 
   const sortTable = postsTable as typeof postsTable & { [key: string]: any }; 
   const sortColumn = sortTable[sortBy];
@@ -48,7 +53,7 @@ export async function getPosts(
   const countResult = await db
     .select({ count: sql<number>`count(*)::int` })
     .from(postsTable)
-    .where(whereClause);
+    .where(finalWhereClause);
   
   const totalItems = countResult[0].count;
   const totalPages = Math.ceil(totalItems / pageSize);
