@@ -10,6 +10,7 @@ import {
 import { CategorySchema } from "@/components/categories/categorySchema";
 import { Category } from "@/db/schema";
 import { requireAdmin } from "@/lib/auth-utils";
+import { revalidateTag } from "next/cache";
 
 // Authentication check for admin role
 async function checkAdminAccess(): Promise<boolean> {
@@ -46,6 +47,30 @@ interface CategoryActionResult {
   data?: Category[];
 }
 
+function revalidateCategoryCache(categoryId?: number, slug?: string, parentId?: number | null) {
+  revalidateTag('categories');
+  revalidateTag('all-categories');
+  revalidateTag('categories:top-level');
+  revalidateTag('categories:sitemap');
+  revalidateTag('categories:public:counts');
+  revalidateTag('categories:all:counts');
+  
+  if (categoryId) {
+    revalidateTag('category-by-id');
+  }
+  
+  if (slug) {
+    revalidateTag('category-by-slug');
+  }
+  
+  if (parentId !== undefined) {
+    revalidateTag('categories-by-parent-id');
+    revalidateTag('category-breadcrumbs');
+  }
+  
+  revalidateTag('articles');
+}
+
 export async function createCategoryAction(formData: FormData): Promise<CategoryActionResult> {
   try {
     await checkAdminAccess();
@@ -77,13 +102,16 @@ export async function createCategoryAction(formData: FormData): Promise<Category
     
     const normalizedSlug = slug.startsWith('/') ? slug : `/${slug}`;
     const parentSlug = parent?.path || undefined;
-    const editedPath = generatePath(normalizedSlug, level as number, parentSlug);
+    const editedPath = generatePath(normalizedSlug, level as 1 | 2 | 3, parentSlug);
     
     const parsedParentId = typeof parentId === 'string' && !isNaN(Number(parentId)) 
       ? Number(parentId)
       : null;
       
-    await createCategory(name, parsedParentId, level, normalizedSlug, editedPath, note);
+    await createCategory(name, parsedParentId, level as 1 | 2 | 3, normalizedSlug, editedPath, note);
+    
+    // Revalidate cache after creating a category
+    revalidateCategoryCache(undefined, normalizedSlug, parsedParentId);
     
     const updatedCategories = await getCategories();
     return { 
@@ -124,6 +152,9 @@ export async function updateCategoryAction(formData: FormData): Promise<Category
 
     let level = parsedData.data.level;
 
+    // Get the original category data to detect changes
+    const originalCategory = id ? await getCategoryById(id) : null;
+    
     const parent = await findParentCategory(parsedData.data.parentId);
     if (parent && parent.level && parent.level !== 3) {
       level = parent.level + 1;
@@ -131,7 +162,7 @@ export async function updateCategoryAction(formData: FormData): Promise<Category
 
     const normalizedSlug = slug.startsWith('/') ? slug : `/${slug}`;
     const parentSlug = parent?.path || undefined;
-    const editedPath = generatePath(normalizedSlug, level as number, parentSlug);
+    const editedPath = generatePath(normalizedSlug, level as 1 | 2 | 3, parentSlug);
 
     const parsedParentId = typeof parentId === 'string' && !isNaN(Number(parentId)) 
       ? Number(parentId)
@@ -145,6 +176,21 @@ export async function updateCategoryAction(formData: FormData): Promise<Category
     }
 
     await updateCategory(id, name, parsedParentId, note || '', normalizedSlug, editedPath);
+    
+    // Revalidate cache after updating a category
+    revalidateCategoryCache(id, normalizedSlug, parsedParentId);
+    
+    // If slug changed, also revalidate the old slug
+    if (originalCategory && originalCategory.slug !== normalizedSlug) {
+      revalidateTag('category-by-slug');
+      revalidateTag('category-by-path');
+    }
+    
+    // If parent changed, revalidate both old and new parent's children
+    if (originalCategory && originalCategory.parentId !== parsedParentId) {
+      revalidateTag('categories-by-parent-id');
+      revalidateTag('category-breadcrumbs');
+    }
     
     const updatedCategories = await getCategories();
     return { 
@@ -164,7 +210,21 @@ export async function deleteCategoryAction(id: number): Promise<CategoryActionRe
   try {
     await checkAdminAccess();
     
+    // Get the category before deleting it to know what to revalidate
+    const categoryToDelete = await getCategoryById(id);
+    
     await deleteCategory(id);
+    
+    // Revalidate cache after deleting a category
+    if (categoryToDelete) {
+      revalidateCategoryCache(
+        id, 
+        categoryToDelete.slug || undefined, // Convert null to undefined
+        categoryToDelete.parentId
+      );
+    } else {
+      revalidateCategoryCache();
+    }
     
     const updatedCategories = await getCategories();
     return { 

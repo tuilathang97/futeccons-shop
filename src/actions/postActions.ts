@@ -8,12 +8,15 @@ import { postsTable } from "@/db/schema";
 import { cloudinaryInstance } from "@/lib/cloudinary";
 import { UploadApiResponse } from "cloudinary";
 import { createPostToDb, savePostImageToDb, approvePost, deletePost } from "@/lib/queries/postQueries";
-import { isAdminUser, requireAdmin } from "@/lib/auth-utils";
+import { isAdminUser, requireAdmin, getServerSession } from "@/lib/auth-utils";
+import { revalidateTag } from 'next/cache';
+import { eq } from 'drizzle-orm';
+import { db } from "@/db/drizzle";
 
 export interface ActionResult {
   success: boolean;
   message: string;
-  data?: unknown;
+  postId?: number;
 }
 
 
@@ -180,6 +183,18 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
         }
       }
       
+      // Revalidate post caches
+      revalidateTag('posts');
+      revalidateTag('posts:all');
+      revalidateTag('posts:user');
+      revalidateTag('posts:latest');
+      
+      if (postData.active) {
+        revalidateTag('posts:published');
+      } else {
+        revalidateTag('posts:inactive');
+      }
+      
       return {
         success: true,
         message: "Đăng tải bài viết thành công"
@@ -210,6 +225,15 @@ export async function approvePostAction(postId: number): Promise<ActionResult> {
   try {
     await requireAdmin();
     const result = await approvePost(postId);
+    
+    if (result.success) {
+      // Revalidate both inactive and published posts caches
+      revalidateTag('posts');
+      revalidateTag('posts:inactive');
+      revalidateTag('posts:published');
+      revalidateTag(`post:dynamic`);
+    }
+    
     return result;
   } catch (error) {
     console.error("Phê duyệt bài viết thất bại:", error);
@@ -224,12 +248,108 @@ export async function deletePostAction(postId: number): Promise<ActionResult> {
   try {
     await requireAdmin();
     const result = await deletePost(postId);
+    
+    if (result.success) {
+      // Revalidate all post-related caches
+      revalidateTag('posts');
+      revalidateTag('posts:all');
+      revalidateTag('posts:user');
+      revalidateTag('posts:published');
+      revalidateTag('posts:inactive');
+      revalidateTag('posts:count');
+      revalidateTag('posts:category');
+      revalidateTag(`post:dynamic`);
+    }
+    
     return result;
   } catch (error) {
     console.error("Xóa bài viết thất bại:", error);
     return {
       success: false,
       message: error instanceof Error ? error.message : "Xóa bài viết thất bại vì lỗi không xác định."
+    };
+  }
+}
+
+export async function updatePost(postId: number, formData: FormData): Promise<ActionResult> {
+  try {
+    const session = await getServerSession();
+    if (!session || !session.user) {
+      return {
+        success: false,
+        message: "Bạn cần đăng nhập để thực hiện hành động này"
+      };
+    }
+
+    const post = await db.query.postsTable.findFirst({
+      where: eq(postsTable.id, postId),
+    });
+
+    if (!post) {
+      return {
+        success: false,
+        message: "Bài viết không tồn tại"
+      };
+    }
+
+    // Check if user is the post owner or an admin
+    const isOwner = post.userId === session.user.id;
+    const isAdmin = await isAdminUser();
+
+    if (!isOwner && !isAdmin) {
+      return {
+        success: false,
+        message: "Bạn không có quyền chỉnh sửa bài viết này"
+      };
+    }
+
+    const rawData = Object.fromEntries(formData);
+    
+    // Update post data with correct properties based on schema
+    const updatedData: Partial<typeof postsTable.$inferInsert> = {
+      tieuDeBaiViet: String(rawData.tieuDeBaiViet || post.tieuDeBaiViet),
+      noiDung: String(rawData.noiDung || post.noiDung),
+      // For Decimal types, we need to ensure they're properly handled
+      giaTien: rawData.giaTien ? String(rawData.giaTien) : post.giaTien?.toString(),
+      dienTichDat: rawData.dienTichDat ? String(rawData.dienTichDat) : post.dienTichDat?.toString(),
+      soPhongNgu: rawData.soPhongNgu ? Number(rawData.soPhongNgu) : post.soPhongNgu,
+      soPhongVeSinh: rawData.soPhongVeSinh ? Number(rawData.soPhongVeSinh) : post.soPhongVeSinh,
+      thanhPho: String(rawData.thanhPho || post.thanhPho),
+      thanhPhoCodeName: String(rawData.thanhPhoCodeName || post.thanhPhoCodeName),
+      quan: String(rawData.quan || post.quan),
+      quanCodeName: String(rawData.quanCodeName || post.quanCodeName),
+      phuong: String(rawData.phuong || post.phuong),
+      phuongCodeName: String(rawData.phuongCodeName || post.phuongCodeName),
+      duong: String(rawData.duong || post.duong),
+      // latitude and longitude are decimal in the schema
+      latitude: rawData.latitude ? String(rawData.latitude) : post.latitude?.toString(),
+      longitude: rawData.longitude ? String(rawData.longitude) : post.longitude?.toString(),
+      updatedAt: new Date()
+    };
+
+    await db.update(postsTable).set(updatedData).where(eq(postsTable.id, postId));
+    
+    // Add revalidation tags
+    revalidateTag('posts');
+    revalidateTag('post:dynamic');
+    revalidateTag('posts:all');
+    revalidateTag('posts:user');
+    
+    if (post.active) {
+      revalidateTag('posts:published');
+    } else {
+      revalidateTag('posts:inactive');
+    }
+    
+    return {
+      success: true,
+      message: "Bài viết đã được cập nhật"
+    };
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Lỗi khi cập nhật bài viết"
     };
   }
 }

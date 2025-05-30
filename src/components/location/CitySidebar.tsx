@@ -37,7 +37,7 @@ export default function CitySidebar({ className }: CitySidebarProps) {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await fetch('/api/provinces');
+        const response = await fetch('/api/provinces', { cache: 'force-cache' });
         const data = await response.json();
 
         const majorCities = data.filter((province: Province) =>

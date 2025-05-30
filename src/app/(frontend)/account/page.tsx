@@ -21,9 +21,11 @@ export default async function AccountPage() {
     return <div>User not found</div>
   }
   const userImage = typeof user.image === 'string' ? user.image : undefined;
-  const userPosts = await getPostBelongToUser(user.id);
-  const postImages = await getPostImages()
-  const categories = await getCategories()
+  const [userPosts, postImages, categories] = await Promise.all([
+    getPostBelongToUser(user.id),
+    getPostImages(),
+    getCategories()
+  ]);
   return (
     <CategoriesProvider initialCategories={categories}>
       <PageWrapper className="space-y-6 ">

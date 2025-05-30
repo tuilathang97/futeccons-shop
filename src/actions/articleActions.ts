@@ -1,21 +1,21 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { z } from 'zod';
 import { 
   createArticle,
-  getArticleById,
+  getArticleByIdWithCategory as getArticleById,
   updateArticle as updateArticleInDb,
   deleteArticle as deleteArticleInDb,
-  getArticles,
   getCategoriesWithArticleStatus
 } from '@/lib/queries/articleQueries';
-import { getCategories } from '@/lib/queries/categoryQueries';
 import { getServerSession } from '@/lib/auth-utils';
 import { db } from "@/db/drizzle";
 import { articlesTable } from "@/db/schema";
 import { and, eq, isNull } from "drizzle-orm";
 import { getCategoryByPath } from "@/lib/queries/categoryQueries";
+import { getCategories } from '@/lib/queries/categoryQueries';
 
 const ArticleSchema = z.object({
   title: z.string().min(1, { message: "Tiêu đề không được để trống" }),
@@ -48,8 +48,49 @@ const ArticleSchema = z.object({
 export type ActionResult = {
   success: boolean;
   message: string;
-  data?: any;
+  data?: unknown;
 };
+
+function revalidateArticleCaches(
+  articleId?: number, 
+  slug?: string, 
+  level1CategoryId?: number | null, 
+  level2CategoryId?: number | null, 
+  level3CategoryId?: number | null,
+  status?: string
+) {
+  revalidateTag('articles');
+  revalidateTag('articles:paginated');
+  revalidateTag('articles:admin:paginated');
+  revalidateTag('articles:sitemap');
+  
+  if (articleId) {
+    revalidateTag('article-by-id');
+    revalidateTag('article-content-by-id');
+  }
+  
+  if (slug) {
+    revalidateTag('article-by-slug-simple');
+    revalidateTag('article-public-by-slug');
+  }
+  
+  if (level1CategoryId) {
+    revalidateTag('articles:count:category');
+    revalidateTag('articles-by-category-slug');
+    
+    revalidateTag('categories');
+    revalidateTag('categories:all:counts');
+    revalidateTag('categories:public:counts');
+  }
+  
+  if (status === 'published') {
+    revalidateTag('articles:latest');
+    revalidateTag('articles:featured');
+  }
+  
+  revalidateTag('articles:search');
+  revalidateTag('related-articles');
+}
 
 export async function createArticleAction(formData: FormData): Promise<ActionResult> {
   try {
@@ -91,11 +132,20 @@ export async function createArticleAction(formData: FormData): Promise<ActionRes
     };
 
 
-    await createArticle(articleData);
+    const [createdArticle] = await createArticle(articleData);
 
+    // Revalidate both path-based and tag-based caches
+    revalidateArticleCaches(
+      createdArticle?.id,
+      articleData.slug,
+      articleData.level1CategoryId,
+      articleData.level2CategoryId, 
+      articleData.level3CategoryId,
+      articleData.status
+    );
 
+    // Keep existing path-based revalidation
     revalidatePath('/admin/articles');
-    
     revalidatePath('/');
     
     if (articleData.level1CategoryId) {
@@ -152,6 +202,14 @@ export async function updateArticleAction(formData: FormData): Promise<ActionRes
       };
     }
 
+    // Get the original article to compare changes
+    const originalArticle = await getArticleById(parseInt(id, 10));
+    if (!originalArticle) {
+      return {
+        success: false,
+        message: "Bài viết không tồn tại",
+      };
+    }
 
     const rawData = {
       title: formData.get('title') as string,
@@ -168,7 +226,6 @@ export async function updateArticleAction(formData: FormData): Promise<ActionRes
       publishedAt: formData.get('publishedAt') as string,
     };
 
-
     const validationResult = ArticleSchema.safeParse(rawData);
     if (!validationResult.success) {
       return {
@@ -177,12 +234,43 @@ export async function updateArticleAction(formData: FormData): Promise<ActionRes
       };
     }
 
-
     await updateArticleInDb(parseInt(id, 10), validationResult.data);
 
-
-    revalidatePath('/admin/articles');
+    // Revalidate both path-based and tag-based caches
+    revalidateArticleCaches(
+      parseInt(id, 10),
+      validationResult.data.slug,
+      validationResult.data.level1CategoryId,
+      validationResult.data.level2CategoryId,
+      validationResult.data.level3CategoryId,
+      validationResult.data.status
+    );
     
+    // If slug changed, also revalidate the old slug
+    if (originalArticle.slug !== validationResult.data.slug) {
+      revalidateTag('article-by-slug-simple');
+      revalidateTag('article-public-by-slug');
+    }
+    
+    // If category changed, revalidate both old and new category article counts
+    if (originalArticle.level1CategoryId !== validationResult.data.level1CategoryId ||
+        originalArticle.level2CategoryId !== validationResult.data.level2CategoryId ||
+        originalArticle.level3CategoryId !== validationResult.data.level3CategoryId) {
+      revalidateTag('articles:count:category');
+      revalidateTag('articles-by-category-slug');
+      revalidateTag('categories:all:counts');
+      revalidateTag('categories:public:counts');
+    }
+    
+    // If status changed, revalidate specific status-related tags
+    if (originalArticle.status !== validationResult.data.status) {
+      revalidateTag('articles:latest');
+      revalidateTag('articles:featured');
+      revalidateTag('articles:published-by-params');
+    }
+
+    // Keep existing path-based revalidation
+    revalidatePath('/admin/articles');
     revalidatePath('/');
     
     if (validationResult.data.level1CategoryId) {
@@ -231,7 +319,6 @@ export async function deleteArticleAction(id: number): Promise<ActionResult> {
       };
     }
 
-
     const article = await getArticleById(id);
     if (!article) {
       return {
@@ -242,33 +329,21 @@ export async function deleteArticleAction(id: number): Promise<ActionResult> {
 
     await deleteArticleInDb(id);
 
+    // Revalidate tag-based caches
+    revalidateArticleCaches(
+      id,
+      article.slug,
+      article.level1CategoryId,
+      article.level2CategoryId,
+      article.level3CategoryId,
+      article.status
+    );
+
     // Revalidate admin paths
     revalidatePath('/admin/articles');
     
     // Revalidate frontend paths
     revalidatePath('/');
-    
-    // Get the categories to revalidate specific paths
-    if (article.level1CategoryId) {
-      const category1 = await getCategoryByPath(`/${article.slug?.split('/')[1] || ''}`);
-      if (category1?.slug) {
-        revalidatePath(`/${category1.slug}`);
-        
-        if (article.level2CategoryId) {
-          const category2 = await getCategoryByPath(`/${category1.slug}/${article.slug?.split('/')[2] || ''}`);
-          if (category2?.slug) {
-            revalidatePath(`/${category1.slug}/${category2.slug}`);
-            
-            if (article.level3CategoryId) {
-              const category3 = await getCategoryByPath(`/${category1.slug}/${category2.slug}/${article.slug?.split('/')[3] || ''}`);
-              if (category3?.slug) {
-                revalidatePath(`/${category1.slug}/${category2.slug}/${category3.slug}`);
-              }
-            }
-          }
-        }
-      }
-    }
 
     const categoriesWithStatus = await getCategoriesWithArticleStatus();
     return {
@@ -344,16 +419,13 @@ interface ArticleQueryParams {
   level1Slug?: string;
   level2Slug?: string;
   level3Slug?: string;
-  state?: string;
-  city?: string;
+  // Other params may be added as needed but not used directly
 }
 
 export async function getPublishedArticleByParams({
   level1Slug,
   level2Slug,
   level3Slug,
-  state,
-  city
 }: ArticleQueryParams) {
   try {
     let level1Category = null;

@@ -46,7 +46,6 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
         return `${duong}, ${phuong}, ${quan}, ${thanhPho}`;
     };
 
-    // Format date to readable string
     const formatDate = () => {
         if (!createdAt) return "";
         const date = new Date(createdAt);
