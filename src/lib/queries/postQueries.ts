@@ -728,3 +728,138 @@ export async function getPostBelongToUser(userId: string) {
   const result = await getPostsByUserId(userId, { page: 1, pageSize: 1000 });
   return result.data;
 }
+
+export const getHomepageData = customUnstableCache(
+  async (
+    params: PaginationParams,
+    categoryIds: { banNhaId?: number; choThueId?: number; duAnId?: number }
+  ): Promise<{
+    featuredPosts: PostWithUser[];
+    banNhaPosts: PostWithUser[];
+    choThuePosts: PostWithUser[];
+    duAnPosts: PostWithUser[];
+    metadata: {
+      currentPage: number;
+      pageSize: number;
+      totalPages: number;
+      totalItems: number;
+    };
+  }> => {
+    console.log(`Executing enterprise DB query for getHomepageData: ${JSON.stringify(params)}, ${JSON.stringify(categoryIds)}`);
+    
+    const pageSize = params.pageSize || 10;
+    const activeCondition = eq(postsTable.active, true);
+
+    const baseSelectFields = {
+      id: postsTable.id,
+      tieuDeBaiViet: postsTable.tieuDeBaiViet,
+      path: postsTable.path,
+      active: postsTable.active,
+      createdAt: postsTable.createdAt,
+      updatedAt: postsTable.updatedAt,
+      giaTien: postsTable.giaTien,
+      dienTichDat: postsTable.dienTichDat,
+      soPhongNgu: postsTable.soPhongNgu,
+      soPhongVeSinh: postsTable.soPhongVeSinh,
+      thanhPho: postsTable.thanhPho,
+      quan: postsTable.quan,
+      phuong: postsTable.phuong,
+      duong: postsTable.duong,
+      level1Category: postsTable.level1Category,
+      author: {
+        id: usersTable.id,
+        name: usersTable.name,
+      },
+    };
+
+    const [
+      featuredPosts,
+      banNhaPosts,
+      choThuePosts,
+      duAnPosts,
+      totalItemsResult
+    ] = await Promise.all([
+      db.select(baseSelectFields)
+        .from(postsTable)
+        .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
+        .where(activeCondition)
+        .orderBy(desc(postsTable.createdAt))
+        .limit(pageSize),
+
+      categoryIds.banNhaId ? 
+        db.select(baseSelectFields)
+          .from(postsTable)
+          .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
+          .where(and(activeCondition, eq(postsTable.level1Category, categoryIds.banNhaId)))
+          .orderBy(desc(postsTable.createdAt))
+          .limit(pageSize)
+        : Promise.resolve([]),
+
+      categoryIds.choThueId ?
+        db.select(baseSelectFields)
+          .from(postsTable)
+          .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
+          .where(and(activeCondition, eq(postsTable.level1Category, categoryIds.choThueId)))
+          .orderBy(desc(postsTable.createdAt))
+          .limit(pageSize)
+        : Promise.resolve([]),
+
+      categoryIds.duAnId ?
+        db.select(baseSelectFields)
+          .from(postsTable)
+          .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
+          .where(and(activeCondition, eq(postsTable.level1Category, categoryIds.duAnId)))
+          .orderBy(desc(postsTable.createdAt))
+          .limit(pageSize)
+        : Promise.resolve([]),
+
+      db.select({ count: drizzleCount() })
+        .from(postsTable)
+        .where(activeCondition)
+    ]);
+      
+    const totalItems = totalItemsResult[0]?.count || 0;
+    const totalPages = Math.ceil(totalItems / pageSize);
+
+    return {
+      featuredPosts: featuredPosts as PostWithUser[],
+      banNhaPosts: banNhaPosts as PostWithUser[],
+      choThuePosts: choThuePosts as PostWithUser[],
+      duAnPosts: duAnPosts as PostWithUser[],
+      metadata: {
+        currentPage: params.page || 1,
+        pageSize,
+        totalPages,
+        totalItems,
+      },
+    };
+  },
+  ['posts', 'homepage'],
+  {
+    tags: ['posts', 'posts:homepage'],
+    revalidate: 600, // 10 minutes
+  }
+);
+
+export const getPostImagesByIds = customUnstableCache(
+  async (postIds: number[]): Promise<Image[]> => {
+    console.log(`Executing DB query for getPostImagesByIds: ${postIds.length} posts`);
+    
+    if (postIds.length === 0) return [];
+    
+    const images = await db
+      .select()
+      .from(postImagesTable)
+      .where(
+        or(...postIds.map(id => eq(postImagesTable.postId, id)))
+      )
+      .orderBy(desc(postImagesTable.createdAt));
+    
+    return images;
+  },
+  ['postImages', 'bulk'],
+  {
+    tags: ['postImages', 'postImages:bulk'],
+    revalidate: 3600, // 1 hour
+  }
+);

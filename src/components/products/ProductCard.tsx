@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
         const result = categories.find(category => category.id === post.level1Category)
         if(result)
         setLevel1Ref(result?.slug || "");
-    }, [post.level1Category]);
+    }, [categories, post.level1Category]);
 
 
     const toggleLike = (e: React.MouseEvent) => {
@@ -178,7 +178,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
                         <div>
                             <div className="flex items-center gap-2 mb-1 text-sm text-gray-600">
                                 <Clock className="w-4 h-4" />
-                                <span>{post.createdAt.toLocaleDateString()}</span>
+                                <span>{post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "N/A"}</span>
                             </div>
                             <div
                                 className="flex items-center gap-2 text-sm text-gray-600"
