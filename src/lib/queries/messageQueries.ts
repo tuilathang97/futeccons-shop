@@ -11,8 +11,8 @@ export type { PaginationParams, PaginatedResult };
 
 export type MessageWithDetails = typeof messagesTable.$inferSelect & {
   post?: Pick<typeof postsTable.$inferSelect, 'id' | 'tieuDeBaiViet' | 'path'>;
-  sender?: Pick<typeof user.$inferSelect, 'id' | 'name' | 'image'>;
-  recipient?: Pick<typeof user.$inferSelect, 'id' | 'name' | 'image'>;
+  sender?: Pick<typeof user.$inferSelect, 'id' | 'name'>;
+  recipient?: Pick<typeof user.$inferSelect, 'id' | 'name'>;
   parentMessage?: typeof messagesTable.$inferSelect;
   replies?: (typeof messagesTable.$inferSelect)[];
 };
@@ -49,9 +49,9 @@ export async function updateMessageStatus(
 ): Promise<void> {
   await db
     .update(messagesTable)
-    .set({ 
-      status, 
-      ...additionalData 
+    .set({
+      status,
+      ...additionalData
     })
     .where(and(eq(messagesTable.id, messageId), eq(messagesTable.recipientId, senderId)));
 }
@@ -67,7 +67,7 @@ export async function markMessageAsRead(messageId: number): Promise<void> {
 
 export const getSentMessagesPaginated = customUnstableCache(
   async (
-    userId: string, 
+    userId: string,
     pagination?: PaginationParams
   ): Promise<PaginatedResult<MessageWithDetails>> => {
     console.log(`Executing DB query for getSentMessagesPaginated: userId=${userId}, params=${JSON.stringify(pagination)}`);
@@ -137,7 +137,6 @@ export const getSentMessagesPaginated = customUnstableCache(
       recipient: row.recipientName ? {
         id: row.recipientId,
         name: row.recipientName,
-        image: row.recipientImage,
       } : undefined,
     }));
 
@@ -160,7 +159,7 @@ export const getSentMessagesPaginated = customUnstableCache(
 
 export const getReceivedMessagesPaginated = customUnstableCache(
   async (
-    userId: string, 
+    userId: string,
     pagination?: PaginationParams
   ): Promise<PaginatedResult<MessageWithDetails>> => {
     console.log(`Executing DB query for getReceivedMessagesPaginated: userId=${userId}, params=${JSON.stringify(pagination)}`);
@@ -231,7 +230,6 @@ export const getReceivedMessagesPaginated = customUnstableCache(
       sender: row.senderName ? {
         id: row.senderId,
         name: row.senderName,
-        image: row.senderImage,
       } : undefined,
     }));
 
@@ -318,7 +316,6 @@ export const getMessageWithReplies = customUnstableCache(
           repliedAt: messagesTable.repliedAt,
           // Reply sender fields
           senderName: alias(user, 'replySender').name,
-          senderImage: alias(user, 'replySender').image,
         })
         .from(messagesTable)
         .where(eq(messagesTable.parentMessageId, messageId))
@@ -348,7 +345,6 @@ export const getMessageWithReplies = customUnstableCache(
       sender: reply.senderName ? {
         id: reply.senderId,
         name: reply.senderName,
-        image: reply.senderImage,
       } : undefined,
     }));
 
