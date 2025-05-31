@@ -9,37 +9,44 @@ import { headers } from 'next/headers';
 import { UploadForm } from '@/components/image-upload-form';
 import { ImageUploadProvider } from '@/contexts/ImageUploadContext';
 import LocationPickerServer from '@/components/post/LocationPickerServer';
+import { redirect } from 'next/navigation';
 
 async function PostPage() {
 	const session = await auth.api.getSession({
     headers: await headers()
 	})
-	const currentSection = session?.session
+	const currentSession = session?.session
 	const user = session?.user
-	if(currentSection && user){
-		return (
-			<ImageUploadProvider>
-				<ProductPostForm>
-					<Suspense fallback={<div>Đang tải...</div>}>
-						<GeneralInfoServer />
-					</Suspense>
-					<Suspense fallback={<div>Đang tải...</div>}>
-						<BasicInfoServer />
-					</Suspense>
-					<Suspense fallback={<div>Đang tải...</div>}>
-						<PostInfo />
-					</Suspense>
-					<Suspense fallback={<div>Đang tải bản đồ...</div>}>
-						<LocationPickerServer />
-					</Suspense>
-					<Suspense>
-						<UploadForm/>
-					</Suspense>
-				</ProductPostForm>
-			</ImageUploadProvider>
-		)
+
+	if (!currentSession || !user) {
+		return redirect(`/auth/sign-in?callbackUrl=${encodeURIComponent('/post-page')}`);
 	}
-	return <>No user or session found</>
+
+	if (!user.number) {
+		return redirect(`/account?reason=phone_required&callbackUrl=${encodeURIComponent('/post-page')}`);
+	}
+
+	return (
+		<ImageUploadProvider>
+			<ProductPostForm>
+				<Suspense fallback={<div>Đang tải...</div>}>
+					<GeneralInfoServer />
+				</Suspense>
+				<Suspense fallback={<div>Đang tải...</div>}>
+					<BasicInfoServer />
+				</Suspense>
+				<Suspense fallback={<div>Đang tải...</div>}>
+					<PostInfo />
+				</Suspense>
+				<Suspense fallback={<div>Đang tải bản đồ...</div>}>
+					<LocationPickerServer />
+				</Suspense>
+				<Suspense>
+					<UploadForm/>
+				</Suspense>
+			</ProductPostForm>
+		</ImageUploadProvider>
+	)
 }
 
 export default PostPage;

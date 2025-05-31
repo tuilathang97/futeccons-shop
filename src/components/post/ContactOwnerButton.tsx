@@ -16,9 +16,6 @@ export default function ContactOwnerButton({ post, currentUser }: ContactOwnerBu
 
   const handleOpenModal = () => {
     if (!currentUser) {
-      // TODO: Redirect to login or show login prompt
-      // For now, just log and prevent modal opening
-      console.log('User not logged in. Redirect to login.');
       alert('Vui lòng đăng nhập để gửi tin nhắn.'); // Simple alert for now
       return;
     }

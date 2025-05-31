@@ -50,7 +50,7 @@ export default function SendMessageModal({
       ...defaultFormValues,
       recipientId: recipient.id,
       postId: post.id,
-      subject: parentMessageId ? `Re: Anfrage zu ${post.tieuDeBaiViet}` : `Anfrage zu: ${post.tieuDeBaiViet}`,
+      subject: parentMessageId ? `Re: Liên hệ về bài đăng "${post.tieuDeBaiViet}"` : `Liên hệ về bài đăng: "${post.tieuDeBaiViet}"`,
       senderContactInfo: sender.number || '',
       parentMessageId: parentMessageId,
     },

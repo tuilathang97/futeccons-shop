@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
 import PostDetail from '@/components/products/PostDetail'
-import { Phone } from 'lucide-react'
 import { getPostDetailsById, type PostWithUserAndImages } from '@/lib/queries/postQueries'
 import { getPostImageyById } from '@/lib/queries/postImagesQueries'
 import PostSectionWrapper from '@/components/postSectionWrapper'
@@ -10,7 +9,7 @@ import ContactOwnerButton from '@/components/post/ContactOwnerButton'
 import { type User as DbUser, type Image as DbImage } from '@/db/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
-import { Button } from '@/components/ui/button'
+import RevealPhoneNumberButton from '@/components/post/RevealPhoneNumberButton'
 
 export default async function Page({ params }: { params: { postId: string[] } }) {
     if (!params) return <div>Không tìm thấy bài viết</div>
@@ -60,6 +59,7 @@ export default async function Page({ params }: { params: { postId: string[] } })
     };
 
     const ownerUserForButton = postForDetail.user;
+    const currentPath = `/post/${numericPostId}`;
 
     return (
         <div className='container px-0 '>
@@ -78,7 +78,12 @@ export default async function Page({ params }: { params: { postId: string[] } })
                                 <p className="font-semibold">{ownerUserForButton.name || "Không có tên"}</p>
                             </div>
                             <Separator className='w-full' />
-                            <Button> Bấm để hiện số {ownerUserForButton.number || "ẩn"} <Phone className="ml-2 h-4 w-4" /></Button>
+                            <RevealPhoneNumberButton 
+                                phoneNumber={ownerUserForButton.number}
+                                isCurrentUserLoggedIn={!!currentUser}
+                                loginUrl="/auth/sign-in"
+                                pageCallbackUrl={currentPath}
+                            />
                             <ContactOwnerButton 
                                 post={postForDetail}
                                 currentUser={currentUser} 

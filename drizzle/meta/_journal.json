@@ -78,6 +78,13 @@
       "when": 1748274743205,
       "tag": "0010_add_composite_indexes_for_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1748676825836,
+      "tag": "0011_tired_kylun",
+      "breakpoints": true
     }
   ]
 }

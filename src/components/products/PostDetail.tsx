@@ -1,14 +1,14 @@
 import React from 'react'
 import PostSectionWrapper from '@/components/postSectionWrapper'
-import { Bed, Clock, LandPlot, Layers, MapPin, Toilet, Home, BuildingIcon, Heart, AlertTriangle, Share2 } from 'lucide-react'
+import { Bed, Clock, LandPlot, Layers, MapPin, Toilet, Home, BuildingIcon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Image as ImageType, Post, Article } from '@/db/schema'
 import LocationMapServer from './LocationMapServer'
 import { getPublishedArticleByParams } from '@/actions/articleActions'
 import ArticleContent from '../articles/ArticleContent'
-import { Button } from '../ui/button'
 import PostCarousel from '../carousel/PostCarousel'
 import PageWrapper from '../PageWrapper'
+import PostDetailClientActions from './PostDetailClientActions'
 
 interface PostDetailProps {
     post: Post & {
@@ -104,12 +104,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                     </PostSectionWrapper>
                     <PostSectionWrapper className='flex flex-col gap-2'>
                         <h2 className='font-semibold text-lg'>Chức năng khác </h2>
-                        <div className='flex gap-2 flex-wrap sm:flex-nowrap'>
-                            <Button className='w-full h-12'> <Heart size={16} /> Lưu tin</Button>
-                            <Button className='w-full h-12'> <Share2 size={16} /> Chia sẻ </Button>
-                            <Button className='w-full h-12'> <AlertTriangle size={16} /> Báo cáo tin</Button>
-                        </div>
-                        {/* todo: thêm chức năng cho 3 nút này */}
+                        <PostDetailClientActions postId={post.id as number} postTitle={post.tieuDeBaiViet} />
                     </PostSectionWrapper>
                 </div>
             </div>

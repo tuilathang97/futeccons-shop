@@ -16,6 +16,11 @@ export default async function MessagePage({ params }: MessagePageProps) {
     redirect('/auth/sign-in?callbackUrl=/account/messages');
   }
 
+  if (!session.user.number) {
+    const callbackUrl = params.messageId ? `/account/messages/${params.messageId}` : '/account/messages';
+    return redirect('/account?reason=phone_required&callbackUrl=' + encodeURIComponent(callbackUrl));
+  }
+
   const { messageId: messageIdStr } = await params;
 
   if (!messageIdStr) {

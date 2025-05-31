@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 import { convertImageToBase64 } from '../auth/sign-up/page'
 function UserProfileForm({ user }: { user: User }) {
   const [name, setName] = useState(user.name)
-  const [number, setNumber] = useState(user.number)
+  const [number, setNumber] = useState(user.number || undefined)
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null)
   const {toast} = useToast()
@@ -76,7 +76,7 @@ function UserProfileForm({ user }: { user: User }) {
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label className="text-right">
-              điện thoại
+              Số điện thoại
             </Label>
             <Input
               id="phoneNumber"

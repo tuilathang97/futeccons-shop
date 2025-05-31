@@ -22,6 +22,10 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
     redirect('/auth/sign-in?callbackUrl=/account/messages');
   }
 
+  if (!session.user.number) {
+    return redirect('/account?reason=phone_required&callbackUrl=' + encodeURIComponent('/account/messages'));
+  }
+
   const { page: pageParam, pageSize: pageSizeParam, tab: tabParam } = await searchParams;
 
   const userId = session.user?.id;
