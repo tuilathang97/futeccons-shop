@@ -7,7 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, Settings, User2 } from "lucide-react"
+import { LogOut, Settings, User2, MessageCircle, CheckCircle2 } from "lucide-react"
 import { User } from '@/db/schema'
 import Link from 'next/link'
 import { signOut } from '@/lib/auth-client'
@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation'
 import { useSession } from '@/contexts/SessionContext'
 import { useToast } from '@/hooks/use-toast'
 import { Avatar, AvatarImage } from '../ui/avatar'
+import { NotificationBadge } from '../ui/notification-badge'
+import { useNotificationCounts } from '@/hooks/useNotificationCounts'
 
 
 function UserDropdown({ user }: { user: User }) {
@@ -22,13 +24,31 @@ function UserDropdown({ user }: { user: User }) {
     const router = useRouter()
     const { setSession, setUser } = useSession();
     const { toast } = useToast()
+    
+    const isAdmin = user.role === 'admin';
+    
+    const { counts } = useNotificationCounts({
+        enabled: true,
+        intervalMs: 30000, 
+    });
+    
+    const hasNotifications = counts.unreadMessages > 0 || (isAdmin && counts.pendingPosts > 0);
+    
     if(!user) return <></>
+    
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-            <Avatar className="h-10 w-10 rounded-full cursor-pointer">
-                <AvatarImage className="object-cover" src={user?.image || "https://picsum.photos/200/300"} alt={user.name || "User avatar"} />
-              </Avatar>
+                <div className="relative">
+                    <Avatar className="h-10 w-10 rounded-full cursor-pointer">
+                        <AvatarImage className="object-cover" src={user?.image || "https://picsum.photos/200/300"} alt={user.name || "User avatar"} />
+                    </Avatar>
+                    {hasNotifications && (
+                        <div className="absolute -top-1 -right-1 h-4 w-4 bg-brand-medium border-2 border-white rounded-full flex items-center justify-center">
+                            <div className="h-2 w-2 bg-white rounded-full animate-pulse"></div>
+                        </div>
+                    )}
+                </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 mt-12 md:mt-4 ml-12 " align="end">
                 <DropdownMenuSeparator />
@@ -38,9 +58,27 @@ function UserDropdown({ user }: { user: User }) {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    <Link href={`/account/messages`} className="flex items-center justify-between w-full">
+                        <span>Tin nhắn</span>
+                        <NotificationBadge count={counts.unreadMessages} className="ml-2" />
+                    </Link>
+                </DropdownMenuItem>
+
+                {isAdmin && (
+                    <DropdownMenuItem>
+                        <CheckCircle2 className="mr-2 h-4 w-4" />
+                        <Link href={`/admin/posts-management`} className="flex items-center justify-between w-full">
+                            <span>Duyệt bài đăng</span>
+                            <NotificationBadge count={counts.pendingPosts} className="ml-2" />
+                        </Link>
+                    </DropdownMenuItem>
+                )}
+
+                {/* <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Cài đặt</span>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
                 <DropdownMenuSeparator />
 

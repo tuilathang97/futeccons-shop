@@ -12,6 +12,7 @@ import { isAdminUser, requireAdmin, getServerSession } from "@/lib/auth-utils";
 import { revalidateTag } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { db } from "@/db/drizzle";
+import { revalidatePostNotifications } from './notificationActions';
 
 export interface ActionResult {
   success: boolean;
@@ -195,6 +196,11 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
         revalidateTag('posts:inactive');
       }
       
+      // Revalidate notification counts if post needs approval
+      if (!postData.active) {
+        await revalidatePostNotifications();
+      }
+      
       return {
         success: true,
         message: "Đăng tải bài viết thành công"
@@ -232,6 +238,9 @@ export async function approvePostAction(postId: number): Promise<ActionResult> {
       revalidateTag('posts:inactive');
       revalidateTag('posts:published');
       revalidateTag(`post:dynamic`);
+      
+      // Revalidate notification counts
+      await revalidatePostNotifications();
     }
     
     return result;
@@ -259,6 +268,9 @@ export async function deletePostAction(postId: number): Promise<ActionResult> {
       revalidateTag('posts:count');
       revalidateTag('posts:category');
       revalidateTag(`post:dynamic`);
+      
+      // Revalidate notification counts
+      await revalidatePostNotifications();
     }
     
     return result;
