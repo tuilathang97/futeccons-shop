@@ -47,10 +47,18 @@ export interface RealEstateCardProps {
 //Info: The following data is used for the sidebar navigation and Cmd K bar.
 export const navItems: NavItem[] = [
     {
+        title: 'Trang chủ',
+        url: '/',
+        icon: 'home',
+        shortcut: ['h', 'h'],
+        isActive: false,
+        items: [] // No child items
+    },
+    {
         title: 'Quản lí',
         url: '/admin',
         icon: 'building',
-        isActive: false,
+        isActive: true,
         shortcut: ['q', 'q'],
         items: [
             {
@@ -72,14 +80,6 @@ export const navItems: NavItem[] = [
                 shortcut: ['p', 'm']
             }
         ]
-    },
-    {
-        title: 'Product',
-        url: '/dashboard/product',
-        icon: 'product',
-        shortcut: ['p', 'p'],
-        isActive: false,
-        items: [] // No child items
     },
 ];
 
