@@ -1,6 +1,23 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { signUp, signIn } from '@/lib/auth-client';
+import { useToast } from '@/hooks/use-toast';
+import { signUpSchema, type SignUpFormData } from '@/lib/schemas/authSchemas';
+import { createUserWithPhone } from '@/actions/userActions';
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
 	Card,
 	CardContent,
@@ -8,204 +25,403 @@ import {
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import Image from "next/image";
-import { Loader2, X } from "lucide-react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { signUp } from "@/lib/auth-client";
-import PageWrapper from "@/components/PageWrapper";
-import Link from "next/link";
+} from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { 
+	Eye, 
+	EyeOff, 
+	Mail, 
+	Lock, 
+	User, 
+	Phone, 
+	ArrowRight, 
+	CheckCircle,
+	AlertCircle,
+	Building2
+} from 'lucide-react';
+import Link from 'next/link';
 
-export default function SignUp() {
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [passwordConfirmation, setPasswordConfirmation] = useState("");
-	const [image, setImage] = useState<File | null>(null);
-	const [imagePreview, setImagePreview] = useState<string | null>(null);
+// Password strength indicator component
+const PasswordStrengthIndicator = ({ password }: { password: string }) => {
+	const requirements = [
+		{ regex: /.{8,}/, text: 'Ít nhất 8 ký tự' },
+		{ regex: /[a-z]/, text: 'Chữ thường (a-z)' },
+		{ regex: /[A-Z]/, text: 'Chữ hoa (A-Z)' },
+		{ regex: /[0-9]/, text: 'Số (0-9)' },
+		{ regex: /[^a-zA-Z0-9]/, text: 'Ký tự đặc biệt (!@#$...)' },
+	];
+
+	return (
+		<div className="space-y-2 mt-3">
+			<p className="text-sm font-medium text-brand-darkest">Yêu cầu mật khẩu:</p>
+			{requirements.map((req, index) => {
+				const isValid = req.regex.test(password);
+				return (
+					<div key={index} className="flex items-center gap-2">
+						{isValid ? (
+							<CheckCircle className="h-4 w-4 text-green-500" />
+						) : (
+							<AlertCircle className="h-4 w-4 text-brand-light" />
+						)}
+						<span
+							className={`text-xs ${
+								isValid ? 'text-green-600' : 'text-brand-dark'
+							}`}
+						>
+							{req.text}
+						</span>
+					</div>
+				);
+			})}
+		</div>
+	);
+};
+
+export default function SignUpPage() {
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+	const [isPending, startTransition] = useTransition();
+	const { toast } = useToast();
 	const router = useRouter();
-	const [loading, setLoading] = useState(false);
 
-	const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (file) {
-			setImage(file);
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setImagePreview(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-		}
+	const form = useForm<SignUpFormData>({
+		resolver: zodResolver(signUpSchema),
+		defaultValues: {
+			name: '',
+			email: '',
+			number: '',
+			password: '',
+			confirmPassword: '',
+		},
+	});
+
+	const watchedPassword = form.watch('password');
+
+	const onSubmit = async (values: SignUpFormData) => {
+		startTransition(async () => {
+			try {
+				await signUp.email(
+					{
+						email: values.email,
+						password: values.password,
+						name: values.name,
+					},
+					{
+						onRequest: () => {
+							toast({
+								title: 'Đang đăng ký...',
+								description: 'Vui lòng đợi trong giây lát',
+							});
+						},
+						onSuccess: async () => {
+							try {
+								const phoneResult = await createUserWithPhone(
+									values.email,
+									values.name,
+									values.number
+								);
+
+								if (!phoneResult.success) {
+									toast({
+										variant: 'destructive',
+										title: 'Cảnh báo',
+										description: `${phoneResult.message} Tài khoản đã được tạo nhưng chưa có số điện thoại.`,
+									});
+								}
+
+								toast({
+									title: 'Đăng ký thành công',
+									description: 'Chào mừng bạn đến với hệ thống!',
+								});
+								
+								await signIn.email({
+									email: values.email,
+									password: values.password,
+									callbackURL: '/',
+								});
+								
+								router.push('/');
+							} catch (phoneError) {
+								console.error('Phone update error:', phoneError);
+								toast({
+									title: 'Đăng ký thành công',
+									description: 'Tài khoản đã được tạo. Bạn có thể cập nhật số điện thoại sau.',
+								});
+								
+								await signIn.email({
+									email: values.email,
+									password: values.password,
+									callbackURL: '/',
+								});
+								
+								router.push('/');
+							}
+						},
+						onError: (ctx) => {
+							const errorMessage = ctx.error.message || 'Đăng ký thất bại';
+							toast({
+								variant: 'destructive',
+								title: 'Đăng ký thất bại',
+								description: errorMessage,
+							});
+						},
+					}
+				);
+			} catch (error) {
+				console.error('Sign up error:', error);
+				toast({
+					variant: 'destructive',
+					title: 'Đã xảy ra lỗi',
+					description: 'Vui lòng thử lại sau',
+				});
+			}
+		});
 	};
 
 	return (
+		<div className="min-h-screen bg-gradient-to-br from-brand-light/30 to-white py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+			<div className="max-w-md w-full space-y-8">
+				{/* Brand Header */}
+				<div className="text-center">
+					<div className="flex justify-center mb-4">
+						<div className="p-3 bg-brand-medium rounded-full shadow-lg">
+							<Building2 className="h-8 w-8 text-white" />
+						</div>
+					</div>
+					<h1 className="text-3xl font-bold text-brand-darkest mb-2">
+						Futeccons Shop
+					</h1>
+					<p className="text-brand-dark">
+						Nền tảng bất động sản hàng đầu
+					</p>
+				</div>
 
-		<PageWrapper className="grid mx-auto min-w-full grid-cols-1 lg:grid-cols-2">
-			<Card className="z-50 min-w-full rounded-md rounded-t-none max-w-2xl">
-				<CardHeader>
-					<CardTitle className="text-lg md:text-xl">Sign Up</CardTitle>
-					<CardDescription className="text-xs md:text-sm">
-						Enter your information to create an account
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<div className="grid gap-4">
-						<div className="grid grid-cols-2 gap-4">
-							<div className="grid gap-2">
-								<Label htmlFor="first-name">First name</Label>
-								<Input
-									id="first-name"
-									placeholder="Max"
-									required
-									onChange={(e) => {
-										setFirstName(e.target.value);
-									}}
-									value={firstName}
-								/>
-							</div>
-							<div className="grid gap-2">
-								<Label htmlFor="last-name">Last name</Label>
-								<Input
-									id="last-name"
-									placeholder="Robinson"
-									required
-									onChange={(e) => {
-										setLastName(e.target.value);
-									}}
-									value={lastName}
-								/>
-							</div>
-						</div>
-						<div className="grid gap-2">
-							<Label htmlFor="email">Email</Label>
-							<Input
-								id="email"
-								type="email"
-								placeholder="m@example.com"
-								required
-								onChange={(e) => {
-									setEmail(e.target.value);
-								}}
-								value={email}
-							/>
-						</div>
-						<div className="grid gap-2">
-							<Label htmlFor="password">Password</Label>
-							<Input
-								id="password"
-								type="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								autoComplete="new-password"
-								placeholder="Password"
-							/>
-						</div>
-						<div className="grid gap-2">
-							<Label htmlFor="password">Confirm Password</Label>
-							<Input
-								id="password_confirmation"
-								type="password"
-								value={passwordConfirmation}
-								onChange={(e) => setPasswordConfirmation(e.target.value)}
-								autoComplete="new-password"
-								placeholder="Confirm Password"
-							/>
-						</div>
-						<div className="grid gap-2">
-							<Label htmlFor="image">Profile Image (optional)</Label>
-							<div className="flex items-end gap-4">
-								{imagePreview && (
-									<div className="relative w-16 h-16 rounded-sm overflow-hidden">
-										<Image
-											src={imagePreview}
-											alt="Profile preview"
-											layout="fill"
-											objectFit="cover"
-										/>
-									</div>
-								)}
-								<div className="flex items-center gap-2 w-full">
-									<Input
-										id="image"
-										type="file"
-										accept="image/*"
-										onChange={handleImageChange}
-										className="w-full"
-									/>
-									{imagePreview && (
-										<X
-											className="cursor-pointer"
-											onClick={() => {
-												setImage(null);
-												setImagePreview(null);
-											}}
-										/>
+				<Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
+					<CardHeader className="space-y-1 text-center pb-6">
+						<CardTitle className="text-2xl font-bold text-brand-darkest">
+							Đăng ký tài khoản
+						</CardTitle>
+						<CardDescription className="text-brand-dark">
+							Tạo tài khoản mới để bắt đầu sử dụng dịch vụ
+						</CardDescription>
+					</CardHeader>
+
+					<CardContent>
+						<Form {...form}>
+							<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+								<FormField
+									control={form.control}
+									name="name"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel className="text-brand-darkest font-medium">Họ và tên</FormLabel>
+											<FormControl>
+												<div className="relative">
+													<User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-medium h-4 w-4" />
+													<Input
+														{...field}
+														placeholder="Nhập họ và tên"
+														className="pl-10 border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+														disabled={isPending}
+													/>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
 									)}
-								</div>
+								/>
+
+								<FormField
+									control={form.control}
+									name="email"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel className="text-brand-darkest font-medium">Email</FormLabel>
+											<FormControl>
+												<div className="relative">
+													<Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-medium h-4 w-4" />
+													<Input
+														{...field}
+														type="email"
+														placeholder="example@gmail.com"
+														className="pl-10 border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+														disabled={isPending}
+													/>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="number"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel className="text-brand-darkest font-medium">Số điện thoại</FormLabel>
+											<FormControl>
+												<div className="relative">
+													<Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-medium h-4 w-4" />
+													<Input
+														{...field}
+														type="tel"
+														placeholder="0123456789"
+														className="pl-10 border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+														disabled={isPending}
+													/>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="password"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel className="text-brand-darkest font-medium">Mật khẩu</FormLabel>
+											<FormControl>
+												<div className="relative">
+													<Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-medium h-4 w-4" />
+													<Input
+														{...field}
+														type={showPassword ? 'text' : 'password'}
+														placeholder="Nhập mật khẩu"
+														className="pl-10 pr-10 border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+														disabled={isPending}
+													/>
+													<Button
+														type="button"
+														variant="ghost"
+														size="sm"
+														className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+														onClick={() => setShowPassword(!showPassword)}
+														disabled={isPending}
+													>
+														{showPassword ? (
+															<EyeOff className="h-4 w-4 text-brand-medium" />
+														) : (
+															<Eye className="h-4 w-4 text-brand-medium" />
+														)}
+													</Button>
+												</div>
+											</FormControl>
+											<FormMessage />
+											{/* Password strength indicator */}
+											{watchedPassword && (
+												<PasswordStrengthIndicator password={watchedPassword} />
+											)}
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="confirmPassword"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel className="text-brand-darkest font-medium">Xác nhận mật khẩu</FormLabel>
+											<FormControl>
+												<div className="relative">
+													<Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-medium h-4 w-4" />
+													<Input
+														{...field}
+														type={showConfirmPassword ? 'text' : 'password'}
+														placeholder="Nhập lại mật khẩu"
+														className="pl-10 pr-10 border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+														disabled={isPending}
+													/>
+													<Button
+														type="button"
+														variant="ghost"
+														size="sm"
+														className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+														onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+														disabled={isPending}
+													>
+														{showConfirmPassword ? (
+															<EyeOff className="h-4 w-4 text-brand-medium" />
+														) : (
+															<Eye className="h-4 w-4 text-brand-medium" />
+														)}
+													</Button>
+												</div>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								{form.formState.errors.root && (
+									<Alert variant="destructive">
+										<AlertDescription>
+											{form.formState.errors.root.message}
+										</AlertDescription>
+									</Alert>
+								)}
+
+								<Button 
+									type="submit" 
+									className="w-full bg-brand-medium hover:bg-brand-dark text-white font-medium py-6 shadow-lg transition-all duration-200 hover:shadow-xl" 
+									disabled={isPending}
+								>
+									{isPending ? (
+										'Đang đăng ký...'
+									) : (
+										<>
+											Đăng ký tài khoản
+											<ArrowRight className="ml-2 h-4 w-4" />
+										</>
+									)}
+								</Button>
+							</form>
+						</Form>
+					</CardContent>
+
+					<CardFooter className="flex flex-col space-y-4 pt-0">
+						<div className="relative">
+							<div className="absolute inset-0 flex items-center">
+								<span className="w-full border-t border-brand-light" />
+							</div>
+							<div className="relative flex justify-center text-xs uppercase">
+								<span className="bg-white px-2 text-brand-dark">
+									Đã có tài khoản?
+								</span>
 							</div>
 						</div>
-						<Button
-							type="submit"
+						
+						<Link 
+							href="/auth/sign-in" 
 							className="w-full"
-							disabled={loading}
-							onClick={async () => {
-								await signUp.email({
-									email,
-									password,
-									name: `${firstName} ${lastName}`,
-									image: image ? await convertImageToBase64(image) : "",
-									callbackURL: "/account",
-									fetchOptions: {
-										onResponse: () => {
-											setLoading(false);
-										},
-										onRequest: () => {
-											setLoading(true);
-										},
-										onError: (ctx) => {
-											toast.error(ctx.error.message);
-										},
-										onSuccess: async () => {
-											router.push("/account");
-										},
-									},
-								});
-							}}
 						>
-							{loading ? (
-								<Loader2 size={16} className="animate-spin" />
-							) : (
-								"Create an account"
-							)}
-						</Button>
-						<span className="text-base text-neutral-500 text-center">
-							Already have an account? <Link href="/auth/sign-in" className="text-orange-400">Sign in</Link>
-						</span>
-					</div>
-				</CardContent>
-				<CardFooter>
-					<div className="flex justify-center w-full border-t py-4">
-						<p className="text-center text-xs text-neutral-500">
-							Secured by <span className="text-orange-400">better-auth.</span>
-						</p>
-					</div>
-				</CardFooter>
-			</Card>
-			<Image className="hidden max-h-[80vh] lg:block object-cover h-auto min-w-full" src="/loginImage.jpg" alt="Sign up" width={500} height={500} />
-		</PageWrapper>
-	);
-}
+							<Button 
+								variant="outline" 
+								className="w-full border-brand-medium text-brand-medium hover:bg-brand-light hover:text-brand-darkest transition-all duration-200"
+							>
+								Đăng nhập ngay
+							</Button>
+						</Link>
+					</CardFooter>
+				</Card>
 
-export async function convertImageToBase64(file: File): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onloadend = () => resolve(reader.result as string);
-		reader.onerror = reject;
-		reader.readAsDataURL(file);
-	});
+				{/* Footer */}
+				<div className="text-center text-sm text-brand-dark">
+					<p>
+						Bằng việc đăng ký, bạn đồng ý với{' '}
+						<Link href="/terms" className="text-brand-medium hover:text-brand-dark underline">
+							Điều khoản dịch vụ
+						</Link>{' '}
+						và{' '}
+						<Link href="/privacy" className="text-brand-medium hover:text-brand-dark underline">
+							Chính sách bảo mật
+						</Link>{' '}
+						của chúng tôi.
+					</p>
+				</div>
+			</div>
+		</div>
+	);
 }

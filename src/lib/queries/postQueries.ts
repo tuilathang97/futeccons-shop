@@ -814,7 +814,7 @@ export const getHomepageData = customUnstableCache(
       totalItems: number;
     };
   }> => {
-    console.log(`Executing enterprise DB query for getHomepageData: ${JSON.stringify(params)}, ${JSON.stringify(categoryIds)}`);
+    console.log(`Executing DB query for getHomepageData: ${JSON.stringify(params)}, ${JSON.stringify(categoryIds)}`);
     
     const pageSize = params.pageSize || 10;
     const activeCondition = eq(postsTable.active, true);

@@ -75,4 +75,53 @@ export async function requireAdmin(): Promise<void> {
   if (!isAdmin) {
     throw new Error('Unauthorized: Admin access required');
   }
+}
+
+/**
+ * Get the current user ID
+ * For use in Server Components and Server Actions
+ */
+export async function getCurrentUserId(): Promise<string | null> {
+  const session = await getServerSession();
+  return session?.user?.id || null;
+}
+
+/**
+ * Check if the current user is an admin (alias for isAdminUser)
+ * For use in Server Components and Server Actions
+ */
+export async function isCurrentUserAdmin(): Promise<boolean> {
+  return isAdminUser();
+}
+
+/**
+ * Get the current user's information
+ * For use in Server Components and Server Actions
+ */
+export async function getCurrentUser(): Promise<UserSession['user'] | null> {
+  const session = await getServerSession();
+  return session?.user || null;
+}
+
+/**
+ * Check if the current user is authenticated
+ * For use in Server Components and Server Actions
+ */
+export async function isAuthenticated(): Promise<boolean> {
+  const session = await getServerSession();
+  return !!session?.user;
+}
+
+/**
+ * Require authentication - throws error if not authenticated
+ * For use in Server Actions that require authentication
+ */
+export async function requireAuth(): Promise<UserSession['user']> {
+  const user = await getCurrentUser();
+  
+  if (!user) {
+    throw new Error('Unauthorized: Authentication required');
+  }
+  
+  return user;
 } 

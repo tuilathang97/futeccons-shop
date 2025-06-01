@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
-import { getServerSession } from '@/lib/auth-utils';
+import { getCurrentUserId, isCurrentUserAdmin } from '@/lib/auth-utils';
 import { getUnreadMessageCount } from '@/lib/queries/messageQueries';
 import { getPendingApprovalCount } from '@/lib/queries/postQueries';
 
@@ -24,42 +24,35 @@ export async function revalidatePostNotifications(): Promise<void> {
   revalidateTag('posts');
 }
 
-
+/**
+ * Revalidate all notification-related caches
+ */
 export async function revalidateAllNotifications(): Promise<void> {
   await revalidateMessageNotifications();
   await revalidatePostNotifications();
 }
 
-
-export async function getCurrentUserId(): Promise<string | null> {
-  const session = await getServerSession();
-  return session?.user?.id || null;
-}
-
-
-export async function isCurrentUserAdmin(): Promise<boolean> {
-  const session = await getServerSession();
-  return session?.user?.role === 'admin';
-}
-
+/**
+ * Get notification counts for the current user
+ */
 export async function getNotificationCounts(): Promise<{
   unreadMessages: number;
   pendingPosts: number;
 }> {
   try {
-    const session = await getServerSession();
+    const userId = await getCurrentUserId();
     
-    if (!session?.user?.id) {
+    if (!userId) {
       return {
         unreadMessages: 0,
         pendingPosts: 0,
       };
     }
 
-    const isAdmin = session.user.role === 'admin';
+    const isAdmin = await isCurrentUserAdmin();
     
     const promises: Promise<number>[] = [
-      getUnreadMessageCount(session.user.id),
+      getUnreadMessageCount(userId),
     ];
 
     if (isAdmin) {
