@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -18,10 +19,16 @@ import UserActionGroup from './userActionGroup'
 import { signOut } from '@/lib/auth-client'
 
 export default function MobileMenuToggle() {
+  const width = useWindowWidth()
   const { categories } = useCategories()
   const { user, setSession, setUser } = useSession()
   const router = useRouter()
-
+  const [open, setOpen] = useState(false)
+  useEffect(() => {
+    if (width > 768 && open) {
+      setOpen(false)
+    }
+  }, [width, open])
   const level1 = categories.filter(c => c.level === 1)
   const level2 = categories.filter(c => c.level === 2)
   const level3 = categories.filter(c => c.level === 3)
@@ -32,6 +39,11 @@ export default function MobileMenuToggle() {
   const toggleLv1 = (id: string) => setOpenLv1(prev => ({ ...prev, [id]: !prev[id] }))
   const toggleLv2 = (id: string) => setOpenLv2(prev => ({ ...prev, [id]: !prev[id] }))
 
+  const handleNavigation = (path: string) => {
+    router.push(path)
+    setOpen(false)
+  }
+
   const renderCategories = () => (
     <ul className="pl-0">
       {level1.map(lv1 => {
@@ -40,23 +52,24 @@ export default function MobileMenuToggle() {
         return (
           <li key={lv1.id} className="mb-1">
             <div className="flex items-center">
-              <button
-                type="button"
+              <Link
+                href={lv1.slug || '/'}
+                onClick={() => handleNavigation(lv1.slug || '/')}
                 className="flex-1 text-left font-semibold tracking-wide py-2 px-3 rounded hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30"
-                onClick={() => lv2s.length ? toggleLv1(lv1.id.toString()) : router.push(lv1.slug || '/')}
                 aria-expanded={!!isOpenLv1}
               >
                 <span className="text-base text-gray-800">{lv1.name}</span>
-              </button>
+              </Link>
               {lv2s.length > 0 && (
                 <button
                   type="button"
                   className={`ml-1 p-1 transition-transform ${isOpenLv1 ? 'rotate-90' : ''}`}
                   onClick={() => toggleLv1(lv1.id.toString())}
                   aria-label={isOpenLv1 ? 'Thu gọn' : 'Mở rộng'}
+                  aria-expanded={!!isOpenLv1}
                   tabIndex={-1}
                 >
-                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  <ChevronRight strokeWidth={2} className="w-4 h-4 text-muted-foreground" />
                 </button>
               )}
             </div>
@@ -73,7 +86,7 @@ export default function MobileMenuToggle() {
                         <button
                           type="button"
                           className="flex-1 text-left font-medium tracking-wide py-1.5 px-3 rounded hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 text-gray-700"
-                          onClick={() => lv3s.length ? toggleLv2(lv2.id.toString()) : router.push(`${lv1.slug}${lv2.slug}`)}
+                          onClick={() => lv3s.length ? toggleLv2(lv2.id.toString()) : handleNavigation(`${lv1.slug}${lv2.slug}`)}
                           aria-expanded={!!isOpenLv2}
                         >
                           <span className="text-sm">{lv2.name}</span>
@@ -91,7 +104,7 @@ export default function MobileMenuToggle() {
                         )}
                       </div>
                       <div
-                        className={`transition-all duration-200 overflow-hidden ${isOpenLv2 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+                        className={`transition-all ease-in-out text-red-500 duration-200 overflow-hidden ${isOpenLv2 ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
                       >
                         <ul className="pl-4">
                           {lv3s.map(lv3 => (
@@ -99,7 +112,7 @@ export default function MobileMenuToggle() {
                               <button
                                 type="button"
                                 className="block w-full text-left py-1 px-3 rounded hover:bg-gray-100 text-gray-600 text-sm transition-colors"
-                                onClick={() => router.push(`${lv1.slug}${lv2.slug}${lv3.slug}`)}
+                                onClick={() => handleNavigation(`${lv1.slug}${lv2.slug}${lv3.slug}`)}
                               >
                                 {lv3.name}
                               </button>
@@ -122,22 +135,27 @@ export default function MobileMenuToggle() {
     await signOut()
     setSession(null)
     setUser(null)
+    setOpen(false)
     router.push('/')
   }
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" onClick={() => setOpen(!open)}>
           <AlignJustify strokeWidth={1.5} size={24} />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className=" flex overflow-scroll min-w-full flex-col gap-4">
+      <SheetContent side="left" className=" min-w-[80%] flex overflow-auto flex-col gap-4">
         <SheetHeader>
           <SheetTitle className="flex flex-col items-center gap-2">
             {user?.id ? (
               <>
-                <Link href="/account" className="text-base gap-4 p-2 rounded-md hover:bg-gray-900/10 min-w-full flex justify-start items-center text-muted-foreground hover:underline">
+                <Link 
+                  href="/account" 
+                  className="text-base gap-4 p-2 rounded-md hover:bg-gray-900/10 min-w-full flex justify-start items-center text-muted-foreground hover:underline"
+                  onClick={() => setOpen(false)}
+                >
                   <Avatar className="h-10 w-10">
                     <AvatarImage className='rounded-full object-cover' src={user.image || ''} alt={user.name || 'User'} />
                     <AvatarFallback>{user.name?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
@@ -185,4 +203,23 @@ export default function MobileMenuToggle() {
       </SheetContent>
     </Sheet>
   )
+}
+
+
+
+export function useWindowWidth() {
+  const [width, setWidth] = useState(0)
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWidth(window.innerWidth)
+      
+      const handleResize = () => setWidth(window.innerWidth)
+      window.addEventListener('resize', handleResize)
+      
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+  
+  return width
 }

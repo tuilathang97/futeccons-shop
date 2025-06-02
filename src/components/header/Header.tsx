@@ -11,8 +11,8 @@ import HeaderNavigation from "./HeaderNavigation"
 export default function Header() {
     const { user, session } = useSession()
     return (
-        <header className="fixed max-w-7xl z-[50] gap-4 top-0 px-4 lg:px-8  md:top-8 left-0 flex  h-16 min-w-full items-center ">
-            <nav className=" items-center px-4 bg-gray-100 shadow-xl gap-2 rounded-xl flex justify-between container border py-2 ">
+        <header className="fixed max-w-7xl z-[50] gap-4 top-0 px-4 lg:px-8 left-0 flex h-16 min-w-full ">
+            <nav className=" items-center px-4 gap-2 bg-gradient-to-br from-brand-light/30 backdrop-blur-2xl flex justify-between container py-2 ">
                 <div className="flex items-center gap-4">
                     <Link href="/" className="mr-6 hidden md:flex" prefetch={false}>
                         <Home className="h-6 w-6" />
