@@ -37,7 +37,7 @@ export const getAllCategories = customUnstableCache(
   ['categories', 'all'],
   {
     tags: ['categories', 'all-categories'],
-    revalidate: 3600,
+    revalidate: 86400,
   }
 );
 
@@ -50,7 +50,7 @@ export const getCategoryById = customUnstableCache(
   ['categories', 'id'],
   {
     tags: ['categories', 'category-by-id'],
-    revalidate: 3600,
+    revalidate: 86400,
   }
 );
 
@@ -63,7 +63,7 @@ export const getCategoryByPath = customUnstableCache(
   ['categories', 'path'],
   {
     tags: ['categories', 'category-by-path'],
-    revalidate: 3600,
+    revalidate: 86400,
   }
 );
 
@@ -76,7 +76,7 @@ export const getCategoryBySlug = customUnstableCache(
   ['categories', 'slug'],
   {
     tags: ['categories', 'category-by-slug'],
-    revalidate: 3600,
+    revalidate: 86400,
   }
 );
 
@@ -104,7 +104,7 @@ export const getCategoriesByParentId = customUnstableCache(
   ['categories', 'parent'],
   {
     tags: ['categories', 'categories-by-parent-id'],
-    revalidate: 3600,
+    revalidate: 86400,
   }
 );
 
@@ -132,7 +132,7 @@ export const getCategoryBreadcrumbs = customUnstableCache(
   ['categories', 'breadcrumbs'],
   {
     tags: ['categories', 'category-breadcrumbs'],
-    revalidate: 3600,
+    revalidate: 86400,
   }
 );
 
@@ -144,7 +144,7 @@ export const getTopLevelCategories = customUnstableCache(
   ['categories', 'top-level'],
   {
     tags: ['categories', 'categories:top-level'],
-    revalidate: 3600,
+    revalidate: 86400,
   }
 );
 
@@ -181,7 +181,7 @@ export const getPublicCategoriesWithCounts = customUnstableCache(
   ['categories', 'public', 'counts'],
   {
     tags: ['categories', 'categories:public:counts', 'articles'],
-    revalidate: 1800,
+    revalidate: 86400,
   }
 );
 
@@ -216,7 +216,7 @@ export const getAllCategoriesWithArticleCounts = customUnstableCache(
   ['categories', 'all', 'counts'],
   {
     tags: ['categories', 'categories:all:counts', 'articles'],
-    revalidate: 1800,
+    revalidate: 86400,
   }
 );
 
