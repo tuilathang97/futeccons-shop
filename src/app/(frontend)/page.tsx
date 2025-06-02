@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { PaginationParams } from '@/lib/queries/paginateQuery';
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import PageWrapper from "@/components/PageWrapper";
+import HomeImage from "@/components/homepage/HomeImage";
 
 interface HomePageProps {
   searchParams: {
@@ -50,6 +51,7 @@ export default async function Home({ searchParams }: HomePageProps) {
   return (
     <CategoriesProvider initialCategories={categories}>
       <PageWrapper className="flex flex-col justify-center min-w-full items-center gap-4">
+        <HomeImage href="/" imgUrl="/lorem.png" />
         <CategoryPicker />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts} postImages={postImages} />
         <ProductsContainer title="Tin bán nhà" posts={homepageData.banNhaPosts} postImages={postImages} />
