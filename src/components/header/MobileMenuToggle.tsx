@@ -83,20 +83,21 @@ export default function MobileMenuToggle() {
                   return (
                     <li key={lv2.id} className="mb-1 mt-2">
                       <div className="flex items-center">
-                        <button
-                          type="button"
+                        <Link
+                          href={`${lv1.slug}${lv2.slug}`}
+                          onClick={() => handleNavigation(`${lv1.slug}${lv2.slug}`)}
                           className="flex-1 text-left font-medium tracking-wide py-1.5 px-3 rounded hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/30 text-gray-700"
-                          onClick={() => lv3s.length ? toggleLv2(lv2.id.toString()) : handleNavigation(`${lv1.slug}${lv2.slug}`)}
                           aria-expanded={!!isOpenLv2}
                         >
                           <span className="text-sm">{lv2.name}</span>
-                        </button>
+                        </Link>
                         {lv3s.length > 0 && (
                           <button
                             type="button"
                             className={`ml-1 p-1 transition-transform ${isOpenLv2 ? 'rotate-90' : ''}`}
                             onClick={() => toggleLv2(lv2.id.toString())}
                             aria-label={isOpenLv2 ? 'Thu gọn' : 'Mở rộng'}
+                            aria-expanded={!!isOpenLv2}
                             tabIndex={-1}
                           >
                             <ChevronRight className="w-4 h-4 text-muted-foreground" />
