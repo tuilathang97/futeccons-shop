@@ -1,170 +1,259 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { authClient, signIn } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import PageWrapper from "@/components/PageWrapper";
-import Image from "next/image";
+import { useState, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { signIn } from '@/lib/auth-client';
+import { useToast } from '@/hooks/use-toast';
+import { signInSchema, type SignInFormData } from '@/lib/schemas/authSchemas';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Eye, EyeOff, Mail, Lock, ArrowRight, Building2 } from 'lucide-react';
+import Link from 'next/link';
 
-export default function SignIn() {
+export default function SignInPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
   const router = useRouter();
-  const {
-    data: session,
-  } = authClient.useSession();
 
-  useEffect(() => {
-    if (session) {
-      router.push('/account');
-    }
-  }, [session, router]);
+  const form = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const onSubmit = async (values: SignInFormData) => {
+    startTransition(async () => {
+      try {
+        await signIn.email(
+          {
+            email: values.email,
+            password: values.password,
+            callbackURL: '/',
+          },
+          {
+            onRequest: () => {
+              toast({
+                title: 'Đang đăng nhập...',
+                description: 'Vui lòng đợi trong giây lát',
+              });
+            },
+            onSuccess: () => {
+              toast({
+                title: 'Đăng nhập thành công',
+                description: 'Chào mừng bạn quay trở lại!',
+              });
+              router.push('/');
+            },
+            onError: (ctx) => {
+              const errorMessage = ctx.error.message || 'Đăng nhập thất bại';
+              toast({
+                variant: 'destructive',
+                title: 'Đăng nhập thất bại',
+                description: errorMessage,
+              });
+            },
+          }
+        );
+      } catch (error) {
+        console.error('Sign in error:', error);
+        toast({
+          variant: 'destructive',
+          title: 'Đã xảy ra lỗi',
+          description: 'Vui lòng thử lại sau',
+        });
+      }
+    });
+  };
 
   return (
-    <PageWrapper className="grid mx-auto grid-cols-1 lg:grid-cols-2">
-      <Card className="z-50 min-w-full rounded-md rounded-t-none max-w-2xl">
-        <CardHeader>
-          <CardTitle className="text-lg md:text-xl">Đăng nhập</CardTitle>
-          <CardDescription className="text-xs md:text-sm">
-            Nhập email bên dưới để đăng nhập vào tài khoản của bạn
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email đăng nhập</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="nguyen-van-a@gmail.com"
-                required
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                value={email}
-              />
-            </div>
-
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Mật khẩu</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Quên mật khẩu?
-                </Link>
-              </div>
-
-              <Input
-                id="password"
-                type="password"
-                placeholder="Mật khẩu"
-                autoComplete="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="remember"
-                onClick={() => {
-                  setRememberMe(!rememberMe);
-                }}
-              />
-              <Label htmlFor="remember">Ghi nhớ đăng nhập</Label>
-            </div>
-
-            <span className="text-base text-neutral-500 text-center">
-							Bạn chưa có tài khoản? <Link href="/auth/sign-up" className="text-orange-400">Đăng kí</Link>
-						</span>
-
-
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={loading}
-              onClick={async () => {
-                await signIn.email(
-                  {
-                    email,
-                    password,
-                    callbackURL: "/account",
-                    rememberMe: false
-                  },
-                  {
-                    onRequest: () => {
-                      setLoading(true);
-                    },
-                    onResponse: () => {
-                      setLoading(false);
-                    },
-                  },
-                );
-              }}
-            >
-              {loading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <p> Login </p>
-              )}
-            </Button>
-
-
-
-            <div className={cn(
-              "w-full gap-2 flex items-center",
-              "justify-between flex-col"
-            )}>
-
-              <Button
-                variant="outline"
-                className={cn(
-                  "w-full gap-2"
-                )}
-                disabled={loading}
-                onClick={async () => {
-                  await signIn.social(
-                    {
-                      provider: "google",
-                      callbackURL: "/account"
-                    },
-                    {
-                      onRequest: () => {
-                        setLoading(true);
-                      },
-                      onResponse: () => {
-                        setLoading(false);
-                      },
-                    },
-                  );
-                }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="0.98em" height="1em" viewBox="0 0 256 262">
-                  <path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622l38.755 30.023l2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"></path>
-                  <path fill="#34A853" d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055c-34.523 0-63.824-22.773-74.269-54.25l-1.531.13l-40.298 31.187l-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"></path>
-                  <path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82c0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602z"></path>
-                  <path fill="#EB4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0C79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"></path>
-                </svg>
-                Đăng nhập với Google
-              </Button>
+    <div className="min-h-screen bg-gradient-to-br from-brand-light/30 to-white py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="max-w-md w-full space-y-8">
+        {/* Brand Header */}
+        <div className="text-center">
+          <div className="flex justify-center mb-4">
+            <div className="p-3 bg-brand-medium rounded-full shadow-lg">
+              <Building2 className="h-8 w-8 text-white" />
             </div>
           </div>
-        </CardContent>
-      </Card>
-      <Image className="hidden max-h-[80vh] lg:block object-cover h-auto min-w-full" src="/loginImage.jpg" alt="Sign up" width={500} height={500} />
-    </PageWrapper>
+          <h1 className="text-3xl font-bold text-brand-darkest mb-2">
+            Futeccons Shop
+          </h1>
+          <p className="text-brand-dark">
+            Nền tảng bất động sản hàng đầu
+          </p>
+        </div>
+
+        <Card className="shadow-xl border-0 bg-white/95 backdrop-blur-sm">
+          <CardHeader className="space-y-1 text-center pb-6">
+            <CardTitle className="text-2xl font-bold text-brand-darkest">
+              Đăng nhập
+            </CardTitle>
+            <CardDescription className="text-brand-dark">
+              Đăng nhập vào tài khoản của bạn để tiếp tục
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-brand-darkest font-medium">Email</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-medium h-4 w-4" />
+                          <Input
+                            {...field}
+                            type="email"
+                            placeholder="example@gmail.com"
+                            className="pl-10 border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+                            disabled={isPending}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-brand-darkest font-medium">Mật khẩu</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-medium h-4 w-4" />
+                          <Input
+                            {...field}
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Nhập mật khẩu"
+                            className="pl-10 pr-10 border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+                            disabled={isPending}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                            onClick={() => setShowPassword(!showPassword)}
+                            disabled={isPending}
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4 text-brand-medium" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-brand-medium" />
+                            )}
+                          </Button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {form.formState.errors.root && (
+                  <Alert variant="destructive">
+                    <AlertDescription>
+                      {form.formState.errors.root.message}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                <Button 
+                  type="submit" 
+                  className="w-full bg-brand-medium hover:bg-brand-dark text-white font-medium py-6 shadow-lg transition-all duration-200 hover:shadow-xl" 
+                  disabled={isPending}
+                >
+                  {isPending ? (
+                    'Đang đăng nhập...'
+                  ) : (
+                    <>
+                      Đăng nhập
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+
+          <CardFooter className="flex flex-col space-y-4 pt-0">
+            <div className="text-sm text-center text-brand-dark">
+              <Link 
+                href="/auth/forgot-password" 
+                className="font-medium text-brand-medium hover:text-brand-dark transition-colors"
+              >
+                Quên mật khẩu?
+              </Link>
+            </div>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-brand-light" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-2 text-brand-dark">
+                  Chưa có tài khoản?
+                </span>
+              </div>
+            </div>
+            
+            <Link 
+              href="/auth/sign-up" 
+              className="w-full"
+            >
+              <Button 
+                variant="outline" 
+                className="w-full border-brand-medium text-brand-medium hover:bg-brand-light hover:text-brand-darkest transition-all duration-200"
+              >
+                Đăng ký ngay
+              </Button>
+            </Link>
+          </CardFooter>
+        </Card>
+
+        {/* Footer */}
+        <div className="text-center text-sm text-brand-dark">
+          <p>
+            Bằng việc đăng nhập, bạn đồng ý với{' '}
+            <Link href="/terms" className="text-brand-medium hover:text-brand-dark underline">
+              Điều khoản dịch vụ
+            </Link>{' '}
+            và{' '}
+            <Link href="/privacy" className="text-brand-medium hover:text-brand-dark underline">
+              Chính sách bảo mật
+            </Link>{' '}
+            của chúng tôi.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

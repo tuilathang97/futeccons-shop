@@ -93,26 +93,27 @@ export default function PostsManagementClientUI({
     <div className="w-full space-y-6">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Tiêu đề</TableHead>
-            <TableHead>Người đăng</TableHead>
-            <TableHead>Ngày tạo</TableHead>
-            <TableHead className="text-right">Hành động</TableHead>
+          <TableRow className="bg-brand-light/20">
+            <TableHead className="text-brand-dark font-semibold">Tiêu đề</TableHead>
+            <TableHead className="text-brand-dark font-semibold">Người đăng</TableHead>
+            <TableHead className="text-brand-dark font-semibold">Ngày tạo</TableHead>
+            <TableHead className="text-right text-brand-dark font-semibold">Hành động</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {posts.length > 0 ? (
             posts.map((post) => (
-              <TableRow key={post.id}>
-                <TableCell className="font-medium">{post.tieuDeBaiViet}</TableCell>
-                <TableCell>{getUserName(post)}</TableCell>
-                <TableCell>{formatDate(post.createdAt)}</TableCell>
+              <TableRow key={post.id} className="hover:bg-brand-light/10">
+                <TableCell className="font-medium text-brand-darkest">{post.tieuDeBaiViet}</TableCell>
+                <TableCell className="text-brand-dark">{getUserName(post)}</TableCell>
+                <TableCell className="text-brand-dark">{formatDate(post.createdAt)}</TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => handlePreview(post)}
                     disabled={isPending}
+                    className="border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-white"
                     asChild
                   >
                     <Link href={`/admin/posts-management/preview/${post.id}`} target="_blank">
@@ -125,7 +126,7 @@ export default function PostsManagementClientUI({
                     size="sm"
                     onClick={() => handleApprove(post.id)}
                     disabled={isPending}
-                    className="text-green-600 hover:text-green-700"
+                    className="text-brand-medium hover:text-white hover:bg-brand-medium"
                   >
                     Duyệt
                   </Button>
@@ -134,6 +135,7 @@ export default function PostsManagementClientUI({
                     size="sm"
                     onClick={() => handleDelete(post.id)}
                     disabled={isPending}
+                    className="bg-brand-darkest hover:bg-brand-darkest/90"
                   >
                     Xóa
                   </Button>
@@ -142,7 +144,7 @@ export default function PostsManagementClientUI({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={4} className="text-center">
+              <TableCell colSpan={4} className="text-center text-brand-dark">
                 Không có bài viết nào chờ duyệt.
               </TableCell>
             </TableRow>
@@ -161,7 +163,7 @@ export default function PostsManagementClientUI({
                   if (currentPage > 1) handlePageChange(currentPage - 1);
                 }}
                 aria-disabled={currentPage <= 1}
-                className={currentPage <= 1 ? "pointer-events-none opacity-50" : undefined}
+                className={`${currentPage <= 1 ? "pointer-events-none opacity-50" : "text-brand-dark hover:bg-brand-light hover:text-brand-darkest"}`}
               />
             </PaginationItem>
             {[...Array(totalPages)].map((_, i) => {
@@ -175,6 +177,10 @@ export default function PostsManagementClientUI({
                       handlePageChange(pageNum);
                     }}
                     isActive={currentPage === pageNum}
+                    className={currentPage === pageNum 
+                      ? "bg-brand-medium text-white hover:bg-brand-medium/90" 
+                      : "text-brand-dark hover:bg-brand-light hover:text-brand-darkest"
+                    }
                   >
                     {pageNum}
                   </PaginationLink>
@@ -189,7 +195,7 @@ export default function PostsManagementClientUI({
                   if (currentPage < totalPages) handlePageChange(currentPage + 1);
                 }}
                 aria-disabled={currentPage >= totalPages}
-                className={currentPage >= totalPages ? "pointer-events-none opacity-50" : undefined}
+                className={`${currentPage >= totalPages ? "pointer-events-none opacity-50" : "text-brand-dark hover:bg-brand-light hover:text-brand-darkest"}`}
               />
             </PaginationItem>
           </PaginationContent>

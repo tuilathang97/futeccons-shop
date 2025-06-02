@@ -1,6 +1,11 @@
 import { getCategories } from '@/lib/queries/categoryQueries';
 import CategoryClientUI from '@/components/categories/CategoryClientUI';
 
+export const metadata = {
+  title: 'Quản lý danh mục - Admin',
+  description: 'Quản lý danh mục',
+};
+
 export default async function AdminCategoriesPage() {
   const categories = await getCategories();
 

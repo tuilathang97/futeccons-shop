@@ -38,7 +38,7 @@ export default async function RootLayout({
   return (
     <html lang="vi" className="h-svh">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-[#f5f7f9] min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
+        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-br from-brand-light/30 to-white min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
       >
         <PostHogProvider>
           <SessionProvider session={session as Session} user={user as User}>

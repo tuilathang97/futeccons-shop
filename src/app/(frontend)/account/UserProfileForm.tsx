@@ -9,7 +9,8 @@ import { User } from '@/db/schema'
 import { useToast } from '@/hooks/use-toast'
 import { PencilIcon, X } from 'lucide-react'
 import React, { useState } from 'react'
-import { convertImageToBase64 } from '../auth/sign-up/page'
+import { convertImageToBase64, validateImageFile } from '@/lib/utils/imageUtils'
+
 function UserProfileForm({ user }: { user: User }) {
   const [name, setName] = useState(user.name)
   const [number, setNumber] = useState(user.number || undefined)
@@ -18,16 +19,27 @@ function UserProfileForm({ user }: { user: User }) {
   const {toast} = useToast()
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (file) {
-			setImage(file);
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setImagePreview(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-		}
-	};
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate the image file
+      const validation = validateImageFile(file);
+      if (!validation.isValid) {
+        toast({
+          title: "Lỗi",
+          description: validation.error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async () => {
     try{
@@ -91,23 +103,32 @@ function UserProfileForm({ user }: { user: User }) {
               Ảnh đại diện
             </Label>
             <div className="flex items-center gap-2 w-full">
-								<Input
-									id="image"
-									type="file"
-									accept="image/*"
-									onChange={handleImageChange}
-									className="w-full"
-								/>
-								{imagePreview && (
-									<X
-										className="cursor-pointer"
-										onClick={() => {
-											setImage(null);
-											setImagePreview(null);
-										}}
-									/>
-								)}
-							</div>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full"
+              />
+              {imagePreview && (
+                <X
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setImage(null);
+                    setImagePreview(null);
+                  }}
+                />
+              )}
+            </div>
+            {imagePreview && (
+              <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
           </div>
         </div>
         <DialogFooter>

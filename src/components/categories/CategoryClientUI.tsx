@@ -123,8 +123,11 @@ export default function CategoryClientUI({ initialCategories }: CategoryClientUI
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Quản lý danh mục</h1>
-        <Button onClick={() => setIsCreateModalOpen(true)}>
+        <h1 className="text-3xl font-bold text-brand-dark">Quản lý danh mục</h1>
+        <Button 
+          onClick={() => setIsCreateModalOpen(true)}
+          className="bg-brand-medium hover:bg-brand-medium/90 text-white"
+        >
           <PlusCircle className="mr-2 h-4 w-4" /> Tạo danh mục mới
         </Button>
       </div>

@@ -7,6 +7,8 @@ import { eq } from 'drizzle-orm';
 import { getServerSession } from '@/lib/auth-utils'; // Assuming this utility exists for session
 import { revalidatePath } from 'next/cache';
 import { createMessage, getMessageWithReplies, getReceivedMessagesPaginated, getSentMessagesPaginated, markMessageAsRead, MessageWithDetails, PaginatedResult, PaginationParams, updateMessageStatus, validateMessageAccess } from '@/lib/queries/messageQueries';
+import { revalidateMessageNotifications } from './notificationActions';
+
 export interface ActionResult {
   success: boolean;
   message: string;
@@ -103,6 +105,7 @@ export async function sendMessage(data: SendMessageData): Promise<ActionResult> 
         revalidatePath(`/account/messages/sent`);
     }
 
+    await revalidateMessageNotifications();
 
     return { success: true, message: 'Tin nhắn đã được gửi thành công.', data: newMessage };
   } catch (error) {

@@ -510,6 +510,75 @@ export const countUserPosts = customUnstableCache(
   }
 );
 
+export const getPendingApprovalCount = customUnstableCache(
+  async (): Promise<number> => {
+    console.log(`Executing DB query for getPendingApprovalCount`);
+    const result = await db
+      .select({ count: drizzleCount() })
+      .from(postsTable)
+      .where(eq(postsTable.active, false));
+    return result[0]?.count || 0;
+  },
+  ['posts', 'count', 'pending'],
+  {
+    tags: ['posts', 'posts:count'],
+    revalidate: 60, 
+  }
+);
+
+export const getRecentPendingPosts = customUnstableCache(
+  async (limit: number = 5): Promise<InactivePostWithUser[]> => {
+    console.log(`Executing DB query for getRecentPendingPosts: limit=${limit}`);
+    const data = await db
+      .select({
+        id: postsTable.id,
+        userId: postsTable.userId,
+        active: postsTable.active,
+        level1Category: postsTable.level1Category,
+        level2Category: postsTable.level2Category,
+        level3Category: postsTable.level3Category,
+        path: postsTable.path,
+        thanhPho: postsTable.thanhPho,
+        thanhPhoCodeName: postsTable.thanhPhoCodeName,
+        quan: postsTable.quan,
+        tieuDeBaiViet: postsTable.tieuDeBaiViet,
+        quanCodeName: postsTable.quanCodeName,
+        phuong: postsTable.phuong,
+        phuongCodeName: postsTable.phuongCodeName,
+        duong: postsTable.duong,
+        latitude: postsTable.latitude,
+        longitude: postsTable.longitude,
+        giaTien: postsTable.giaTien,
+        dienTichDat: postsTable.dienTichDat,
+        soTang: postsTable.soTang,
+        soPhongNgu: postsTable.soPhongNgu,
+        soPhongVeSinh: postsTable.soPhongVeSinh,
+        giayToPhapLy: postsTable.giayToPhapLy,
+        loaiHinhNhaO: postsTable.loaiHinhNhaO,
+        noiDung: postsTable.noiDung,
+        createdAt: postsTable.createdAt,
+        updatedAt: postsTable.updatedAt,
+        user: {
+          id: usersTable.id,
+          name: usersTable.name,
+          email: usersTable.email,
+        },
+      })
+      .from(postsTable)
+      .where(eq(postsTable.active, false))
+      .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
+      .orderBy(desc(postsTable.createdAt))
+      .limit(limit);
+
+    return data as InactivePostWithUser[];
+  },
+  ['posts', 'recent', 'pending'],
+  {
+    tags: ['posts', 'posts:recent'],
+    revalidate: 60, // 1 minute for real-time updates
+  }
+);
+
 // Get posts for sitemap
 export const getPostsForSitemap = customUnstableCache(
   async (): Promise<{ path: string; updatedAt: Date | null }[]> => {
@@ -745,7 +814,7 @@ export const getHomepageData = customUnstableCache(
       totalItems: number;
     };
   }> => {
-    console.log(`Executing enterprise DB query for getHomepageData: ${JSON.stringify(params)}, ${JSON.stringify(categoryIds)}`);
+    console.log(`Executing DB query for getHomepageData: ${JSON.stringify(params)}, ${JSON.stringify(categoryIds)}`);
     
     const pageSize = params.pageSize || 10;
     const activeCondition = eq(postsTable.active, true);

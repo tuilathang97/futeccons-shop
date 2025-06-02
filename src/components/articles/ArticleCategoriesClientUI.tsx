@@ -3,9 +3,8 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { handleActionResult } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, RefreshCw } from 'lucide-react';
 import CategoryArticleTable from './CategoryArticleTable';
 import { createArticleAction, updateArticleAction, deleteArticleAction, getCategoriesWithArticleStatusAction, getArticleForEditAction } from '@/actions/articleActions';
 import { CategoryWithArticleStatus } from './types';
@@ -56,12 +55,12 @@ export default function ArticleCategoriesClientUI({ initialCategories }: Article
     startTransition(async () => {
       const result = await getArticleForEditAction(category.articleId!);
       
-      if (result.success && result.data) {
+      if (result.success && result.data && typeof result.data === 'object' && 'categories' in result.data && 'article' in result.data) {
         // Store the full categories list for dropdowns
-        setAllCategories(result.data.categories);
+        setAllCategories(result.data.categories as Category[]);
         
         // Set the article for editing
-        setSelectedArticle(result.data.article);
+        setSelectedArticle(result.data.article as Article);
         setIsModalOpen(true);
       } else {
         toast({
@@ -176,16 +175,22 @@ export default function ArticleCategoriesClientUI({ initialCategories }: Article
   return (
     <div className="w-full max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Quản lý bài viết theo danh mục</h1>
+        <h1 className="text-3xl font-bold text-brand-dark">Quản lý bài viết theo danh mục</h1>
         <div className="flex gap-2">
           <Button 
             variant="outline" 
             onClick={refreshData}
             disabled={isPending}
+            className="border-brand-dark text-brand-dark hover:bg-brand-light hover:text-brand-darkest"
           >
+            <RefreshCw className="mr-2 h-4 w-4" />
             Làm mới
           </Button>
-          <Button onClick={handleCreateNew} disabled={isPending}>
+          <Button 
+            onClick={handleCreateNew} 
+            disabled={isPending}
+            className="bg-brand-medium hover:bg-brand-medium/90 text-white"
+          >
             <PlusCircle className="mr-2 h-4 w-4" /> Tạo bài viết mới
           </Button>
         </div>
@@ -208,7 +213,15 @@ export default function ArticleCategoriesClientUI({ initialCategories }: Article
           }
           setIsModalOpen(open);
         }}
-        categories={allCategories.length > 0 ? allCategories : categories as any}
+        categories={allCategories.length > 0 ? allCategories : categories.map(cat => ({
+          id: cat.id,
+          name: cat.name,
+          parentId: cat.parentId,
+          level: cat.level,
+          note: cat.note,
+          path: cat.path,
+          slug: cat.slug
+        }))}
         selectedCategory={selectedCategory}
         article={selectedArticle}
         onSubmit={handleModalSubmit}

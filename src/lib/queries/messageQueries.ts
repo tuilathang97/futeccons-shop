@@ -384,4 +384,97 @@ export const validateMessageAccess = customUnstableCache(
     tags: ['messages', 'message'],
     revalidate: 3600, // 1 hour
   }
+);
+
+export const getUnreadMessageCount = customUnstableCache(
+  async (userId: string): Promise<number> => {
+    console.log(`Executing DB query for getUnreadMessageCount: userId=${userId}`);
+    const result = await db
+      .select({ count: count() })
+      .from(messagesTable)
+      .where(
+        and(
+          eq(messagesTable.recipientId, userId),
+          eq(messagesTable.status, 'sent')
+        )
+      );
+
+    return result[0]?.count || 0;
+  },
+  ['messages', 'count', 'unread'],
+  {
+    tags: ['messages', 'messages:count'],
+    revalidate: 60, // 1 minute for real-time updates
+  }
+);
+
+// Get recent unread messages (for notifications)
+export const getRecentUnreadMessages = customUnstableCache(
+  async (userId: string, limit: number = 5): Promise<MessageWithDetails[]> => {
+    console.log(`Executing DB query for getRecentUnreadMessages: userId=${userId}, limit=${limit}`);
+    const messagesData = await db
+      .select({
+        id: messagesTable.id,
+        subject: messagesTable.subject,
+        content: messagesTable.content,
+        senderContactInfo: messagesTable.senderContactInfo,
+        senderId: messagesTable.senderId,
+        recipientId: messagesTable.recipientId,
+        postId: messagesTable.postId,
+        parentMessageId: messagesTable.parentMessageId,
+        status: messagesTable.status,
+        createdAt: messagesTable.createdAt,
+        updatedAt: messagesTable.updatedAt,
+        readAt: messagesTable.readAt,
+        repliedAt: messagesTable.repliedAt,
+        // Post fields
+        postTitle: postsTable.tieuDeBaiViet,
+        postPath: postsTable.path,
+        // Sender fields
+        senderName: user.name,
+        senderImage: user.image,
+      })
+      .from(messagesTable)
+      .where(
+        and(
+          eq(messagesTable.recipientId, userId),
+          eq(messagesTable.status, 'sent')
+        )
+      )
+      .leftJoin(postsTable, eq(messagesTable.postId, postsTable.id))
+      .leftJoin(user, eq(messagesTable.senderId, user.id))
+      .orderBy(desc(messagesTable.createdAt))
+      .limit(limit);
+
+    return messagesData.map(row => ({
+      id: row.id,
+      subject: row.subject,
+      content: row.content,
+      senderContactInfo: row.senderContactInfo,
+      senderId: row.senderId,
+      recipientId: row.recipientId,
+      postId: row.postId,
+      parentMessageId: row.parentMessageId,
+      status: row.status,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      readAt: row.readAt,
+      repliedAt: row.repliedAt,
+      post: row.postTitle ? {
+        id: row.postId,
+        tieuDeBaiViet: row.postTitle,
+        path: row.postPath,
+      } : undefined,
+      sender: row.senderName ? {
+        id: row.senderId,
+        name: row.senderName,
+        image: row.senderImage,
+      } : undefined,
+    }));
+  },
+  ['messages', 'recent', 'unread'],
+  {
+    tags: ['messages', 'messages:recent'],
+    revalidate: 60, // 1 minute for real-time updates
+  }
 ); 
