@@ -87,6 +87,8 @@ export default async function Page({ params }: { params: { postId: string[] } })
                             <ContactOwnerButton 
                                 post={postForDetail}
                                 currentUser={currentUser} 
+                                loginUrl="/auth/sign-in"
+                                pageCallbackUrl={currentPath}
                             />
                         </PostSectionWrapper>
                     </div>
