@@ -7,7 +7,6 @@ import ArticleContent from "@/components/articles/ArticleContent";
 import { getPostImages } from "@/lib/queries/postImagesQueries";
 import PageWrapper from "@/components/PageWrapper";
 import FilterBar from "@/components/filterComponent/FilterBar";
-import CategoryPicker from "@/components/homepage/CategoryPicker";
 import Sidebar from "@/components/location/Sidebar";
 
 interface PageProps {
@@ -27,8 +26,6 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
         level1Slug: categoryLevel1
     });
     const postImages = await getPostImages();
-    const currentCategory = categories.find(category => category.slug === `/${categoryLevel1}`);
-    const selectedCategories = categories.filter(cate => cate.parentId === currentCategory?.id);
     return (
         <PageWrapper className="flex flex-col 2xl:px-0 w-full gap-4 ">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
@@ -36,21 +33,16 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
                     level1Slug={categoryLevel1}
                 />
             </div> 
-            <div>
-                {
-                    <CategoryPicker filterCategories={selectedCategories} className="mt-4" />
-                }
-            </div>
-            <PageWrapper className="flex flex-col !px-0 gap-4 my-4 lg:grid lg:grid-cols-[60%_40%]">
+            <PageWrapper className="flex flex-col !px-0 gap-4 my-4 md:grid md:grid-cols-[70%_30%]">
                 <div className="min-w-full">
                     <ProductsContainer
                         data={result || []}
                         postImages={postImages}
                         searchParam={{}}
                         cardVariant="horizontal"
-                    />
+                        />
                 </div>
-                <div className="mt-4 md:mt-0 lg:pr-4">
+                <div className="max-w-full">
                     <Sidebar />
                 </div>
             </PageWrapper>

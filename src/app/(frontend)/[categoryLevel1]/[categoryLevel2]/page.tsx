@@ -7,7 +7,6 @@ import ArticleContent from "@/components/articles/ArticleContent";
 import { getPostImages } from "@/lib/queries/postImagesQueries";
 import PageWrapper from "@/components/PageWrapper";
 import FilterBar from "@/components/filterComponent/FilterBar";
-import CategoryPicker from "@/components/homepage/CategoryPicker";
 import Sidebar from "@/components/location/Sidebar";
 
 export default async function ProductListing2LevelDeep({ params }: {
@@ -19,8 +18,6 @@ export default async function ProductListing2LevelDeep({ params }: {
     if (!isValidPath || !categories ) {
         notFound();
     }
-    const currentCategory = categories.find(category => category.path === `/${categoryLevel1}/${categoryLevel2}`);
-    const selectedCategories = categories.filter(cate => cate.parentId === currentCategory?.id);
     const article = await getPublishedArticleByParams({
         level1Slug: categoryLevel1,
         level2Slug: categoryLevel2
@@ -36,10 +33,7 @@ export default async function ProductListing2LevelDeep({ params }: {
                     level2Slug={categoryLevel2}
                 />
             </div>
-            <div>
-                <CategoryPicker filterCategories={selectedCategories} className="mt-4" />
-            </div>
-            <div className="flex flex-col gap-4 my-4 md:grid md:grid-cols-[70%_30%]">
+            <PageWrapper className="flex flex-col !px-0 gap-4 my-4 md:grid md:grid-cols-[70%_30%]">
                 <div className="min-w-full">
                     <ProductsContainer
                         data={data || []}
@@ -51,7 +45,7 @@ export default async function ProductListing2LevelDeep({ params }: {
                 <div className="mt-4 md:mt-0">
                     <Sidebar />
                 </div>
-            </div>
+            </PageWrapper>
 
             {article && (
                 <div className="mt-8">
