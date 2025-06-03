@@ -1,53 +1,54 @@
 "use client"
 import { useCategories } from '@/contexts/CategoriesContext'
-import Link from 'next/link'
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Category } from '@/db/schema'
-import { Building2 } from 'lucide-react'
-import { Button } from '../ui/button'
-
+import Image from 'next/image'
+import PageWrapper from '../PageWrapper'
+import { useRouter } from 'next/navigation'
 interface CategoryPickerProps {
     filterCategories?: Category[]
     className?: string
 }
+function CategoriesRender(categories: Category[]) {
+    const router = useRouter()
+
+    const renderCategories = categories.map((category, index) => {
+        return (
+            <button
+                onClick={() => router.push(category.path || "/")}
+                key={category.id || index}
+                className="group flex flex-col items-center gap-2 rounded-md transition-colors hover:bg-slate-50"
+            >
+                <div className='relative min-w-full hover:shadow-md transition-shadow duration-300'>
+                    <div className="flex flex-col-reverse items-center gap-2">
+                        <Image className='z-10 blur-sm min-h-32 min-w-full aspect-auto rounded-md' src={"/lorem.png"} alt={category.name || ""} width={200} height={200} />
+                    </div>
+                    <p className="text-2xl flex justify-center w-full text-center flex text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 font-bold">{category.name}</p>
+                </div>
+            </button>
+        )
+    })
+    return renderCategories
+}
 
 function CategoryPicker({ filterCategories, className }: CategoryPickerProps) {
-    const [activeCategory, setActiveCategory] = useState(0)
     const { categories } = useCategories()
     if (!categories) return <></>
     const firstLevelCategories = categories.filter((category) => category.level === 1)
     if (!firstLevelCategories) {
         return <></>
     }
-    function renderCategories(categories: Category[]) {
-        return categories.map((category, index) => {
-            return (
-                <button
-                    key={category.id || index}
-                    onClick={() => setActiveCategory(index)}
-                    className={cn("group flex flex-col opacity-80 items-center gap-2 p-3 transition-colors hover:border-b-2 hover:border-brand-medium hover:opacity-100",index === activeCategory ? "border-b-2 border-brand-medium" : "")}
-                >
-                    <div className="flex flex-col-reverse items-center gap-2">
-                        <p className="text-sm text-center font-medium">{category.name}</p>
-                        <Building2 size={36} scale={1} />
-                    </div>
-                </button>
-            )
-        })
-    }
 
     return (
-        <>
-            <Card className={cn("w-full container", className)}>
-                <CardContent className='p-0 flex items-center py-4 '>
-                    <div className="flex gap-4">
-                        {renderCategories(filterCategories ? filterCategories : firstLevelCategories)}
-                    </div>
+        <PageWrapper className='!px-0 bg-none min-w-full '>
+            <Card className={cn("p-0 bg-transparent border-none shadow-none", className)}>
+                <CardContent className='p-0 gap-4 min-w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
+                    {CategoriesRender(filterCategories ? filterCategories : firstLevelCategories)}
                 </CardContent>
             </Card>
-        </>
+        </PageWrapper>
     )
 }
 

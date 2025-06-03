@@ -41,7 +41,7 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
                     <CategoryPicker filterCategories={selectedCategories} className="mt-4" />
                 }
             </div>
-            <PageWrapper className="flex !px-0 flex-col gap-4 my-4 lg:grid lg:grid-cols-[60%_40%]">
+            <PageWrapper className="flex flex-col !px-0 gap-4 my-4 lg:grid lg:grid-cols-[60%_40%]">
                 <div className="min-w-full">
                     <ProductsContainer
                         data={result || []}
