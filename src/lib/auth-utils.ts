@@ -60,7 +60,7 @@ export const getServerSession = customUnstableCache(
   _getServerSession,
   ['server-session'],
   {
-    revalidate: 0, // No time-based revalidation, only request-time memoization
+    revalidate: false, // No time-based revalidation, only request-time memoization
     tags: ['auth-session'],
   }
 );

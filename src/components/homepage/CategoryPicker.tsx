@@ -25,7 +25,7 @@ function CategoriesRender(categories: Category[],imagesUrl:string[]) {
             >
                 <div className='relative min-w-full hover:shadow-md transition-shadow duration-300'>
                     <div className="flex flex-col-reverse items-center gap-2">
-                        <Image className='z-10 object-cover min-w-full min-h-full w-[10rem] blur-[3px] h-[10rem] rounded-md' src={imagesUrl[index]} alt={category.name || ""} width={200} height={200} />
+                        <Image className='z-10 object-cover brightness-50 min-w-full min-h-full w-[10rem] h-[10rem] rounded-md' src={imagesUrl[index]} alt={category.name || ""} width={200} height={200} />
                     </div>
                     <p className="text-2xl flex justify-center w-full text-center flex text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 font-bold">{category.name}</p>
                 </div>
@@ -42,8 +42,8 @@ function CategoryPicker({ filterCategories, className }: CategoryPickerProps) {
         "/categoryImages/ban-nha-dat.webp",
         "/categoryImages/cho-thue.webp",
         "/categoryImages/du-an.webp",
-        "/categoryImages/ban-chung-cu.webp",
-        "/categoryImages/nhadat.webp",
+        "/categoryImages/bietThuChoThue.webp",
+        "/categoryImages/chungCu.webp",
         "/categoryImages/nhaPho.webp",
     ]
     const defaultCategories = categories.filter((category) => category.level === 1)
@@ -58,7 +58,7 @@ function CategoryPicker({ filterCategories, className }: CategoryPickerProps) {
     }
     console.log({defaultCategories})
     return (
-        <PageWrapper className='!px-0 bg-none min-w-full '>
+        <PageWrapper className='!px-0 bg-none '>
             <Card className={cn("p-0 bg-transparent border-none shadow-none", className)}>
                 <CardContent className='p-0 gap-4 min-w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
                     {CategoriesRender(filterCategories ? filterCategories : defaultCategories,imagesUrl)}

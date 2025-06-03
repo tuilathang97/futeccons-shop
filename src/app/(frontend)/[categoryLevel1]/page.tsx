@@ -33,7 +33,7 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
                     level1Slug={categoryLevel1}
                 />
             </div> 
-            <PageWrapper className="flex flex-col !px-0 gap-4 my-4 md:grid md:grid-cols-[70%_30%]">
+            <PageWrapper className="flex !px-0 flex-col gap-4 my-4 md:grid md:grid-cols-[70%_30%]">
                 <div className="min-w-full">
                     <ProductsContainer
                         data={result || []}
@@ -42,7 +42,7 @@ export default async function ProductListing1LevelDeep({ params }: PageProps) {
                         cardVariant="horizontal"
                         />
                 </div>
-                <div className="max-w-full">
+                <div className="max-w-full md:px-4">
                     <Sidebar />
                 </div>
             </PageWrapper>

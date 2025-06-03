@@ -7,14 +7,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, Settings, User2, MessageCircle, CheckCircle2 } from "lucide-react"
+import { LogOut, User2, MessageCircle, CheckCircle2 } from "lucide-react"
 import { User } from '@/db/schema'
 import Link from 'next/link'
 import { signOut } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
 import { useSession } from '@/contexts/SessionContext'
 import { useToast } from '@/hooks/use-toast'
-import { Avatar, AvatarImage } from '../ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { NotificationBadge } from '../ui/notification-badge'
 import { useNotificationCounts } from '@/hooks/useNotificationCounts'
 
@@ -41,7 +41,8 @@ function UserDropdown({ user }: { user: User }) {
             <DropdownMenuTrigger asChild>
                 <div className="relative">
                     <Avatar className="h-10 w-10 rounded-full cursor-pointer">
-                        <AvatarImage className="object-cover" src={user?.image || "https://picsum.photos/200/300"} alt={user.name || "User avatar"} />
+                        <AvatarImage className="object-cover" src={user?.image || "/lorem.png"} alt={user.name || "User avatar"} />
+                        <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                     {hasNotifications && (
                         <div className="absolute -top-1 -right-1 h-4 w-4 bg-brand-medium border-2 border-white rounded-full flex items-center justify-center">
