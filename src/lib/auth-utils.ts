@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { customUnstableCache } from "@/lib/cache";
 
 // Define the session type to match Better Auth's structure
 export type UserSession = {
@@ -31,10 +32,9 @@ export type UserSession = {
 };
 
 /**
- * Get the current user session from the server
- * For use in Server Components and Server Actions
+ * Internal function for getting server session (without cache)
  */
-export async function getServerSession(): Promise<UserSession | null> {
+async function _getServerSession(): Promise<UserSession | null> {
   try {
     const headersList = await headers();
     const headersObj = new Headers();
@@ -51,6 +51,19 @@ export async function getServerSession(): Promise<UserSession | null> {
     return null;
   }
 }
+
+/**
+ * Get the current user session from the server (cached)
+ * For use in Server Components and Server Actions
+ */
+export const getServerSession = customUnstableCache(
+  _getServerSession,
+  ['server-session'],
+  {
+    revalidate: 0, // No time-based revalidation, only request-time memoization
+    tags: ['auth-session'],
+  }
+);
 
 /**
  * Check if the current user is an admin
