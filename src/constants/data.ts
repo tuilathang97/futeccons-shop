@@ -281,32 +281,3 @@ export const bedroomOptions = [
         value: "5+"
     }
 ];
-
-
-export const formData = {
-    id: 16,
-    userId: 'cf1695cc-f08d-4403-845b-a40a32a6e979',
-    active: false,
-    level1Category: 1,
-    level2Category: 5,
-    level3Category: 7,
-    path: null,
-    thanhPho: 'Thành phố Hồ Chí Minh',
-    thanhPhoCodeName: 'thanh_pho_ho_chi_minh',
-    quan: 'Quận Gò Vấp',
-    tieuDeBaiViet: 'Tôi là 1 con gà ',
-    quanCodeName: 'quan_go_vap',
-    phuong: 'Phường 5',
-    phuongCodeName: 'phuong_5',
-    duong: 'duong-1',
-    giaTien: '1000000000.00',
-    dienTichDat: '55.00',
-    soTang: 8,
-    soPhongNgu: 4,
-    soPhongVeSinh: 2,
-    giayToPhapLy: 'so-hong',
-    loaiHinhNhaO: 'chung-cu',
-    noiDung: 'Tôi là 1 con gà Tôi là 1 con gà ',
-    createdAt: "2025-03-14T05:37:20.203Z",
-    updatedAt: "2025-03-14T05:37:20.203Z"
-}

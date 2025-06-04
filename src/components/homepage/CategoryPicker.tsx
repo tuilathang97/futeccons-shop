@@ -56,7 +56,6 @@ function CategoryPicker({ filterCategories, className }: CategoryPickerProps) {
     if (!defaultCategories) {
         return <></>
     }
-    console.log({defaultCategories})
     return (
         <PageWrapper className='!px-0 bg-none '>
             <Card className={cn("p-0 bg-transparent border-none shadow-none", className)}>

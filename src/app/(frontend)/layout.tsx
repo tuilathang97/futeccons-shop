@@ -10,6 +10,7 @@ import { SessionProvider } from "@/contexts/SessionContext";
 import { Session, User } from "@/db/schema";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import { PostHogProvider } from "@/components/layout/PostHogProvider";
+import PageWrapper from "@/components/PageWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,8 +44,10 @@ export default async function RootLayout({
         <PostHogProvider>
           <SessionProvider session={session as Session} user={user as User}>
             <CategoriesProvider initialCategories={categories}>
-              <Header />
-              <main>{children}</main>
+              <PageWrapper>
+                <Header />
+                <main>{children}</main>
+              </PageWrapper>
             </CategoriesProvider>
           </SessionProvider>
           <Toaster />

@@ -4,16 +4,19 @@ import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
 import { Post } from '@/db/schema'
 import { Image } from '@/db/schema'
+import PageWrapper from '../PageWrapper'
 
 interface Container {
     title: string
     posts?:Post[]
     postImages?:Image[]
+    linkTitle?:string
+    href?:string
 }
 
-function ProductsContainer({ title,posts,postImages }: Container) {
+function ProductsContainer({ title,posts,postImages,linkTitle }: Container) {
     return (
-        <div className='min-h-[5rem] px-4 sm:px-8 md:px-12 flex flex-col bg-white container gap-4 w-full border border-gray-100 rounded-md p-4'>
+        <PageWrapper className='min-h-[5rem] flex flex-col bg-white gap-4 w-full border border-gray-100 rounded-md p-4'>
             <div className='flex'>
                 <h1 className='text-xl font-semibold md:text-2xl'>{title}</h1>
             </div>
@@ -39,12 +42,12 @@ function ProductsContainer({ title,posts,postImages }: Container) {
             <div className='flex justify-center'>
                 <Button className='max-w-[15rem]'>
                     {posts?.length && posts.length  < 100 ?
-                        <span className='flex items-center gap-4'>Xem thêm <ArrowDown /></span> :
+                        <span className='flex items-center gap-4'>Xem thêm {linkTitle} <ArrowDown /></span> :
                         <span className='flex items-center gap-4'>Xem thêm {posts?.length} tin <ArrowRight size={150} /></span>
                     }
                 </Button>
             </div>
-        </div>
+        </PageWrapper>
     )
 }
 
