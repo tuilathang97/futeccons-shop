@@ -5,18 +5,19 @@ import { PostHogProvider as PHProvider, usePostHog } from "posthog-js/react"
 import { Suspense, useEffect } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 
-export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-      api_host: "/ingest",
-      ui_host: "https://us.posthog.com",
-      capture_pageview: false, // We capture pageviews manually
-      capture_pageleave: true,  // Enable pageleave capture
-      capture_exceptions: true, // Enables capturing exceptions via Error Tracking
-      debug: process.env.NODE_ENV === "development",
-    })
-  }, [])
+// Initialize PostHog when the module is loaded
+if (typeof window !== 'undefined') { // Ensure this only runs in the browser
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
+    api_host: "/ingest",
+    ui_host: "https://us.posthog.com",
+    capture_pageview: false, // We capture pageviews manually
+    capture_pageleave: true,  // Enable pageleave capture
+    capture_exceptions: true, // Enables capturing exceptions via Error Tracking
+    debug: process.env.NODE_ENV === "development",
+  })
+}
 
+export function PostHogProvider({ children }: { children: React.ReactNode }) {
   return (
     <PHProvider client={posthog}>
       <SuspendedPostHogPageView />

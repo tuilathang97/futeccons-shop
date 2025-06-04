@@ -55,7 +55,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
       }
       return
   }, [state?.message])
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async () => {
     setIsLoading(true);
     const formElement = formRef?.current;
     if (formElement) {

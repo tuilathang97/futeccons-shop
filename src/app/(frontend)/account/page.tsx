@@ -15,7 +15,7 @@ interface AccountPageProps {
 
 export default async function AccountPage({ searchParams }: AccountPageProps) {
   const userSession = await getServerSession();
-
+  const conditionsParams = await searchParams;
   if (!userSession?.user) {
     redirect("/auth/sign-in?callbackUrl=/account");
   }
@@ -32,8 +32,8 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
     getCategories()
   ]);
 
-  const showPhoneNumberBanner = searchParams?.reason === 'phone_required';
-  const callbackUrl = searchParams?.callbackUrl;
+  const showPhoneNumberBanner = conditionsParams?.reason === 'phone_required';
+  const callbackUrl = conditionsParams?.callbackUrl;
 
   return (
     <AccountPageClient
