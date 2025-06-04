@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast'
 import { PencilIcon, X } from 'lucide-react'
 import React, { useState } from 'react'
 import { convertImageToBase64, validateImageFile } from '@/lib/utils/imageUtils'
+import Image from 'next/image'
 
 function UserProfileForm({ user }: { user: User }) {
   const [name, setName] = useState(user.name)
@@ -107,6 +108,7 @@ function UserProfileForm({ user }: { user: User }) {
                 id="image"
                 type="file"
                 accept="image/*"
+                placeholder="Chọn ảnh đại diện"
                 onChange={handleImageChange}
                 className="w-full"
               />
@@ -122,7 +124,7 @@ function UserProfileForm({ user }: { user: User }) {
             </div>
             {imagePreview && (
               <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200">
-                <img
+                <Image
                   src={imagePreview}
                   alt="Preview"
                   className="w-full h-full object-cover"
@@ -133,7 +135,7 @@ function UserProfileForm({ user }: { user: User }) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button className='min-w-full' type="submit" onClick={handleSubmit}>Save changes</Button>
+            <Button className='min-w-full' type="submit" onClick={handleSubmit}>Lưu thông tin</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

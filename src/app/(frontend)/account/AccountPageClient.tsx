@@ -30,7 +30,7 @@ export default function AccountPageClient({
 
   return (
     <CategoriesProvider initialCategories={categories}>
-      <PageWrapper className="space-y-6 ">
+      <div className="space-y-6 ">
         {showPhoneNumberBanner && <MissingPhoneNumberBanner callbackUrl={callbackUrl} />}
         <h1 className="text-2xl font-semibold ">Thông tin tài khoản</h1>
         <Card>
@@ -67,7 +67,7 @@ export default function AccountPageClient({
           </div>
         </Card>
         <ProductsTab userPosts={userPosts} postImages={postImages} />
-      </PageWrapper>
+      </div>
     </CategoriesProvider>
   );
 } 
