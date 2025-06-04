@@ -12,7 +12,7 @@ function FilterEstateType({ childCategories, currentChildCategory }: { childCate
   function handleValueChange(id: string) {
     const value = categories.find(category => category.id === Number(id))
     const currentParams = new URLSearchParams(searchParams.toString()).toString()
-    const newUrl = currentParams.length > 0 ? `${value?.path}&${currentParams.toString()}` : value?.path
+    const newUrl = currentParams.length > 0 ? `${value?.path}?${currentParams.toString()}` : value?.path
     if(newUrl){
       router.push(newUrl)
       router.prefetch(newUrl)

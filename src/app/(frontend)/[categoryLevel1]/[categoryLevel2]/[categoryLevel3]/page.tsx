@@ -10,14 +10,14 @@ import PageWrapper from '@/components/PageWrapper'
 import FilterBar from '@/components/filterComponent/FilterBar'
 import Sidebar from '@/components/location/Sidebar'
 
-export default async function ProductListing3LevelDeep({ params }: {
+export default async function ProductListing3LevelDeep({ params,searchParams }: {
     params: Promise<{ categoryLevel1: string, categoryLevel2: string, categoryLevel3: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
     const { categoryLevel1, categoryLevel2, categoryLevel3 } = await params
-    
+    const searchConditions = await searchParams;
     const isValidPath = await validateCategoryPath(`/${categoryLevel1}/${categoryLevel2}/${categoryLevel3}`);
     
-    // Get all categories
     const categories = await getCategories();
     const result = await getPostByCategoryPath(categoryLevel1, categoryLevel2, categoryLevel3);
     
@@ -34,7 +34,7 @@ export default async function ProductListing3LevelDeep({ params }: {
     const postImages = await getPostImages();
 
     return (
-        <PageWrapper className="flex flex-col 2xl:px-0 w-full gap-4">
+        <section className="flex flex-col 2xl:px-0 w-full gap-4">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <FilterBar 
                     level1Slug={categoryLevel1}
@@ -47,7 +47,7 @@ export default async function ProductListing3LevelDeep({ params }: {
                     <ProductsContainer
                         data={result || []}
                         postImages={postImages}
-                        searchParam={{}}
+                        searchParam={searchConditions}
                         cardVariant="horizontal"
                     />
                 </div>
@@ -61,6 +61,6 @@ export default async function ProductListing3LevelDeep({ params }: {
                     <ArticleContent article={article} />
                 </div>
             )}
-        </PageWrapper>
+        </section>
     )
 }

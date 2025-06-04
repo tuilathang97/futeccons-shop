@@ -1,30 +1,38 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { MessageSquare } from 'lucide-react';
 import SendMessageModal from './SendMessageModal';
-import type { User, Post } from '@/db/schema'; // Assuming these types are available
+import type { User, Post } from '@/db/schema';
 
 interface ContactOwnerButtonProps {
-  post: Post & { user: User }; // Post with its owner (user)
-  currentUser: User | null; // Currently logged-in user
+  post: Post & { user: User };
+  currentUser: User | null;
+  loginUrl: string;
+  pageCallbackUrl: string;
 }
 
-export default function ContactOwnerButton({ post, currentUser }: ContactOwnerButtonProps) {
+export default function ContactOwnerButton({ 
+  post, 
+  currentUser, 
+  loginUrl, 
+  pageCallbackUrl 
+}: ContactOwnerButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleOpenModal = () => {
     if (!currentUser) {
-      alert('Vui lòng đăng nhập để gửi tin nhắn.'); // Simple alert for now
+      router.push(`${loginUrl}?callbackUrl=${encodeURIComponent(pageCallbackUrl)}`);
       return;
     }
     setIsModalOpen(true);
   };
 
-  // Prevent owner from messaging themselves
   if (currentUser?.id === post.userId) {
-    return null; // Or a disabled button, or some other UI indication
+    return null;
   }
 
   return (
@@ -37,9 +45,9 @@ export default function ContactOwnerButton({ post, currentUser }: ContactOwnerBu
         <SendMessageModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          recipient={post.user} // The owner of the post
+          recipient={post.user}
           post={post}
-          sender={currentUser} // The person sending the message
+          sender={currentUser}
         />
       )}
     </>

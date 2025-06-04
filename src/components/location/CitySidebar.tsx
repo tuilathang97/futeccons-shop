@@ -102,7 +102,7 @@ export default function CitySidebar({ className }: CitySidebarProps) {
 
                 {
                   <div>
-                    <div className=" mt-4 grid grid-cols-3 lg:grid-cols-2 gap-x-4 gap-y-4">
+                    <div className=" mt-4 grid grid-cols-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-4">
                       {province.districts
                         .filter(district => district.division_type === 'huyện' || district.division_type === 'quận')
                         .slice(0, selectedProvince === index ? province.districts.length : 6)

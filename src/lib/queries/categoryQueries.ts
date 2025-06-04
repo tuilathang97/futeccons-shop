@@ -89,6 +89,12 @@ export async function deleteCategory(id: number) {
 }
 
 export async function validateCategoryPath(path: string): Promise<boolean> {
+  const isInclude = path.includes('%');
+  if (isInclude) {
+    const cleanedPath = path.split('%')[0];
+    const category = await getCategoryByPath(cleanedPath);
+    return category !== null && category !== undefined;
+  }
   const category = await getCategoryByPath(path);
   return category !== null && category !== undefined;
 }

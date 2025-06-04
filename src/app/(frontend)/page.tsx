@@ -5,7 +5,6 @@ import { getHomepageData, getPostImagesByIds } from "@/lib/queries/postQueries";
 import { Metadata } from "next";
 import { PaginationParams } from '@/lib/queries/paginateQuery';
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
-import PageWrapper from "@/components/PageWrapper";
 import HomeImage from "@/components/homepage/HomeImage";
 
 interface HomePageProps {
@@ -50,14 +49,14 @@ export default async function Home({ searchParams }: HomePageProps) {
 
   return (
     <CategoriesProvider initialCategories={categories}>
-      <PageWrapper className="flex flex-col justify-center min-w-full items-center gap-4">
+      <div className="flex flex-col justify-center items-center gap-4">
         <HomeImage href="/" imgUrl="/categoryImages/saigon.webp" />
         <CategoryPicker />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts} postImages={postImages} />
         <ProductsContainer title="Tin bán nhà" posts={homepageData.banNhaPosts} postImages={postImages} />
         <ProductsContainer title="Tin cho thuê" posts={homepageData.choThuePosts} postImages={postImages} />
         <ProductsContainer title="Tin dự án" posts={homepageData.duAnPosts} postImages={postImages} />
-      </PageWrapper>
+      </div>
     </CategoriesProvider>
   );
 }

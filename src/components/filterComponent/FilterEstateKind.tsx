@@ -2,7 +2,6 @@
 import React from 'react'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '../ui/select'
 import { Category } from '@/db/schema'
-import { getCategoryById } from '@/lib/queries/categoryQueries'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useCategories } from '@/contexts/CategoriesContext'
@@ -17,7 +16,7 @@ function FilterEstateKind({ childSubCategories, CurrentSubCategory }: { childSub
         const value = categories.find(category => category.id === Number(id))
         if(value){
             const currentParams = new URLSearchParams(searchParams.toString()).toString()          
-            const newUrl = currentParams.length > 0 ? `${value?.path}&${currentParams.toString()}` : value?.path
+            const newUrl = currentParams.length > 0 ? `${value?.path}?${currentParams.toString()}` : value?.path
             if(newUrl){
                 router.push(newUrl)
                 router.prefetch(newUrl)

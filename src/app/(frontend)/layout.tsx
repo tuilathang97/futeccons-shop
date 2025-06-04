@@ -44,7 +44,7 @@ export default async function RootLayout({
         <PostHogProvider>
           <SessionProvider session={session as Session} user={user as User}>
             <CategoriesProvider initialCategories={categories}>
-              <PageWrapper>
+              <PageWrapper >
                 <Header />
                 <main>{children}</main>
               </PageWrapper>

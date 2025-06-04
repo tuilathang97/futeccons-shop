@@ -161,6 +161,8 @@ function FilterPrice({ priceType }: FilterPriceProps) {
     }
 
     const updateUrl = (priceValue: string) => {
+        console.log({priceValue})
+        console.log({price})
         const params = new URLSearchParams(searchParams.toString())
 
         if (priceValue) {

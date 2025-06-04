@@ -9,12 +9,15 @@ import PageWrapper from "@/components/PageWrapper";
 import FilterBar from "@/components/filterComponent/FilterBar";
 import Sidebar from "@/components/location/Sidebar";
 
-export default async function ProductListing2LevelDeep({ params }: {
+export default async function ProductListing2LevelDeep({ params,searchParams }: {
     params: Promise<{ categoryLevel1: string, categoryLevel2: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-    const { categoryLevel1, categoryLevel2 } = await params;
+    const { categoryLevel1,categoryLevel2} = await params;
     const categories = await getCategories();
     const isValidPath = await validateCategoryPath(`/${categoryLevel1}/${categoryLevel2}`);
+    const searchConditions = await searchParams;
+    console.log({searchConditions})
     if (!isValidPath || !categories ) {
         notFound();
     }
@@ -26,7 +29,7 @@ export default async function ProductListing2LevelDeep({ params }: {
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2);
     const postImages = await getPostImages();
     return (
-        <PageWrapper className="flex flex-col 2xl:px-0 w-full gap-4">
+        <section className="flex flex-col 2xl:px-0 w-full gap-4">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <FilterBar 
                     level1Slug={categoryLevel1}
@@ -38,7 +41,7 @@ export default async function ProductListing2LevelDeep({ params }: {
                     <ProductsContainer
                         data={data || []}
                         postImages={postImages}
-                        searchParam={{}}
+                        searchParam={searchConditions}
                         cardVariant="horizontal"
                     />
                 </div>
@@ -52,6 +55,6 @@ export default async function ProductListing2LevelDeep({ params }: {
                     <ArticleContent article={article} />
                 </div>
             )}
-        </PageWrapper>
+        </section>
     );
 }
