@@ -90,11 +90,9 @@ export default function CreateArticleModal({
   const slug = form.watch('slug');
 
   const generateSlug = useCallback(() => {
-    console.log({selectedCategory, article})
     if (selectedCategory?.path || article?.level1CategoryId) {
       const categoryPath = selectedCategory?.path || article?.slug;
       
-        console.log({categoryPath })
       if (categoryPath) {
         form.setValue('slug', categoryPath, { shouldValidate: true });
         return;

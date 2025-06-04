@@ -2,9 +2,9 @@ import { getServerSession } from "@/lib/auth-utils";
 import { redirect } from 'next/navigation';
 import { getPostBelongToUser } from "@/lib/queries/postQueries";
 import { getPostImages } from "@/lib/queries/postImagesQueries";
+import AccountPageClient from "./AccountPageClient";
+import type { User } from "@/db/schema";
 import { getCategories } from "@/lib/queries/categoryQueries";
-import AccountPageClient from "./AccountPageClient"; // Import the new client component
-import type { User } from "@/db/schema"; // Import User type for casting if necessary
 
 interface AccountPageProps {
   searchParams?: {
@@ -15,6 +15,7 @@ interface AccountPageProps {
 
 export default async function AccountPage({ searchParams }: AccountPageProps) {
   const userSession = await getServerSession();
+  const categories = await getCategories();
   const conditionsParams = await searchParams;
   if (!userSession?.user) {
     redirect("/auth/sign-in?callbackUrl=/account");
@@ -26,12 +27,10 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
     return <div>User not found after session check.</div>; 
   }
 
-  const [userPosts, postImages, categories] = await Promise.all([
+  const [userPosts, postImages] = await Promise.all([
     getPostBelongToUser(user.id),
     getPostImages(),
-    getCategories()
   ]);
-
   const showPhoneNumberBanner = conditionsParams?.reason === 'phone_required';
   const callbackUrl = conditionsParams?.callbackUrl;
 

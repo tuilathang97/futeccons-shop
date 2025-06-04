@@ -20,6 +20,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", badge = "Hot", thumbnailImg }) => {
     const path = usePathname()
+    console.log(post.phuong,post.quan,post.thanhPho,post.phuongCodeName,post.quanCodeName,post.thanhPhoCodeName)
     const [isLiked, setIsLiked] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [level1Ref, setLevel1Ref] = useState("");

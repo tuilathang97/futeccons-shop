@@ -17,7 +17,6 @@ export default async function ProductListing2LevelDeep({ params,searchParams }: 
     const categories = await getCategories();
     const isValidPath = await validateCategoryPath(`/${categoryLevel1}/${categoryLevel2}`);
     const searchConditions = await searchParams;
-    console.log({searchConditions})
     if (!isValidPath || !categories ) {
         notFound();
     }
