@@ -11,18 +11,24 @@ import { PencilIcon, X } from 'lucide-react'
 import React, { useState } from 'react'
 import { convertImageToBase64, validateImageFile } from '@/lib/utils/imageUtils'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 function UserProfileForm({ user }: { user: User }) {
   const [name, setName] = useState(user.name)
-  const [number, setNumber] = useState(user.number || undefined)
+  const [number, setNumber] = useState(user.number)
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null)
   const {toast} = useToast()
-
+  const router = useRouter()
+  const defaultUserInfo = {
+    name: user?.name,
+    number: user?.number || "",
+    image: user?.image || null,
+  }
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate the image file
       const validation = validateImageFile(file);
       if (!validation.isValid) {
         toast({
@@ -41,8 +47,28 @@ function UserProfileForm({ user }: { user: User }) {
       reader.readAsDataURL(file);
     }
   };
+  if(!name || !number){
+   return <div>No user info</div>
+  }
 
   const handleSubmit = async () => {
+    if(name === defaultUserInfo.name && number === defaultUserInfo.number && image === defaultUserInfo.image){
+      toast({
+        title: "Không thể thay đổi",
+        description: "Không có thay đổi nào",
+        variant: "destructive",
+      })
+      router.refresh()
+      return
+    }
+    if(name.length > 15 || number.length !== 10 || !number.startsWith("0") || name.length < 2){
+      toast({
+        title: "Không thể thay đổi",
+        description: "Tên và số điện thoại không được hợp lệ",
+        variant: "destructive",
+      })
+      return
+    }
     try{
       const res = await updateUser(user.id, { name ,number, image: image ? await convertImageToBase64(image) : ""})
       if(res.success){
@@ -58,6 +84,9 @@ function UserProfileForm({ user }: { user: User }) {
         variant: "destructive",
       })
       return e
+    }
+    finally{
+      router.refresh()
     }
   }
   return (
@@ -124,11 +153,12 @@ function UserProfileForm({ user }: { user: User }) {
             </div>
             {imagePreview && (
               <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200">
-                <Image
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
+                <Avatar className="w-full h-full object-cover"> 
+                  <AvatarImage src={imagePreview} />
+                  <AvatarFallback>
+                    {name?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
               </div>
             )}
           </div>

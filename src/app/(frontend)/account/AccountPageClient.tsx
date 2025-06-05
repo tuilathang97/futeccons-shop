@@ -26,7 +26,6 @@ export default function AccountPageClient({
   callbackUrl,
 }: AccountPageClientProps) {
   const userImage = typeof user.image === 'string' ? user.image : undefined;
-
   return (
     <CategoriesProvider initialCategories={categories}>
       <div className="space-y-6 ">

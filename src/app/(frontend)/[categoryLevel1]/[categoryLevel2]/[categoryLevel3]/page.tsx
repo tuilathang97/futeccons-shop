@@ -48,7 +48,6 @@ export default async function ProductListing3LevelDeep({ params,searchParams }: 
                         data={result || []}
                         postImages={postImages}
                         searchParam={searchConditions}
-                        cardVariant="horizontal"
                     />
                 </div>
                 <div className="mt-4 md:mt-0">

@@ -38,7 +38,6 @@ export default async function ProductListing1LevelDeep({ params,searchParams }: 
                     <ProductsContainer
                         data={result || []}
                         postImages={postImages}
-                        cardVariant="horizontal"
                         searchParam={searchConditions}
                         />
                 </div>
