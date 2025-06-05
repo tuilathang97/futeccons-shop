@@ -10,7 +10,6 @@ import { useToast } from '@/hooks/use-toast'
 import { PencilIcon, X } from 'lucide-react'
 import React, { useState } from 'react'
 import { convertImageToBase64, validateImageFile } from '@/lib/utils/imageUtils'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 

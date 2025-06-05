@@ -4,7 +4,6 @@ import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
 import { Post } from '@/db/schema'
 import { Image } from '@/db/schema'
-import PageWrapper from '../PageWrapper'
 
 interface Container {
     title: string
@@ -14,7 +13,7 @@ interface Container {
     href?:string
 }
 
-function ProductsContainer({ title,posts,postImages,linkTitle }: Container) {
+function ProductsContainer({ title,posts,linkTitle }: Container) {
     return (
         <div className='min-h-[5rem] flex flex-col py-4 gap-4 w-full rounded-md'>
             <div className='flex'>
@@ -31,9 +30,8 @@ function ProductsContainer({ title,posts,postImages,linkTitle }: Container) {
                 w-full'
             >
                 {posts?.map((postData,index) => {
-                    const thumbnailImg = postImages?.find(image => image.postId === postData.id)
                     return (
-                        <ProductCard thumbnailImg={thumbnailImg} post={postData} key={index} />
+                        <ProductCard post={postData} key={index} />
                     )
                 })}
             </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import ProductCard from '../products/ProductCard'
-import { Image, Post } from '@/db/schema'
+import { Post } from '@/db/schema'
 function convertCurrency(valueStr: string) {
     if (valueStr.includes("tr")) {
         return valueStr.replace("tr", "000000");
@@ -22,7 +22,7 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
     return null
 }
 
-function ProductsContainer({ data, searchParam, postImages }: { data: Post[], searchParam: any, postImages:Image[]  }) {
+function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: any  }) {
 
     if (!data || data.length === 0) {
         return <div>Không có bài viết phù hợp với yêu cầu </div>
@@ -66,9 +66,8 @@ function ProductsContainer({ data, searchParam, postImages }: { data: Post[], se
     return (
         <div className={`flex flex-col col-span-4 md:grid md:grid-cols-2 gap-4 min-h-fit`}>
             {filteredResult && filteredResult.length > 0 ? filteredResult.map((data: Post, index: number) => {
-                const thumbnailImg = postImages?.find(image => image.postId === Number(data.id))
                 return (
-                    <ProductCard post={data} key={index} thumbnailImg={thumbnailImg} />
+                    <ProductCard post={data} key={index} />
                 )
             }) : <div>Không có bài viết phù hợp với yêu cầu </div>
             }

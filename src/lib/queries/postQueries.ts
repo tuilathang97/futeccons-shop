@@ -939,3 +939,23 @@ export const getPostImagesByIds = customUnstableCache(
     revalidate: 3600, // 1 hour
   }
 );
+
+export const getPostThumbnailByPostId = async (postId: number) => {
+  try{
+    const images = await db
+      .select()
+      .from(postImagesTable)
+      .where(eq(postImagesTable.postId, postId))
+      .limit(1)
+    return {
+      success: true,
+      image: images[0]
+    };
+  }catch(error){
+    console.error(error)
+    return {
+      success: false,
+      image: null
+    };
+  }
+}

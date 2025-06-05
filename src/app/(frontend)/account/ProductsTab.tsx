@@ -1,9 +1,9 @@
 import ProductCard from "@/components/products/ProductCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Post, Image } from "@/db/schema"
+import { Post } from "@/db/schema"
 
-export default function ProductsTab({ userPosts, postImages }: { userPosts: Post[], postImages: Image[] }) {
+export default function ProductsTab({ userPosts }: { userPosts: Post[] }) {
   const approvedPosts = userPosts.filter((post) => post.active === true);
   const pendingPosts = userPosts.filter((post) => post.active === false);
 
@@ -25,9 +25,8 @@ export default function ProductsTab({ userPosts, postImages }: { userPosts: Post
           <TabsContent value="approved">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
               {approvedPosts.map((post, index) => {
-                const postImage = postImages.find((e) => e.postId === post.id)
                 return (
-                  <ProductCard  post={post} key={index} thumbnailImg={postImage} />
+                  <ProductCard  post={post} key={index} />
                 )
               })}
             </div>
@@ -35,9 +34,8 @@ export default function ProductsTab({ userPosts, postImages }: { userPosts: Post
           <TabsContent value="pending">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {pendingPosts.map((post, index) => {
-                const postImage = postImages.find((e) => e.postId === post.id)
                 return (
-                  <ProductCard post={post} key={index} thumbnailImg={postImage} />
+                  <ProductCard post={post} key={index} />
                 )
               })}
             </div>
