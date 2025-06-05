@@ -1,31 +1,29 @@
 "use client"
 import React, { useState, useEffect, Suspense } from 'react';
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Heart, MapPin } from "lucide-react";
+import { Heart } from "lucide-react";
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
-import { Post } from '@/db/schema';
+import { type Post, type Image as ImageType } from '@/db/schema';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Skeleton } from '../ui/skeleton';
-import { Image as ImageType } from '@/db/schema';
 import { useCategories } from '@/contexts/CategoriesContext';
+
 interface ProductCardProps {
     post: Post;
-    variant?: "horizontal" | "vertical";
     badge?: string;
     thumbnailImg?: ImageType;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", badge = "Hot", thumbnailImg }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ post, badge = "Hot", thumbnailImg }) => {
+    const router = useRouter();
     const path = usePathname()
-    console.log(post.phuong,post.quan,post.thanhPho,post.phuongCodeName,post.quanCodeName,post.thanhPhoCodeName)
     const [isLiked, setIsLiked] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const [level1Ref, setLevel1Ref] = useState("");
-    const router = useRouter();
     const { categories } = useCategories()
+
     useEffect(() => {
         setIsMounted(true);
         try {
@@ -38,11 +36,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
             console.error('Error loading liked posts:', error);
         }
     }, [post.id]);
-    
+
     useEffect(() => {
         const result = categories.find(category => category.id === post.level1Category)
-        if(result)
-        setLevel1Ref(result?.slug || "");
+        if (result)
+            setLevel1Ref(result?.slug || "");
     }, [categories, post.level1Category]);
 
 
@@ -76,122 +74,85 @@ const ProductCard: React.FC<ProductCardProps> = ({ post, variant = "vertical", b
 
     const formatPrice = () => {
         const numPrice = parseFloat(post.giaTien);
+        if (isNaN(numPrice)) return "N/A";
         if (numPrice >= 1000000000) {
             return `${(numPrice / 1000000000).toFixed(1)} tỷ`;
         } else if (numPrice >= 1000000) {
             return `${(numPrice / 1000000).toFixed(0)} triệu`;
         }
-        return numPrice.toString();
+        return numPrice.toLocaleString('vi-VN') + " đ";
     };
 
-    function handleRedirectToPost(postId: number) {
-        router.push(`/post/${postId}`);
-    }
     const formatAddress = () => {
         return (
-            <div className='flex flex-wrap items-center gap-1' onClick={(e) => { e.stopPropagation(); }}>
+            <div className='flex flex-wrap items-center gap-1 text-xs' onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
                 <Link
-                    className='hover:text-red-500'
-                    href={`${path !== "/" && path !== "/account" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
+                    className='hover:text-red-500 hover:underline'
+                    href={`${path !== "/" && path !== "/account" ? path : (level1Ref || '')}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`}
                 >
-                    {post.phuong}
+                    {post.phuong || 'N/A'}
                 </Link>
                 <Link
-                    className='hover:text-red-500'
-                    href={`${path !== "/" && path !== "/account" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
+                    className='hover:text-red-500 hover:underline'
+                    href={`${path !== "/" && path !== "/account" ? path : (level1Ref || '')}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`}
                 >
-                    {post.quan}
+                    {post.quan || 'N/A'}
                 </Link>
                 <Link
-                    className='hover:text-red-500'
-                    href={`${path !== "/" && path !== "/account" ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}`}
+                    className='hover:text-red-500 hover:underline'
+                    href={`${path !== "/" && path !== "/account" ? path : (level1Ref || '')}?thanhPho=${post.thanhPhoCodeName}`}
                 >
-                    {post.thanhPho}
+                    {post.thanhPho || 'N/A'}
                 </Link>
             </div>
         );
     };
 
     return (
-        <Card className={`shadow-xl  ${variant === "vertical" ? "h-full w-full" : "w-full md:max-h-[20rem] "} hover:shadow-lg group overflow-hidden transition-shadow duration-300`}>
-            <button onClick={() => handleRedirectToPost(post.id)} className="block w-full h-full">
-                <div className={cn(
-                    "flex",
-                    variant === "vertical"
-                        ? "flex-col h-full"
-                        : "flex-col md:flex-row md:h-full"
-                )}>
-                    <div className={cn(
-                        "relative overflow-hidden",
-                        variant === "vertical"
-                            ? "h-[200px] w-full rounded-t-md "
-                            : "h-[200px] md:min-h-full rounded-l-md md:w-[200px] flex-shrink-0 p-0 md:p-4"
-                    )}>
-                        {thumbnailImg?.secureUrl &&
-                            <Suspense fallback={<Skeleton className="w-full h-[200px] rounded-full" />}>
-                                <Image
-                                    src={thumbnailImg?.secureUrl}
-                                    fill
-                                    sizes='w-[300px] h-[200px]'
-                                    alt={post.tieuDeBaiViet || "Property image"}
-                                    className={`object-cover ${variant === "vertical" ? "rounded-t-md" : "rounded-l-md"}`}
-                                />
-                            </Suspense>
-                        }
-                        <Badge className={`absolute text-white bg-red-500 border border-gray-500 shadow-md ${variant === "vertical" ? "top-2 left-2" : "md:top-4 md:left-2 "}`}>
-                            {badge}
-                        </Badge>
-                        {isMounted && (
-                            <Heart
-                                strokeWidth={0.5}
-                                className={`absolute top-2 right-2 ${variant === "vertical" ? "" : "sm:top-4 sm:right-2 "} cursor-pointer transition-all duration-300 hover:scale-110
-                                ${isLiked ? 'fill-red-500 stroke-red-500' : 'fill-white stroke-gray-400'}`}
-                                onClick={toggleLike}
+        <Card onClick={() => router.push(`/post/${post.id}`)} className="min-w-full py-4 border-none shadow-none cursor-pointer bg-transparent group flex flex-col overflow-hidden">
+            <div className="flex bg-transparent flex-col h-full">
+                <div className="relative w-full overflow-hidden min-h-[15rem] rounded-lg">
+                    {thumbnailImg?.secureUrl ? (
+                        <Suspense fallback={<Skeleton className="w-full h-full rounded-lg" />}>
+                            <Image
+                                src={thumbnailImg.secureUrl}
+                                alt={post.tieuDeBaiViet || "Property image"}
+                                fill={true}
+                                className="object-cover shadow-md aspect-square"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
-                        )}
+                        </Suspense>
+                    ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-t-lg">
+                            <span className="text-gray-500 text-sm">No Image</span>
+                        </div>
+                    )}
+                    <Badge className="absolute top-2 left-2 text-white bg-red-500 shadow-md z-10 px-2 py-0.5 text-xs font-semibold">
+                        {badge}
+                    </Badge>
+                    {isMounted && (
+                        <Heart
+                            strokeWidth={1.5}
+                            size={22}
+                            className={`absolute top-2 right-2 cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 z-10
+                            ${isLiked ? 'fill-red-500 stroke-red-600' : 'fill-white/80 stroke-gray-500 hover:fill-red-200 hover:stroke-red-400'}`}
+                            onClick={toggleLike}
+                        />
+                    )}
+                </div>
+
+                <div className="flex flex-col flex-grow py-3 gap-1.5">
+                    <div className="flex flex-wrap items-center">
+                        <span className="text-lg font-bold text-red-600 group-hover:text-red-800 transition-all duration-200">{formatPrice()}</span>
                     </div>
-
-                    <div className={cn(
-                        "flex flex-col justify-around flex-grow",
-                        variant === "vertical" ? "p-4" : "p-4"
-                    )}>
-                        <CardTitle className="flex mb-2 text-base font-semibold text-start md:text-lg group-hover:text-red-500 line-clamp-2">
-                            {post.tieuDeBaiViet}
-                        </CardTitle>
-                        <div className="flex flex-wrap items-center gap-4 mb-2">
-                            <span className="text-lg font-bold text-red-600">{formatPrice()}</span>
-                        </div>
-                        <CardDescription className="flex mb-3 text-base text-gray-800 text-start md:text-xs line-clamp-1">
-                            {post.noiDung}
-                        </CardDescription>
-
-                        <div className={`flex flex-wrap items-center gap-2 mb-3 ${variant === "vertical" ? "" : "block md:hidden"}`}>
-                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
-                                {post.dienTichDat} m²
-                            </Badge>
-                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
-                                {post.soPhongNgu} PN
-                            </Badge>
-                            <Badge variant={"outline"} className="text-sm font-medium text-gray-700">
-                                {post.soPhongVeSinh} WC
-                            </Badge>
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-2 mb-1 text-sm text-gray-600">
-                                <Clock className="w-4 h-4" />
-                                <span>{post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "N/A"}</span>
-                            </div>
-                            <div
-                                className="flex items-center gap-2 text-sm text-gray-600"
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <MapPin className="flex-shrink-0 w-4 h-4" />
-                                <span className='text-xs'>{formatAddress()}</span>
-                            </div>
-                        </div>
+                    <CardTitle className="text-md font-semibold text-gray-800 dark:text-gray-200 line-clamp-2 leading-tight hover:text-brand-primary transition-colors duration-200" title={post.tieuDeBaiViet || undefined}>
+                        {post.tieuDeBaiViet || "Không có tiêu đề"}
+                    </CardTitle>
+                    <div>
+                        {formatAddress()}
                     </div>
                 </div>
-            </button>
+            </div>
         </Card>
     );
 };

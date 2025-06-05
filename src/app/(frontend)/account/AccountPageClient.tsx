@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ProductsTab from "./ProductsTab";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
-import PageWrapper from "@/components/PageWrapper";
 import UserProfileForm from "./UserProfileForm";
 import MissingPhoneNumberBanner from "@/components/auth/MissingPhoneNumberBanner"; // Import the banner
 import type { User, Post, Image as DbImage, Category } from "@/db/schema"; // Use DbImage to avoid conflict with Next/Image

@@ -16,26 +16,24 @@ interface Container {
 
 function ProductsContainer({ title,posts,postImages,linkTitle }: Container) {
     return (
-        <PageWrapper className='min-h-[5rem] flex flex-col bg-white gap-4 w-full border border-gray-100 rounded-md p-4'>
+        <div className='min-h-[5rem] flex flex-col py-4 gap-4 w-full rounded-md'>
             <div className='flex'>
                 <h1 className='text-xl font-semibold md:text-2xl'>{title}</h1>
             </div>
             <div className='
-                grid gap-4
+                grid
+                gap-4
                 md:grid-cols-2
                 lg:grid-cols-3
                 xl:grid-cols-4
                 grid-cols-1
-                sm:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]
-                place-items-center
-                justify-items-center
                 items-start
                 w-full'
             >
                 {posts?.map((postData,index) => {
                     const thumbnailImg = postImages?.find(image => image.postId === postData.id)
                     return (
-                        <ProductCard thumbnailImg={thumbnailImg} variant="vertical" post={postData} key={index} />
+                        <ProductCard thumbnailImg={thumbnailImg} post={postData} key={index} />
                     )
                 })}
             </div>
@@ -47,7 +45,7 @@ function ProductsContainer({ title,posts,postImages,linkTitle }: Container) {
                     }
                 </Button>
             </div>
-        </PageWrapper>
+        </div>
     )
 }
 
