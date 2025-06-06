@@ -20,7 +20,6 @@ interface AccountPageClientProps {
 export default function AccountPageClient({
   user,
   userPosts,
-  postImages,
   categories,
   showPhoneNumberBanner,
   callbackUrl,
@@ -64,7 +63,7 @@ export default function AccountPageClient({
             <UserProfileForm user={user} />
           </div>
         </Card>
-        <ProductsTab userPosts={userPosts} postImages={postImages} />
+        <ProductsTab userPosts={userPosts} />
       </div>
     </CategoriesProvider>
   );

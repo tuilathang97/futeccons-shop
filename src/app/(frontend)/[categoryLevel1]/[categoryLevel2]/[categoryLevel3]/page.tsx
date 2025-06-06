@@ -5,7 +5,6 @@ import { notFound } from 'next/navigation'
 import React from 'react'
 import { getPublishedArticleByParams } from '@/actions/articleActions'
 import ArticleContent from '@/components/articles/ArticleContent'
-import { getPostImages } from '@/lib/queries/postImagesQueries'
 import PageWrapper from '@/components/PageWrapper'
 import FilterBar from '@/components/filterComponent/FilterBar'
 import Sidebar from '@/components/location/Sidebar'
@@ -31,7 +30,6 @@ export default async function ProductListing3LevelDeep({ params,searchParams }: 
         level3Slug: categoryLevel3
     });
 
-    const postImages = await getPostImages();
 
     return (
         <section className="flex flex-col 2xl:px-0 w-full gap-4">
@@ -46,7 +44,6 @@ export default async function ProductListing3LevelDeep({ params,searchParams }: 
                 <div className="min-w-full">
                     <ProductsContainer
                         data={result || []}
-                        postImages={postImages}
                         searchParam={searchConditions}
                     />
                 </div>

@@ -4,7 +4,6 @@ import { getCategories, validateCategoryPath } from "@/lib/queries/categoryQueri
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
-import { getPostImages } from "@/lib/queries/postImagesQueries";
 import PageWrapper from "@/components/PageWrapper";
 import FilterBar from "@/components/filterComponent/FilterBar";
 import Sidebar from "@/components/location/Sidebar";
@@ -26,7 +25,6 @@ export default async function ProductListing2LevelDeep({ params,searchParams }: 
     });
 
     const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2);
-    const postImages = await getPostImages();
     return (
         <section className="flex flex-col 2xl:px-0 w-full gap-4">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
@@ -39,7 +37,6 @@ export default async function ProductListing2LevelDeep({ params,searchParams }: 
                 <div className="min-w-full">
                     <ProductsContainer
                         data={data || []}
-                        postImages={postImages}
                         searchParam={searchConditions}
                     />
                 </div>

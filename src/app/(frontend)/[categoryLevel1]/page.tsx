@@ -4,7 +4,6 @@ import { getCategories, validateCategoryPath } from "@/lib/queries/categoryQueri
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
-import { getPostImages } from "@/lib/queries/postImagesQueries";
 import FilterBar from "@/components/filterComponent/FilterBar";
 import Sidebar from "@/components/location/Sidebar";
 
@@ -25,7 +24,6 @@ export default async function ProductListing1LevelDeep({ params,searchParams }: 
     const article = await getPublishedArticleByParams({
         level1Slug: categoryLevel1
     });
-    const postImages = await getPostImages();
     return (
         <section className="flex flex-col gap-4">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
@@ -37,7 +35,6 @@ export default async function ProductListing1LevelDeep({ params,searchParams }: 
                 <div className="min-w-full">
                     <ProductsContainer
                         data={result || []}
-                        postImages={postImages}
                         searchParam={searchConditions}
                         />
                 </div>
