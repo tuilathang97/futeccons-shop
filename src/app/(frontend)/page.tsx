@@ -1,7 +1,7 @@
 import CategoryPicker from "@/components/homepage/CategoryPicker";
 import ProductsContainer from "@/components/products/ProductsContainer";
 import { getCategories } from "@/lib/queries/categoryQueries";
-import { getHomepageData, getPostImagesByIds } from "@/lib/queries/postQueries";
+import { getHomepageData } from "@/lib/queries/postQueries";
 import { Metadata } from "next";
 import { PaginationParams } from '@/lib/queries/paginateQuery';
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
@@ -36,26 +36,17 @@ export default async function Home({ searchParams }: HomePageProps) {
     choThueId: choThueCategory?.id,
     duAnId: duAnCategory?.id,
   });
-
-  const allPosts = [
-    ...homepageData.featuredPosts,
-    ...homepageData.banNhaPosts,
-    ...homepageData.choThuePosts,
-    ...homepageData.duAnPosts,
-  ];
-  const postIds = [...new Set(allPosts.map(post => post.id))];
   
-  const postImages = await getPostImagesByIds(postIds);
 
   return (
     <CategoriesProvider initialCategories={categories}>
       <div className="flex flex-col justify-center items-center gap-4">
         <HomeImage href="/" imgUrl="/categoryImages/saigon.webp" />
         <CategoryPicker />
-        <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts} postImages={postImages} />
-        <ProductsContainer title="Tin bán nhà" posts={homepageData.banNhaPosts} postImages={postImages} />
-        <ProductsContainer title="Tin cho thuê" posts={homepageData.choThuePosts} postImages={postImages} />
-        <ProductsContainer title="Tin dự án" posts={homepageData.duAnPosts} postImages={postImages} />
+        <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
+        <ProductsContainer title="Tin bán nhà" posts={homepageData.banNhaPosts}  />
+        <ProductsContainer title="Tin cho thuê" posts={homepageData.choThuePosts}  />
+        <ProductsContainer title="Tin dự án" posts={homepageData.duAnPosts}  />
       </div>
     </CategoriesProvider>
   );

@@ -29,12 +29,15 @@ export default function ProductCardSection({ post }: { post: Post }) {
   };
 
   const formatAddress = () => {
+    const addressPath = path !== "/" && path !== "/account"
     return (
       <div className='flex flex-wrap items-center gap-1 text-xs' onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
         <button
           className='hover:text-red-500 hover:underline'
           onClick={() => {
-            router.push(`${path !== "/" && path !== "/account" ? path : (level1Ref || '')}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`)
+            console.log(addressPath)
+            console.log(level1Ref)
+            // router.push(`${addressPath ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`)
           }}
         >
           {post.phuong || 'N/A'}
@@ -42,7 +45,7 @@ export default function ProductCardSection({ post }: { post: Post }) {
         <button
           className='hover:text-red-500 hover:underline'
           onClick={() => {
-            router.push(`${path !== "/" && path !== "/account" ? path : (level1Ref || '')}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`)
+            router.push(`${addressPath ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}`)
           }}
         >
           {post.quan || 'N/A'}
@@ -50,7 +53,7 @@ export default function ProductCardSection({ post }: { post: Post }) {
         <button
           className='hover:text-red-500 hover:underline'
           onClick={() => {
-            router.push(`${path !== "/" && path !== "/account" ? path : (level1Ref || '')}?thanhPho=${post.thanhPhoCodeName}`)
+            router.push(`${addressPath ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}`)
           }}
         >
           {post.thanhPho || 'N/A'}

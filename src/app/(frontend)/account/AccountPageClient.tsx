@@ -4,25 +4,31 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ProductsTab from "./ProductsTab";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
+import MissingPhoneNumberBanner from "@/components/auth/MissingPhoneNumberBanner";
+import type { User, Category } from "@/db/schema";
+import React from "react";
 import UserProfileForm from "./UserProfileForm";
-import MissingPhoneNumberBanner from "@/components/auth/MissingPhoneNumberBanner"; // Import the banner
-import type { User, Post, Image as DbImage, Category } from "@/db/schema"; // Use DbImage to avoid conflict with Next/Image
 
 interface AccountPageClientProps {
-  user: User; // Ensure this User type matches what UserProfileForm expects
-  userPosts: Post[];
-  postImages: DbImage[];
+  user: User;
   categories: Category[];
   showPhoneNumberBanner: boolean;
   callbackUrl?: string | null;
+  approvedPostsElements: React.ReactNode;
+  pendingPostsElements: React.ReactNode;
+  approvedCount: number;
+  pendingCount: number;
 }
 
 export default function AccountPageClient({
   user,
-  userPosts,
   categories,
   showPhoneNumberBanner,
   callbackUrl,
+  approvedPostsElements,
+  pendingPostsElements,
+  approvedCount,
+  pendingCount,
 }: AccountPageClientProps) {
   const userImage = typeof user.image === 'string' ? user.image : undefined;
   return (
@@ -63,7 +69,12 @@ export default function AccountPageClient({
             <UserProfileForm user={user} />
           </div>
         </Card>
-        <ProductsTab userPosts={userPosts} />
+        <ProductsTab
+          approvedPostsElements={approvedPostsElements}
+          pendingPostsElements={pendingPostsElements}
+          approvedCount={approvedCount}
+          pendingCount={pendingCount}
+        />
       </div>
     </CategoriesProvider>
   );

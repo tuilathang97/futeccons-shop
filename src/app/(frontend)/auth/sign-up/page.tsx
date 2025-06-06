@@ -7,7 +7,8 @@ import { useRouter } from 'next/navigation';
 import { signUp, signIn } from '@/lib/auth-client';
 import { useToast } from '@/hooks/use-toast';
 import { signUpSchema, type SignUpFormData } from '@/lib/schemas/authSchemas';
-import { createUserWithPhone } from '@/actions/userActions';
+import { createUserWithPhone, updateUserAvatar } from '@/actions/userActions';
+import { validateImageFile } from '@/lib/utils/imageUtils';
 import {
 	Form,
 	FormControl,
@@ -37,9 +38,12 @@ import {
 	ArrowRight, 
 	CheckCircle,
 	AlertCircle,
-	Building2
+	Building2,
+	X,
+	Camera
 } from 'lucide-react';
 import Link from 'next/link';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // Password strength indicator component
 const PasswordStrengthIndicator = ({ password }: { password: string }) => {
@@ -81,6 +85,8 @@ export default function SignUpPage() {
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 	const [isPending, startTransition] = useTransition();
+	const [avatarFile, setAvatarFile] = useState<File | null>(null);
+	const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 	const { toast } = useToast();
 	const router = useRouter();
 
@@ -96,6 +102,34 @@ export default function SignUpPage() {
 	});
 
 	const watchedPassword = form.watch('password');
+	const watchedName = form.watch('name');
+
+	const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			const validation = validateImageFile(file);
+			if (!validation.isValid) {
+				toast({
+					title: "Lỗi",
+					description: validation.error,
+					variant: "destructive",
+				});
+				return;
+			}
+
+			setAvatarFile(file);
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setAvatarPreview(reader.result as string);
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+
+	const clearAvatar = () => {
+		setAvatarFile(null);
+		setAvatarPreview(null);
+	};
 
 	const onSubmit = async (values: SignUpFormData) => {
 		startTransition(async () => {
@@ -129,15 +163,35 @@ export default function SignUpPage() {
 									});
 								}
 
-								toast({
-									title: 'Đăng ký thành công',
-									description: 'Chào mừng bạn đến với hệ thống!',
-								});
-								
+								// Sign in the user first
 								await signIn.email({
 									email: values.email,
 									password: values.password,
 									callbackURL: '/',
+								});
+
+								// Upload avatar if provided
+								if (avatarFile) {
+									try {
+										const formData = new FormData();
+										formData.append('avatar', avatarFile);
+										const avatarResult = await updateUserAvatar(formData);
+										
+										if (!avatarResult.success) {
+											console.warn('Avatar upload failed:', avatarResult.message);
+											toast({
+												title: 'Cảnh báo',
+												description: 'Tài khoản đã được tạo nhưng không thể tải ảnh đại diện. Bạn có thể thêm sau.',
+											});
+										}
+									} catch (avatarError) {
+										console.error('Avatar upload error:', avatarError);
+									}
+								}
+
+								toast({
+									title: 'Đăng ký thành công',
+									description: 'Chào mừng bạn đến với hệ thống!',
 								});
 								
 								router.push('/');
@@ -209,6 +263,50 @@ export default function SignUpPage() {
 					<CardContent>
 						<Form {...form}>
 							<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+								{/* Avatar Upload - Optional */}
+								<FormItem>
+									<FormLabel className="text-brand-darkest font-medium">Ảnh đại diện (tùy chọn)</FormLabel>
+									<FormControl>
+										<div className="flex flex-col items-center gap-3">
+											{avatarPreview ? (
+												<div className="relative">
+													<Avatar className="h-20 w-20">
+														<AvatarImage src={avatarPreview} alt="Avatar preview" />
+														<AvatarFallback>
+															{watchedName?.charAt(0).toUpperCase() || 'U'}
+														</AvatarFallback>
+													</Avatar>
+													<Button
+														type="button"
+														variant="ghost"
+														size="sm"
+														className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-red-100 hover:bg-red-200 p-0"
+														onClick={clearAvatar}
+													>
+														<X className="h-3 w-3 text-red-600" />
+													</Button>
+												</div>
+											) : (
+												<div className="w-20 h-20 rounded-full bg-brand-light/20 flex items-center justify-center">
+													<Camera className="h-8 w-8 text-brand-medium" />
+												</div>
+											)}
+											<div className="w-full">
+												<Input
+													type="file"
+													accept="image/*"
+													onChange={handleAvatarChange}
+													className="border-brand-light/50 focus:border-brand-medium focus:ring-brand-medium"
+													disabled={isPending}
+												/>
+												<p className="text-xs text-brand-dark mt-1">
+													Tối đa 5MB, định dạng: JPEG, PNG, GIF, WebP
+												</p>
+											</div>
+										</div>
+									</FormControl>
+								</FormItem>
+
 								<FormField
 									control={form.control}
 									name="name"

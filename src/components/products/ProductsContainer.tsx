@@ -3,14 +3,11 @@ import { Button } from '../ui/button'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import ProductCard from './ProductCard'
 import { Post } from '@/db/schema'
-import { Image } from '@/db/schema'
 
 interface Container {
     title: string
     posts?:Post[]
-    postImages?:Image[]
     linkTitle?:string
-    href?:string
 }
 
 function ProductsContainer({ title,posts,linkTitle }: Container) {

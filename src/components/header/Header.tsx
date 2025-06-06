@@ -25,7 +25,7 @@ export default function Header() {
                         <div>
                             <div className="hidden md:flex">
                                 {user?.id && session?.id ? (
-                                    <UserDropDown user={user} />
+                                    <UserDropDown />
                                 ) : <UserActionGroup />
                                 }
                             </div>

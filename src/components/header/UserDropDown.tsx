@@ -8,7 +8,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LogOut, User2, MessageCircle, CheckCircle2 } from "lucide-react"
-import { User } from '@/db/schema'
 import Link from 'next/link'
 import { signOut } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
@@ -19,13 +18,13 @@ import { NotificationBadge } from '../ui/notification-badge'
 import { useNotificationCounts } from '@/hooks/useNotificationCounts'
 
 
-function UserDropdown({ user }: { user: User }) {
+function UserDropdown() {
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
-    const { setSession, setUser } = useSession();
-    const { toast } = useToast()
+    const { setSession, setUser, user } = useSession();
+    const { toast } = useToast()   
     
-    const isAdmin = user.role === 'admin';
+    const isAdmin = user?.role === 'admin';
     
     const { counts } = useNotificationCounts({
         enabled: true,

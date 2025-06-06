@@ -250,6 +250,7 @@ export const getPostsByUserId = customUnstableCache(
       path: postsTable.path,
       giaTien: postsTable.giaTien,
       thanhPho: postsTable.thanhPho,
+      level1Category: postsTable.level1Category,
       quan: postsTable.quan,
       phuong: postsTable.phuong,
       thanhPhoCodeName: postsTable.thanhPhoCodeName,

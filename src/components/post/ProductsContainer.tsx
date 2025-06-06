@@ -23,7 +23,7 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
 }
 
 function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: any  }) {
-
+    console.log({data})   
     if (!data || data.length === 0) {
         return <div>Không có bài viết phù hợp với yêu cầu </div>
     }
