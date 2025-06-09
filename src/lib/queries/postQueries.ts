@@ -823,10 +823,8 @@ export const getHomepageData = customUnstableCache(
     };
   }> => {
     console.log(`Executing DB query for getHomepageData: ${JSON.stringify(params)}, ${JSON.stringify(categoryIds)}`);
-    
     const pageSize = params.pageSize || 10;
     const activeCondition = eq(postsTable.active, true);
-
     const baseSelectFields = {
       id: postsTable.id,
       tieuDeBaiViet: postsTable.tieuDeBaiViet,
@@ -851,7 +849,6 @@ export const getHomepageData = customUnstableCache(
         name: usersTable.name,
       },
     };
-
     const [
       featuredPosts,
       banNhaPosts,
@@ -870,7 +867,7 @@ export const getHomepageData = customUnstableCache(
         db.select(baseSelectFields)
           .from(postsTable)
           .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
-          .where(and(activeCondition, eq(postsTable.level1Category, categoryIds.banNhaId)))
+          .where(and(activeCondition,eq(postsTable.level1Category, categoryIds.banNhaId)))
           .orderBy(desc(postsTable.createdAt))
           .limit(pageSize)
         : Promise.resolve([]),
@@ -897,10 +894,8 @@ export const getHomepageData = customUnstableCache(
         .from(postsTable)
         .where(activeCondition)
     ]);
-      
     const totalItems = totalItemsResult[0]?.count || 0;
     const totalPages = Math.ceil(totalItems / pageSize);
-
     return {
       featuredPosts: featuredPosts as PostWithUser[],
       banNhaPosts: banNhaPosts as PostWithUser[],
