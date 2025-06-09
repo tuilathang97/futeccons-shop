@@ -58,6 +58,16 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
       return
   }, [state?.message])
   const handleSubmit = form.handleSubmit(async () => {
+    setTimeout(() => {
+      setIsLoading(false)
+      form.reset()
+      clearPreviews()
+      router.refresh()
+      toast({
+        description: "Đăng tin thất bại vì thời gian hết hạn",
+        variant: "destructive",
+      })
+    }, 10000);
     setIsLoading(true);
     const formElement = formRef?.current;
     if (formElement) {

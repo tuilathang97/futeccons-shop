@@ -68,7 +68,7 @@ function UserProfileForm({ user }: { user: User }) {
     if (name.length > 15 || number.length !== 10 || !number.startsWith("0") || name.length < 2) {
       toast({
         title: "Không thể thay đổi",
-        description: "Tên và số điện thoại không được hợp lệ",
+        description: "Tên và số điện thoại không hợp lệ",
         variant: "destructive",
       })
       return
