@@ -35,9 +35,7 @@ export default function ProductCardSection({ post }: { post: Post }) {
         <button
           className='hover:text-red-500 hover:underline'
           onClick={() => {
-            console.log(addressPath)
-            console.log(level1Ref)
-            // router.push(`${addressPath ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`)
+            router.push(`${addressPath ? path : level1Ref}?thanhPho=${post.thanhPhoCodeName}&quan=${post.quanCodeName}&phuong=${post.phuongCodeName}`)
           }}
         >
           {post.phuong || 'N/A'}
@@ -64,7 +62,7 @@ export default function ProductCardSection({ post }: { post: Post }) {
 
 
   return (
-    <div className="flex flex-col flex-grow py-3 gap-1.5">
+    <div className="flex flex-col flex-grow pt-[4px] pr-[20px] gap-1.5">
       <div className="flex flex-wrap items-center">
         <span className="text-lg font-bold text-red-600 group-hover:text-red-800 transition-all duration-200">{formatPrice()}</span>
       </div>

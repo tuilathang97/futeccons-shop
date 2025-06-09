@@ -20,14 +20,14 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
     return (
         <Link href={`/post/${post.id}`} className="min-w-full py-4 border-none shadow-none cursor-pointer bg-transparent group flex flex-col overflow-hidden">
             <div className="flex bg-transparent flex-col h-full">
-                <div className="relative w-full overflow-hidden min-h-[15rem] rounded-2xl">
+                <div className="relative aspect-square w-full overflow-hidden min-h-[15rem] rounded-2xl">
                     {thumbnailImg?.secureUrl ? (
                         <Suspense fallback={<Skeleton className="w-full h-full rounded-2xl" />}>
                             <Image
                                 src={thumbnailImg.secureUrl}
                                 alt={post.tieuDeBaiViet || "Property image"}
                                 fill={true}
-                                className="object-cover shadow-md aspect-square "
+                                className="object-cover shadow-md "
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             />
                         </Suspense>
