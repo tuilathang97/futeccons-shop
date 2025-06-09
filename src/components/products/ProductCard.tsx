@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
     const {image} = await getPostThumbnailByPostId(post.id)
     const thumbnailImg = image as ImageType
     return (
-        <Link href={`/post/${post.id}`} className="min-w-full py-4 border-none shadow-none cursor-pointer bg-transparent group flex flex-col overflow-hidden">
+        <Link href={`/post/${post.id}`} className="min-w-full border-none shadow-none cursor-pointer bg-transparent group flex flex-col overflow-hidden">
             <div className="flex bg-transparent flex-col h-full">
                 <div className="relative aspect-square w-full overflow-hidden min-h-[15rem] rounded-2xl">
                     {thumbnailImg?.secureUrl ? (

@@ -39,7 +39,7 @@ export default function PostCarousel({ images }: { images: ImageType[] }) {
                 <CarouselContent >
                     {images.map((image, index) => (
                         <CarouselItem className="flex items-center justify-center" key={index}>
-                          <Image src={image.secureUrl} alt={image.type || `Image ${index + 1}`} className='min-w-full h-auto max-h-[31.25rem] aspect-4/3 rounded-md ' width={500} height={1000} />
+                          <Image src={image.secureUrl} alt={image.type || `Image ${index + 1}`} className='min-w-full h-auto  aspect-1 object-cover rounded-md ' width={500} height={1000} />
                         </CarouselItem>
                     ))}
                 </CarouselContent>

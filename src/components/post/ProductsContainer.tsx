@@ -22,8 +22,7 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
     return null
 }
 
-function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: any  }) {
-    console.log({data})   
+function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: any  }) {  
     if (!data || data.length === 0) {
         return <div>Không có bài viết phù hợp với yêu cầu </div>
     }
@@ -64,7 +63,7 @@ function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: a
     });
 
     return (
-        <div className={`flex flex-col col-span-4 md:grid md:grid-cols-2 gap-4 min-h-fit`}>
+        <div className={`flex flex-col col-span-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-fit`}>
             {filteredResult && filteredResult.length > 0 ? filteredResult.map((data: Post, index: number) => {
                 return (
                     <ProductCard post={data} key={index} />

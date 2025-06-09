@@ -31,7 +31,7 @@ export default function ProductCardSection({ post }: { post: Post }) {
   const formatAddress = () => {
     const addressPath = path !== "/" && path !== "/account"
     return (
-      <div className='flex flex-wrap items-center gap-1 text-xs' onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+      <div className='flex leading-[14px] flex-wrap items-center gap-1 text-[14px] opacity-80 hover:opacity-100 transition-opacity duration-200 ' onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}>
         <button
           className='hover:text-red-500 hover:underline'
           onClick={() => {
@@ -62,13 +62,18 @@ export default function ProductCardSection({ post }: { post: Post }) {
 
 
   return (
-    <div className="flex flex-col flex-grow pt-[4px] pr-[20px] gap-1.5">
+    <div className="flex flex-col flex-grow pt-[4px] pr-[20px] gap-[6px] ">
       <div className="flex flex-wrap items-center">
         <span className="text-lg font-bold text-red-600 group-hover:text-red-800 transition-all duration-200">{formatPrice()}</span>
       </div>
-      <CardTitle className="text-md font-semibold text-gray-800 dark:text-gray-200 line-clamp-2 leading-tight hover:text-brand-primary transition-colors duration-200" title={post.tieuDeBaiViet || undefined}>
-        {post.tieuDeBaiViet || "Không có tiêu đề"}
-      </CardTitle>
+      <div className='flex flex-col'>
+        <CardTitle className="text-md font-semibold dark:text-gray-200 line-clamp-2 hover:text-brand-primary transition-colors duration-200" title={post.tieuDeBaiViet || undefined}>
+          {post.tieuDeBaiViet || "Không có tiêu đề"}
+        </CardTitle>
+        <div className='text-sm line-clamp-1 text-gray-500 mb-2'>
+        {post.noiDung || "Không có nội dung "}
+        </div>
+      </div>
       <div>
         {formatAddress()}
       </div>

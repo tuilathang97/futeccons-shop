@@ -93,7 +93,7 @@ export default function CitySidebar({ className }: CitySidebarProps) {
                 <Button
                   variant="outline"
                   onClick={() => handleSelectAddress(province.codename)}
-                  className={`flex min-w-full items-center gap-2 font-medium hover:text-primary transition-colors
+                  className={`flex min-w-full text-base sm:text-sm items-center gap-2 font-medium hover:text-primary transition-colors
                     }`}
                 >
                   <Building2 className="h-4 w-4" />

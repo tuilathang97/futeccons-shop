@@ -12,6 +12,7 @@ import { useImageUpload } from "@/contexts/ImageUploadContext";
 import { toast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { createPost } from "@/actions/postActions";
+import { useRouter } from "next/navigation";
 
 
 export function ProductPostForm({ children }: { children: React.ReactNode }) {
@@ -19,7 +20,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { previews, previewsFiles, clearPreviews } = useImageUpload();
-
+  const router = useRouter();
   const form = useForm<Post>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
@@ -52,6 +53,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
       } else {
         setIsLoading(false);
+        router.refresh()
       }
       return
   }, [state?.message])
@@ -71,6 +73,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
 
       startTransition(() => {
         formAction(formData);
+        setIsLoading(false)
       });
     }
   });
