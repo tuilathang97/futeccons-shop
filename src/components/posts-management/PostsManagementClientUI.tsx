@@ -9,7 +9,6 @@ import { handleActionResult } from '@/lib/utils/handle-action-result';
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -24,7 +23,7 @@ export default function PostsManagementClientUI({ paginatedPostsData }: PostsMan
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { currentPage, totalPages, pageSize } = paginatedPostsData.metadata;
+  const { currentPage, totalPages } = paginatedPostsData.metadata;
 
   useEffect(() => {
     setPosts(paginatedPostsData.data);

@@ -8,10 +8,10 @@ import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import HomeImage from "@/components/homepage/HomeImage";
 
 interface HomePageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     pageSize?: string;
-  };
+  }>;
 }
 
 const DEFAULT_PAGE_SIZE = 10; 

@@ -12,9 +12,10 @@ import { useState } from "react";
 const UserSection = ({user}: {user: User}) => {
   const [isHiddenPhoneNumber, setIsHiddenPhoneNumber] = useState(true)
   const {toast} = useToast()
+
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(user.number);
+      await navigator.clipboard.writeText(user.number || "");
       return {success: true, message: "Đã copy số điện thoại"}
     } catch (err) {
       return {success: false, message: "Không thể copy số điện thoại" + err}

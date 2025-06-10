@@ -146,7 +146,6 @@ function preparePostData(formDataEntries: Record<string, string>, userId: string
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createPost(prevState: any, formData: FormData): Promise<ActionResult> {
   const session = await auth.api.getSession({
     headers: await headers()

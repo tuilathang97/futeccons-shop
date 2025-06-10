@@ -9,10 +9,10 @@ import ProductCard from "@/components/products/ProductCard"; // Import ProductCa
 import React from "react"; // Import React for JSX
 
 interface AccountPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     reason?: string;
     callbackUrl?: string;
-  };
+  }>;
 }
 
 export default async function AccountPage({ searchParams }: AccountPageProps) {

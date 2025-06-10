@@ -36,7 +36,7 @@ function FilterEstateKind({
     async function getCategoryBySelectedId(value: string) {
         const afterChangeSelected = await getCategoryById(Number(value))
 
-        if (afterChangeSelected.slug) {
+        if (afterChangeSelected?.slug) {
             const currentParams = new URLSearchParams(searchParams.toString());
 
             const newUrl = currentParams.toString()

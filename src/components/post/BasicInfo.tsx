@@ -289,7 +289,7 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
         <FormField
           control={form.control}
           name="duong"
-          render={({ field: { value, onChange, ...fieldProps } }) => (
+          render={({ field: { onChange, ...fieldProps } }) => (
             <FormItem className="w-full md:w-[200px]">
               <FormLabel className="w-full md:w-[200px]">Đường <span className="text-red-500">*</span></FormLabel>
 

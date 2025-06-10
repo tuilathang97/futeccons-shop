@@ -11,8 +11,8 @@ export type { PaginationParams, PaginatedResult };
 
 export type MessageWithDetails = typeof messagesTable.$inferSelect & {
   post?: Pick<typeof postsTable.$inferSelect, 'id' | 'tieuDeBaiViet' | 'path'>;
-  sender?: Pick<typeof user.$inferSelect, 'id' | 'name'>;
-  recipient?: Pick<typeof user.$inferSelect, 'id' | 'name'>;
+  sender?: Pick<typeof user.$inferSelect, 'id' | 'name' | 'image'>;
+  recipient?: Pick<typeof user.$inferSelect, 'id' | 'name' | 'image'>;
   parentMessage?: typeof messagesTable.$inferSelect;
   replies?: (typeof messagesTable.$inferSelect)[];
 };
@@ -137,6 +137,7 @@ export const getSentMessagesPaginated = customUnstableCache(
       recipient: row.recipientName ? {
         id: row.recipientId,
         name: row.recipientName,
+        image: row.recipientImage,
       } : undefined,
     }));
 
@@ -230,6 +231,7 @@ export const getReceivedMessagesPaginated = customUnstableCache(
       sender: row.senderName ? {
         id: row.senderId,
         name: row.senderName,
+        image: row.senderImage,
       } : undefined,
     }));
 
@@ -316,6 +318,7 @@ export const getMessageWithReplies = customUnstableCache(
           repliedAt: messagesTable.repliedAt,
           // Reply sender fields
           senderName: alias(user, 'replySender').name,
+          senderImage: alias(user, 'replySender').image,
         })
         .from(messagesTable)
         .where(eq(messagesTable.parentMessageId, messageId))
@@ -345,6 +348,7 @@ export const getMessageWithReplies = customUnstableCache(
       sender: reply.senderName ? {
         id: reply.senderId,
         name: reply.senderName,
+        image: reply.senderImage,
       } : undefined,
     }));
 

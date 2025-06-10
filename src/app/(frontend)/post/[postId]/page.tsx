@@ -11,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import RevealPhoneNumberButton from '@/components/post/RevealPhoneNumberButton'
 
-export default async function Page({ params }: { params: { postId: string[] } }) {
+export default async function Page({ params }: { params: Promise<{ postId: string[] }> }) {
     if (!params) return <div>Không tìm thấy bài viết</div>
     const { postId } = await params
     const numericPostId = Number(Array.isArray(postId) ? postId[0] : postId);

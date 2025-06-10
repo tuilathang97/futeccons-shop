@@ -5,12 +5,12 @@ import { getSentMessages, getReceivedMessages, type PaginationParams } from '@/a
 import MessagesClientUI from '@/components/messages/MessagesClientUI';
 
 interface MessagesPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     pageSize?: string;
     tab?: 'sent' | 'received';
     // Potentially other filters later
-  };
+  }>;
 }
 
 const DEFAULT_PAGE_SIZE = 10;

@@ -50,7 +50,7 @@ const FaqItem = React.forwardRef<
   }
 >((props, ref) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const { question, children, index, className, isFinish } = props;
+  const { question, children, className, isFinish } = props;
 
   return (
     <div

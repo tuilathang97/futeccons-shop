@@ -1,7 +1,6 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Image as ImageType, Post } from '@/db/schema';
-import { Skeleton } from '../ui/skeleton';
 import ProductCardSection from './ProductCardSection';
 import ProductLoveIcon from './ProductLoveIcon';
 import Link from 'next/link';
@@ -22,15 +21,14 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
             <div className="flex bg-transparent flex-col h-full">
                 <div className="relative aspect-square w-full overflow-hidden min-h-[15rem] rounded-2xl">
                     {thumbnailImg?.secureUrl ? (
-                        <Suspense fallback={<Skeleton className="w-full h-full rounded-2xl" />}>
-                            <Image
-                                src={thumbnailImg.secureUrl}
-                                alt={post.tieuDeBaiViet || "Property image"}
-                                fill={true}
-                                className="object-cover shadow-md "
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            />
-                        </Suspense>
+                        <Image
+                            src={thumbnailImg.secureUrl}
+                            alt={post.tieuDeBaiViet || "Property image"}
+                            fill={true}
+                            priority={true}
+                            className="object-cover shadow-md "
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
                     ) : (
                         <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-t-lg">
                             <span className="text-gray-500 text-sm">No Image</span>

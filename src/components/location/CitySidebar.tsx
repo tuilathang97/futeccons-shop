@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Building2, MapPin } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -24,39 +24,24 @@ interface Province {
 }
 
 interface CitySidebarProps {
+  provinces: Province[];
   className?: string;
 }
 
-export default function CitySidebar({ className }: CitySidebarProps) {
-  const [provinces, setProvinces] = useState<Province[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function CitySidebar({ provinces, className }: CitySidebarProps) {
   const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
   const { handleSelectAddress } = useSelectAddress()
+  if (!provinces || provinces.length === 0) {
+    return null;
+  }
+  const majorCities = provinces.filter((province: Province) =>
+    ['thanh_pho_ha_noi', 'thanh_pho_ho_chi_minh', 'thanh_pho_da_nang',
+      'thanh_pho_hai_phong', 'thanh_pho_can_tho'].includes(province.codename)
+  );
+  
+  
 
-
-  useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const response = await fetch('/api/provinces', { cache: 'force-cache' });
-        const data = await response.json();
-
-        const majorCities = data.filter((province: Province) =>
-          ['thanh_pho_ha_noi', 'thanh_pho_ho_chi_minh', 'thanh_pho_da_nang',
-            'thanh_pho_hai_phong', 'thanh_pho_can_tho'].includes(province.codename)
-        );
-
-        setProvinces(majorCities);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching provinces:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchProvinces();
-  }, []);
-
-  if (loading) {
+  if (majorCities.length === 0) {
     return (
       <div className={className}>
         <Card className="w-full">
@@ -89,16 +74,15 @@ export default function CitySidebar({ className }: CitySidebarProps) {
         <CardContent className="p-4">
           <div className="space-y-6">
             {provinces.map((province,index) => (
-              <div key={province.codename} className="space-y-2">
-                <Button
-                  variant="outline"
+              <div key={province.codename} className="space-y-2 flex flex-col justify-center">
+                <span
                   onClick={() => handleSelectAddress(province.codename)}
-                  className={`flex min-w-full text-base sm:text-sm items-center gap-2 font-medium hover:text-primary transition-colors
+                  className={`flex cursor-pointer hover:underline min-w-full text-base sm:text-sm items-center gap-2 font-medium hover:text-primary transition-colors
                     }`}
                 >
                   <Building2 className="h-4 w-4" />
                   {province.name}
-                </Button>
+                </span>
 
                 {
                   <div>
@@ -106,25 +90,25 @@ export default function CitySidebar({ className }: CitySidebarProps) {
                       {province.districts
                         .filter(district => district.division_type === 'huyện' || district.division_type === 'quận')
                         .slice(0, selectedProvince === index ? province.districts.length : 6)
+                        .sort((a, b) => b.name.length - a.name.length)
                         .map((district) => (
-                          <Button
-                            variant="secondary"
+                          <span
                             key={district.codename}
                             onClick={() => handleSelectAddress(province.codename, district.codename)}
-                            className={`text-sm text-left hover:text-primary transition-colors 
+                            className={`text-sm flex hover:underline cursor-pointer text-left hover:text-primary transition-colors 
                               }`}
                           >
                             {district.name}
-                          </Button>
+                          </span>
                         ))}
                     </div>
                     {province.districts.length > 8 && (
                       <Button
                         onClick={() => setSelectedProvince(selectedProvince === index ? null : index)}
-                        variant="secondary"
-                        className="text-sm mt-4 min-w-full  font-medium"
+
+                        className="text-sm bg-brand-medium mt-4 min-w-full  font-medium"
                       >
-                        Xem thêm...
+                        {selectedProvince === index ? "Thu gọn" : "Xem thêm..."}
                       </Button>
                     )}
                     <Separator className="my-4 w-[100%] h-[1px] bg-gray-200" />

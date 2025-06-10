@@ -44,7 +44,7 @@ async function processImage(buffer: Buffer, outputPath: string, options: {
     .toFile(outputPath);
 }
 
-export async function uploadImages(prevState, formData: FormData) {
+export async function uploadImages(prevState: any, formData: FormData) {
   const files = formData.getAll('images') as File[];
   const uploadHash = uuidv4();
   const baseDir = join(process.cwd(), 'public/uploads');

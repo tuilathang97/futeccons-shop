@@ -1,31 +1,35 @@
+"use server"
 import { getInactivePosts, InactivePostWithUserAndImages } from "@/lib/queries/postQueries";
 import { PaginationParams, PaginatedResult } from "@/lib/queries/paginateQuery";
 import PostsManagementClientUI from "@/components/admin/posts-management/PostsManagementClientUI";
 import { Suspense } from "react";
 
-export const metadata = {
-  title: 'Quản lý bài đăng - Admin',
-  description: 'Duyệt hoặc xóa bài đăng của người dùng',
-};
+// const metadata = {
+//   title: 'Quản lý bài đăng - Admin',
+//   description: 'Duyệt hoặc xóa bài đăng của người dùng',
+// };
 
-interface PostsManagementPageProps {
-  searchParams: {
+type PostsManagementPageProps = {
+  params?: Promise<{
+    postId: string | any 
+  }>;
+  searchParams: Promise<{
     page?: string;
     pageSize?: string;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
-  };
+  }>
 }
+
 
 const DEFAULT_PAGE_SIZE = 10; // Consistent with getInactivePosts
 
-export default async function PostsManagementPage({ searchParams }: PostsManagementPageProps) {
+export default async function PostsManagementPage({ params, searchParams }: PostsManagementPageProps) {
   const { page: pageString, pageSize: pageSizeString, sortBy: sortByString, sortOrder: sortOrderString } = await searchParams;
   const page = pageString ? parseInt(pageString, 10) : 1;
   const pageSize = pageSizeString ? parseInt(pageSizeString, 10) : DEFAULT_PAGE_SIZE;
   const sortBy = sortByString;
   const sortOrder = sortOrderString;
-
   const paginationParams: PaginationParams = {
     page: isNaN(page) ? 1 : page,
     pageSize: isNaN(pageSize) ? DEFAULT_PAGE_SIZE : pageSize,

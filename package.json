@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "next lint",
     "scan": "next dev & npx react-scan@latest localhost:3000",
-    "db-seed": "tsx ./src/db/drizzle/seed.ts",
     "db-generate": "pnpm drizzle-kit generate",
     "db-migrate": "pnpm drizzle-kit migrate",
     "db-update": "pnpm drizzle-kit push",

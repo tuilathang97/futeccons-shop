@@ -16,10 +16,10 @@ import { useRouter } from "next/navigation";
 
 
 export function ProductPostForm({ children }: { children: React.ReactNode }) {
-  const [state, formAction] = useActionState(createPost, { success: false, message: "", data: null});
+  const [state, formAction] = useActionState(createPost, { success: false, message: "", postId: undefined});
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { previews, previewsFiles, clearPreviews } = useImageUpload();
+  const { previewsFiles, clearPreviews } = useImageUpload();
   const router = useRouter();
   const form = useForm<Post>({
     resolver: zodResolver(PostSchema),
@@ -56,7 +56,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
         router.refresh()
       }
       return
-  }, [state?.message])
+  }, [state?.message,clearPreviews,form,router,state?.success])
   const handleSubmit = form.handleSubmit(async () => {
     setTimeout(() => {
       setIsLoading(false)

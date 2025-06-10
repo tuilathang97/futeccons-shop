@@ -27,7 +27,6 @@ export default function PostDetailClientActions({ postId, postTitle }: PostDetai
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const userNumber = (session.user as any)?.number;
 
     if (!userNumber) {
@@ -45,7 +44,7 @@ export default function PostDetailClientActions({ postId, postTitle }: PostDetai
   };
 
   return (
-    <div className='flex gap-2 flex-wrap sm:flex-nowrap'>
+    <div className='grid grid-cols-2 gap-2 w-full '>
       <Button className='w-full h-12' onClick={() => console.log('Save post')}> <Heart size={16} /> Lưu tin</Button>
       <Button className='w-full h-12' onClick={handleSendMessage}> <MessageSquare size={16} /> Nhắn tin người bán </Button> 
       <Button className='w-full h-12' onClick={() => console.log('Share post')}> <Share2 size={16} /> Chia sẻ </Button>

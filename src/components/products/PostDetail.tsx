@@ -7,7 +7,6 @@ import LocationMapServer from './LocationMapServer'
 import { getPublishedArticleByParams } from '@/actions/articleActions'
 import ArticleContent from '../articles/ArticleContent'
 import PostCarousel from '../carousel/PostCarousel'
-import PageWrapper from '../PageWrapper'
 import PostDetailClientActions from './PostDetailClientActions'
 
 interface PostDetailProps {
@@ -56,10 +55,10 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
     const parsedLongitude = typeof post.longitude === 'string' ? parseFloat(post.longitude) : post.longitude;
 
     return (
-        <PageWrapper>
+        <div>
             <div className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-3'>
-                    <div className='bg-gray-200/50 border flex justify-center items-center min-h-[500px] border-gray-200 rounded-md rounded-md p-0 max-h-[1000px] overflow-hidden min-w-full'>
+                    <div className='bg-gray-200/50 border flex justify-center items-center border-gray-200 rounded-md rounded-md p-0 max-h-[1000px] overflow-hidden min-w-full'>
                         <PostCarousel images={images}/>
                     </div>
                     <PostSectionWrapper>
@@ -102,7 +101,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                             />
                         </div>
                     </PostSectionWrapper>
-                    <PostSectionWrapper className='flex flex-col gap-2'>
+                    <PostSectionWrapper className='flex flex-col  gap-2'>
                         <h2 className='font-semibold text-lg'>Chức năng khác </h2>
                         <PostDetailClientActions postId={post.id as number} postTitle={post.tieuDeBaiViet} />
                     </PostSectionWrapper>
@@ -113,7 +112,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                     <ArticleContent article={article} />
                 </div>
             )}
-        </PageWrapper>
+        </div>
     )
 }
 

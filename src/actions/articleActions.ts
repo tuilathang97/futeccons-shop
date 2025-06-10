@@ -129,6 +129,9 @@ export async function createArticleAction(formData: FormData): Promise<ActionRes
     const articleData = {
       ...validationResult.data,
       authorId: session.user?.id,
+      level1CategoryId: Number(validationResult.data.level1CategoryId),
+      level2CategoryId: Number(validationResult.data.level2CategoryId) || null,
+      level3CategoryId: Number(validationResult.data.level3CategoryId) || null,
     };
 
 
@@ -234,7 +237,12 @@ export async function updateArticleAction(formData: FormData): Promise<ActionRes
       };
     }
 
-    await updateArticleInDb(parseInt(id, 10), validationResult.data);
+    await updateArticleInDb(parseInt(id, 10), {
+      ...validationResult.data,
+      level1CategoryId: Number(validationResult.data.level1CategoryId),
+      level2CategoryId: Number(validationResult.data.level2CategoryId) || null,
+      level3CategoryId: Number(validationResult.data.level3CategoryId) || null,
+    });
 
     // Revalidate both path-based and tag-based caches
     revalidateArticleCaches(

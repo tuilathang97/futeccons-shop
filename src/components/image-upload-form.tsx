@@ -51,7 +51,7 @@ export function UploadForm() {
     addPreviews(urls);
     addFiles(filesToProcess);
     e.target.value = "";
-  }, [addPreviews, addFiles, previewsFiles, previews.length]);
+  }, [addPreviews, addFiles, previewsFiles]);
 
   return (
     <FaqItem index={0} question='Đăng tải hình ảnh' isFinish={previews.length > 0} className="space-y-4">

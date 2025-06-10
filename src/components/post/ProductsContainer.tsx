@@ -22,13 +22,13 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
     return null
 }
 
-function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: any  }) {  
+function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {gia?: string, area?: string, bedrooms?: string}  }) {  
     if (!data || data.length === 0) {
         return <div>Không có bài viết phù hợp với yêu cầu </div>
     }
 
     const { gia, area, bedrooms } = searchParam
-    const formatedPrice = handleFormatPriceToNumber({ gia })
+    const formatedPrice = handleFormatPriceToNumber({ gia: gia || "" })
 
     const filteredResult = data?.filter((post: Post) => {
         let areaCondition = true;

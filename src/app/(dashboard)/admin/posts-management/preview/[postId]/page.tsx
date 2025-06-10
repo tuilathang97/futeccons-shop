@@ -4,9 +4,9 @@ import { Metadata } from 'next';
 import PostDetail from "@/components/products/PostDetail";
 
 interface PostPreviewPageProps {
-  params: {
-    postId?: string;
-  };
+  params: Promise<{
+    postId: string
+  }>;
 }
 
 export async function generateMetadata({ params }: PostPreviewPageProps): Promise<Metadata> {

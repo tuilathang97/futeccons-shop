@@ -204,3 +204,5 @@ export async function getMessageById(messageId: number, userId: string): Promise
 }
 
 export type { MessageWithDetails, PaginatedResult };
+
+export type { PaginationParams };

@@ -1,5 +1,5 @@
 'use client';
-
+  // @typescript-eslint/no-explicit-any
 import { useState, useEffect, useCallback } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -64,22 +64,22 @@ export default function CreateArticleModal({
       title: article?.title || '',
       slug: article?.slug || '',
       content: article?.content || '',
-      level1CategoryId: article?.level1CategoryId ? String(article.level1CategoryId) : 
-                        (selectedCategory?.level === 1 ? String(selectedCategory.id) : 
+      level1CategoryId: article?.level1CategoryId ? Number(article.level1CategoryId) : 
+                        (selectedCategory?.level === 1 ? Number(selectedCategory.id) : 
                          selectedCategory && selectedCategory.level > 1 && selectedCategory.parentId ? 
-                         String(getParentCategoryId(selectedCategory, categories, 1) || '') : ''),
-      level2CategoryId: article?.level2CategoryId ? String(article.level2CategoryId) : 
-                        (selectedCategory?.level === 2 ? String(selectedCategory.id) : 
+                         Number(getParentCategoryId(selectedCategory, categories, 1) || 0) : 0),
+      level2CategoryId: article?.level2CategoryId ? Number(article.level2CategoryId) : 
+                        (selectedCategory?.level === 2 ? Number(selectedCategory.id) : 
                          selectedCategory && selectedCategory.level > 2 && selectedCategory.parentId ? 
-                         String(getParentCategoryId(selectedCategory, categories, 2) || '') : ''),
-      level3CategoryId: article?.level3CategoryId ? String(article.level3CategoryId) : 
-                        (selectedCategory?.level === 3 ? String(selectedCategory.id) : ''),
+                         Number(getParentCategoryId(selectedCategory, categories, 2) || 0) : 0),
+      level3CategoryId: article?.level3CategoryId ? Number(article.level3CategoryId) : 
+                        (selectedCategory?.level === 3 ? Number(selectedCategory.id) : 0),
       targetState: article?.targetState || '',
       targetCity: article?.targetCity || '',
       metaDescription: article?.metaDescription || '',
       metaKeywords: article?.metaKeywords || '',
       status: (article?.status as 'draft' | 'published' | 'archived') || 'draft',
-      publishedAt: article?.publishedAt ? article.publishedAt.toISOString() : null,
+      publishedAt: article?.publishedAt ? new Date(article.publishedAt) : null,
     }
   });
 
@@ -98,7 +98,7 @@ export default function CreateArticleModal({
         return;
       }
     }
-  }, [form, title, selectedCategory, article, categories]);
+  }, [form, selectedCategory, article]);
 
   useEffect(() => {
     if (open) {
@@ -106,22 +106,22 @@ export default function CreateArticleModal({
         title: article?.title || '',
         slug: article?.slug || '',
         content: article?.content || '',
-        level1CategoryId: article?.level1CategoryId ? String(article.level1CategoryId) : 
-                        (selectedCategory?.level === 1 ? String(selectedCategory.id) : 
+        level1CategoryId: article?.level1CategoryId ? Number(article.level1CategoryId) : 
+                        (selectedCategory?.level === 1 ? Number(selectedCategory.id) : 
                          selectedCategory && selectedCategory.level > 1 && selectedCategory.parentId ? 
-                         String(getParentCategoryId(selectedCategory, categories, 1) || '') : ''),
-        level2CategoryId: article?.level2CategoryId ? String(article.level2CategoryId) : 
-                        (selectedCategory?.level === 2 ? String(selectedCategory.id) : 
+                         Number(getParentCategoryId(selectedCategory, categories, 1) || 0) : 0),
+        level2CategoryId: article?.level2CategoryId ? Number(article.level2CategoryId) : 
+                        (selectedCategory?.level === 2 ? Number(selectedCategory.id) : 
                          selectedCategory && selectedCategory.level > 2 && selectedCategory.parentId ? 
-                         String(getParentCategoryId(selectedCategory, categories, 2) || '') : ''),
-        level3CategoryId: article?.level3CategoryId ? String(article.level3CategoryId) : 
-                        (selectedCategory?.level === 3 ? String(selectedCategory.id) : ''),
+                         Number(getParentCategoryId(selectedCategory, categories, 2) || 0) : 0),
+        level3CategoryId: article?.level3CategoryId ? Number(article.level3CategoryId) : 
+                        (selectedCategory?.level === 3 ? Number(selectedCategory.id) : 0),
         targetState: article?.targetState || '',
         targetCity: article?.targetCity || '',
         metaDescription: article?.metaDescription || '',
         metaKeywords: article?.metaKeywords || '',
         status: (article?.status as 'draft' | 'published' | 'archived') || 'draft',
-        publishedAt: article?.publishedAt ? article.publishedAt.toISOString() : null,
+        publishedAt: article?.publishedAt ? new Date(article.publishedAt) : null,
       });
     }
   }, [open, article, selectedCategory, categories, form]);
@@ -137,7 +137,7 @@ export default function CreateArticleModal({
       else if (selectedCategory.level === 2 && selectedCategory.parentId) {
         const parentCategory = categories.find(c => c.id === selectedCategory.parentId);
         if (parentCategory) {
-          form.setValue('level1CategoryId', String(parentCategory.id));
+          form.setValue('level1CategoryId', Number(parentCategory.id));
         }
         
         const childCategories = categories.filter(c => 
@@ -150,13 +150,13 @@ export default function CreateArticleModal({
         if (parentCategory && parentCategory.parentId) {
           const grandParentCategory = categories.find(c => c.id === parentCategory.parentId);
           if (grandParentCategory) {
-            form.setValue('level1CategoryId', String(grandParentCategory.id));
+            form.setValue('level1CategoryId', Number(grandParentCategory.id));
             
             const siblings = categories.filter(c => 
               c.level === 2 && c.parentId === grandParentCategory.id
             );
             setLevel2Categories(siblings);
-            form.setValue('level2CategoryId', String(parentCategory.id));
+            form.setValue('level2CategoryId', Number(parentCategory.id));
           }
         }
       }
@@ -165,23 +165,23 @@ export default function CreateArticleModal({
 
   useEffect(() => {
     if (level1Id && !isCategorySelectionDisabled) {
-      const parentId = parseInt(level1Id || '0', 10);
+      const parentId = Number(level1Id || 0);
       const childCategories = categories.filter(c => 
         c.level === 2 && c.parentId === parentId
       );
       setLevel2Categories(childCategories);
       
       const currentLevel2Id = form.getValues('level2CategoryId');
-      if (currentLevel2Id && !childCategories.some(c => String(c.id) === currentLevel2Id)) {
-        form.setValue('level2CategoryId', '');
-        form.setValue('level3CategoryId', '');
+      if (currentLevel2Id && !childCategories.some(c => Number(c.id) === currentLevel2Id)) {
+        form.setValue('level2CategoryId', 0);
+        form.setValue('level3CategoryId', 0);
       }
       
       generateSlug();
     } else if (!isCategorySelectionDisabled) {
       setLevel2Categories([]);
-      form.setValue('level2CategoryId', '');
-      form.setValue('level3CategoryId', '');
+      form.setValue('level2CategoryId', 0);
+      form.setValue('level3CategoryId', 0);
       
       generateSlug();
     }
@@ -189,21 +189,21 @@ export default function CreateArticleModal({
 
   useEffect(() => {
     if (level2Id && !isCategorySelectionDisabled) {
-      const parentId = parseInt(level2Id || '0', 10);
+      const parentId = Number(level2Id || 0);
       const childCategories = categories.filter(c => 
         c.level === 3 && c.parentId === parentId
       );
       setLevel3Categories(childCategories);
       
       const currentLevel3Id = form.getValues('level3CategoryId');
-      if (currentLevel3Id && !childCategories.some(c => String(c.id) === currentLevel3Id)) {
-        form.setValue('level3CategoryId', '');
+      if (currentLevel3Id && !childCategories.some(c => Number(c.id) === currentLevel3Id)) {
+        form.setValue('level3CategoryId', 0);
       }
       
       generateSlug();
     } else if (!isCategorySelectionDisabled) {
       setLevel3Categories([]);
-      form.setValue('level3CategoryId', '');
+      form.setValue('level3CategoryId', 0);
       
       generateSlug();
     }

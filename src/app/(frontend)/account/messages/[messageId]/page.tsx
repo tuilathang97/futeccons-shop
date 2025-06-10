@@ -4,24 +4,23 @@ import { notFound, redirect } from 'next/navigation';
 import MessageThreadClientUI from '@/components/messages/MessageThreadClientUI'; // Assuming this component will be created
 
 interface MessagePageProps {
-  params: {
+  params: Promise<{
     messageId?: string;
-  };
+  }>;
 }
 
 export default async function MessagePage({ params }: MessagePageProps) {
   const session = await getServerSession();
+  const { messageId: messageIdStr } = await params;
 
   if (!session?.user) {
     redirect('/auth/sign-in?callbackUrl=/account/messages');
   }
 
   if (!session.user.number) {
-    const callbackUrl = params.messageId ? `/account/messages/${params.messageId}` : '/account/messages';
+    const callbackUrl = messageIdStr ? `/account/messages/${messageIdStr}` : '/account/messages';
     return redirect('/account?reason=phone_required&callbackUrl=' + encodeURIComponent(callbackUrl));
   }
-
-  const { messageId: messageIdStr } = await params;
 
   if (!messageIdStr) {
     notFound();

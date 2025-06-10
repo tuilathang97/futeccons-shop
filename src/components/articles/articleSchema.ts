@@ -7,16 +7,13 @@ export const ArticleSchema = z.object({
       message: "Slug chỉ được chứa chữ thường, số, dấu gạch ngang và dấu gạch chéo" 
     }),
   content: z.string().min(1, { message: "Nội dung không được để trống" }),
-  level1CategoryId: z.string()
-    .transform((val) => val ? parseInt(val, 10) : null)
+  level1CategoryId: z.number()
     .nullable()
     .optional(),
-  level2CategoryId: z.string()
-    .transform((val) => val ? parseInt(val, 10) : null)
+  level2CategoryId: z.number()
     .nullable()
     .optional(),
-  level3CategoryId: z.string()
-    .transform((val) => val ? parseInt(val, 10) : null)
+  level3CategoryId: z.number()
     .nullable()
     .optional(),
   targetState: z.string().nullable().optional(),
