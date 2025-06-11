@@ -114,6 +114,7 @@ const config: Config = {
       },
       fontFamily:{
         arimo: ["var(--font-arimo)"],
+        montserrat: ["var(--font-montserrat)"],
       }
     },
   },

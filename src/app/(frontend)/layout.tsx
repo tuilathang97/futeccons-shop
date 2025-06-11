@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Arimo } from "next/font/google";
+import { Arimo, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
@@ -19,6 +19,13 @@ const arimo = Arimo({
   weight: ["400", "500", "600", "700"],
 });
 
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["vietnamese"],
+  weight: ["400", "500", "600", "700"],
+});
+
+
 export const metadata: Metadata = {
   title: "Futeccons Shop",
   description: "Mua bán bất động sản",
@@ -36,7 +43,7 @@ export default async function RootLayout({
   return (
     <html lang="vi" className="h-svh">
       <body
-        className={`${arimo.variable} font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
+        className={`${arimo.variable} ${montserrat.variable} font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
       >
         <PostHogProvider>
           <SessionProvider session={session as Session} user={user as User}>

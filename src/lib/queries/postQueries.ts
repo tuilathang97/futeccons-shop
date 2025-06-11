@@ -837,6 +837,7 @@ export const getHomepageData = customUnstableCache(
       updatedAt: postsTable.updatedAt,
       giaTien: postsTable.giaTien,
       dienTichDat: postsTable.dienTichDat,
+      noiDung: postsTable.noiDung,
       soPhongNgu: postsTable.soPhongNgu,
       soPhongVeSinh: postsTable.soPhongVeSinh,
       thanhPho: postsTable.thanhPho,
@@ -859,9 +860,8 @@ export const getHomepageData = customUnstableCache(
       db.select(baseSelectFields)
         .from(postsTable)
         .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
-        .where(activeCondition)
         .orderBy(desc(postsTable.createdAt))
-        .limit(pageSize),
+        .limit(4),
 
       categoryIds.banNhaId ? 
         db.select(baseSelectFields)

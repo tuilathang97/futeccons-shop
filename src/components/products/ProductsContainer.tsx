@@ -42,7 +42,7 @@ function ProductsContainer({ title,posts,linkTitle }: Container) {
                     )
                 })}
             </div>
-            <div className='flex justify-center'>
+            <div className='flex justify-center mt-4'>
                 <Button className='max-w-[15rem]'>
                     {posts?.length && posts.length  < 100 ?
                         <span className='flex items-center gap-4'>Xem thêm {linkTitle} <ArrowDown /></span> :

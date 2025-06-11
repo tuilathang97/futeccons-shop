@@ -6,6 +6,8 @@ import { Metadata } from "next";
 import { PaginationParams } from '@/lib/queries/paginateQuery';
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import HomeImage from "@/components/homepage/HomeImage";
+import Link from "next/link";
+import WhyUs from "@/components/homepage/WhyUs";
 
 interface HomePageProps {
   searchParams: Promise<{
@@ -40,13 +42,24 @@ export default async function Home({ searchParams }: HomePageProps) {
 
   return (
     <CategoriesProvider initialCategories={categories}>
-      <div className="flex flex-col justify-center items-center gap-4">
+      <div className="flex flex-col justify-center items-center gap-[1.15rem] ">
+        <div className="min-w-full mx-auto">
+          <div className="flex flex-col sm:py-[3rem] py-[2rem] min-w-full items-center text-center text-sm/8 gap-4">
+            <h1 className="max-w-4xl tracking-wide text-[2.5rem] leading-[3rem] font-bold font-montserrat">Tìm Kiếm Động Sản Phù Hợp Với Nhu Cầu Của Bạn</h1>
+            <p className="text-base tracking-wide font-montserrat sm:text-lg text-gray-500 ">Tại đây,chúng tôi sẽ giúp bạn 
+              <span className="text-brand-medium text-xl mx-1">
+                <Link href="/ban-nha" className="hover:text-brand-dark hover:underline">sở hữu</Link>
+              </span>
+              hoặc
+              <span className="text-brand-medium text-xl mx-1">
+                <Link href="/cho-thue" className="hover:text-brand-dark hover:underline">cho thuê</Link>
+              </span> không gian lý tưởng</p>
+          </div>
+        </div>
         <HomeImage href="/" imgUrl="/categoryImages/saigon.webp" />
         <CategoryPicker />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
-        <ProductsContainer title="Tin bán nhà" posts={homepageData.banNhaPosts}  />
-        <ProductsContainer title="Tin cho thuê" posts={homepageData.choThuePosts}  />
-        <ProductsContainer title="Tin dự án" posts={homepageData.duAnPosts}  />
+        <WhyUs />
       </div>
     </CategoriesProvider>
   );
