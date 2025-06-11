@@ -73,7 +73,7 @@ export default function CitySidebar({ provinces, className }: CitySidebarProps) 
         </CardHeader>
         <CardContent className="p-4">
           <div className="space-y-6">
-            {provinces.map((province,index) => (
+            {majorCities.map((province,index) => (
               <div key={province.codename} className="space-y-2 flex flex-col justify-center">
                 <span
                   onClick={() => handleSelectAddress(province.codename)}
@@ -89,8 +89,8 @@ export default function CitySidebar({ provinces, className }: CitySidebarProps) 
                     <div className=" mt-4 grid grid-cols-3 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-4">
                       {province.districts
                         .filter(district => district.division_type === 'huyện' || district.division_type === 'quận')
-                        .slice(0, selectedProvince === index ? province.districts.length : 6)
                         .sort((a, b) => b.name.length - a.name.length)
+                        .slice(0, selectedProvince === index ? province.districts.length : 6)
                         .map((district) => (
                           <span
                             key={district.codename}

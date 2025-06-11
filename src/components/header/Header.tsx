@@ -36,9 +36,9 @@ export default function Header() {
                         <Link
                             href="/post-page"
                         >
-                            <Button className="flex gap-2 bg-brand-medium text-gray-50">
-                                <p>Đăng tin</p>
-                                <SquarePen size={16} />
+                            <Button className="flex gap-2 bg-brand-medium">
+                                <p className="text-gray-50">Đăng tin</p>
+                                <SquarePen className="text-gray-50" size={16} />
                             </Button>
                         </Link>
                     </div>

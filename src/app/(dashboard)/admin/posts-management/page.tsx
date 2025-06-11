@@ -4,10 +4,6 @@ import { PaginationParams, PaginatedResult } from "@/lib/queries/paginateQuery";
 import PostsManagementClientUI from "@/components/admin/posts-management/PostsManagementClientUI";
 import { Suspense } from "react";
 
-// const metadata = {
-//   title: 'Quản lý bài đăng - Admin',
-//   description: 'Duyệt hoặc xóa bài đăng của người dùng',
-// };
 
 type PostsManagementPageProps = {
   params?: Promise<{
@@ -21,15 +17,16 @@ type PostsManagementPageProps = {
   }>
 }
 
-
 const DEFAULT_PAGE_SIZE = 10; // Consistent with getInactivePosts
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function PostsManagementPage({ params, searchParams }: PostsManagementPageProps) {
   const { page: pageString, pageSize: pageSizeString, sortBy: sortByString, sortOrder: sortOrderString } = await searchParams;
   const page = pageString ? parseInt(pageString, 10) : 1;
   const pageSize = pageSizeString ? parseInt(pageSizeString, 10) : DEFAULT_PAGE_SIZE;
   const sortBy = sortByString;
   const sortOrder = sortOrderString;
+
   const paginationParams: PaginationParams = {
     page: isNaN(page) ? 1 : page,
     pageSize: isNaN(pageSize) ? DEFAULT_PAGE_SIZE : pageSize,

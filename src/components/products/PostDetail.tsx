@@ -65,11 +65,11 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                         <div className='flex flex-col gap-4'>
                             <h1 className='font-bold text-md md:text-xl lg:text-2xl'>{post.tieuDeBaiViet}</h1>
                             <div>
-                                <p className='text-xl font-semibold text-red-500'>{formatPrice()}</p>
+                                <p className='text-xl font-semibold text-brand-medium '>{formatPrice()}</p>
                             </div>
                             <div className='flex flex-col gap-2'>
-                                <p className='flex gap-2 items-center'> <span><MapPin size={16} /></span> {formatAddress()} </p>
-                                <p className='flex gap-2 items-center'> <span><Clock size={16} /></span> {formatDate()} </p>
+                                <p className='flex gap-2 font-medium items-center'> <span><MapPin size={16} /></span> {formatAddress()} </p>
+                                <p className='flex gap-2 font-medium items-center'> <span><Clock size={16} /></span> {formatDate()} </p>
                             </div>
                         </div>
                     </PostSectionWrapper>
