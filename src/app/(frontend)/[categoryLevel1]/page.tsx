@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
 import FilterBar from "@/components/filterComponent/FilterBar";
-import Sidebar from "@/components/location/Sidebar";
 
 interface PageProps {
     params: Promise<{ categoryLevel1: string }>;
@@ -31,15 +30,12 @@ export default async function ProductListing1LevelDeep({ params,searchParams }: 
                     level1Slug={categoryLevel1}
                 />
             </div> 
-            <div className="flex flex-col gap-4 my-4 md:grid md:grid-cols-[70%_30%]">
+            <div className="flex flex-col gap-4 my-4">
                 <div className="min-w-full">
                     <ProductsContainer
                         data={result || []}
                         searchParam={searchConditions}
                         />
-                </div>
-                <div className="max-w-full md:px-4">
-                    <Sidebar />
                 </div>
             </div>
             {article && (

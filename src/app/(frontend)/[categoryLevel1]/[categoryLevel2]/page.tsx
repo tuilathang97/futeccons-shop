@@ -6,7 +6,6 @@ import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
 import PageWrapper from "@/components/PageWrapper";
 import FilterBar from "@/components/filterComponent/FilterBar";
-import Sidebar from "@/components/location/Sidebar";
 
 export default async function ProductListing2LevelDeep({ params,searchParams }: {
     params: Promise<{ categoryLevel1: string, categoryLevel2: string }>;
@@ -39,9 +38,6 @@ export default async function ProductListing2LevelDeep({ params,searchParams }: 
                         data={data || []}
                         searchParam={searchConditions}
                     />
-                </div>
-                <div className="mt-4 md:mt-0">
-                    <Sidebar />
                 </div>
             </PageWrapper>
 

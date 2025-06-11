@@ -63,7 +63,7 @@ function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {
     });
 
     return (
-        <div className={`flex flex-col col-span-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-fit`}>
+        <div className={`flex flex-col col-span-4 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 min-h-fit`}>
             {filteredResult && filteredResult.length > 0 ? filteredResult.map((data: Post, index: number) => {
                 return (
                     <ProductCard post={data} key={index} />

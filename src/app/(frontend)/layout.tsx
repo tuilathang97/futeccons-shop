@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Arimo } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
+import Footer from "@/components/layout/Footer";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { getCategories } from "@/lib/queries/categoryQueries";
@@ -12,14 +13,10 @@ import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import { PostHogProvider } from "@/components/layout/PostHogProvider";
 import PageWrapper from "@/components/PageWrapper";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const arimo = Arimo({
+  variable: "--font-arimo",
+  subsets: ["vietnamese"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -39,15 +36,16 @@ export default async function RootLayout({
   return (
     <html lang="vi" className="h-svh">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-br from-brand-light/30 to-white min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
+        className={`${arimo.variable} font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
       >
         <PostHogProvider>
           <SessionProvider session={session as Session} user={user as User}>
             <CategoriesProvider initialCategories={categories}>
+              <Header />
               <PageWrapper >
-                <Header />
                 <main>{children}</main>
               </PageWrapper>
+              <Footer />
             </CategoriesProvider>
           </SessionProvider>
           <Toaster />

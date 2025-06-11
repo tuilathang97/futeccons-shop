@@ -12,9 +12,9 @@ import PageWrapper from "../PageWrapper"
 export default function Header() {
     const { user, session } = useSession()
     return (
-        <header className="fixed z-[50] gap-4 top-0 left-0 flex h-16 min-w-full ">
+        <header className="fixed z-[50] gap-4 top-0 left-0 flex h-16 min-w-full bg-white/10 backdrop-blur-2xl ">
             <PageWrapper >
-                <nav className="items-center px-8 gap-2 bg-gradient-to-br from-brand-light/30 backdrop-blur-2xl flex justify-between py-2 w-full ml-auto mr-auto">
+                <nav className="items-center gap-2 flex justify-between py-2 w-full ml-auto mr-auto">
                     <div className="flex items-center gap-4">
                         <Link href="/" className="mr-6 hidden md:flex" prefetch={false}>
                             <Home className="h-6 w-6" />

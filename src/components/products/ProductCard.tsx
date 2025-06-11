@@ -17,9 +17,9 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
     const {image} = await getPostThumbnailByPostId(post.id)
     const thumbnailImg = image as ImageType
     return (
-        <Link href={`/post/${post.id}`} className="min-w-full border-none shadow-none cursor-pointer bg-transparent group flex flex-col overflow-hidden">
+        <div className="min-w-full border-none shadow-none bg-transparent group flex flex-col overflow-hidden">
             <div className="flex bg-transparent flex-col h-full">
-                <div className="relative aspect-square w-full overflow-hidden min-h-[15rem] rounded-2xl">
+                <Link href={`/post/${post.id}`} className="relative aspect-16/9 w-full overflow-hidden min-h-[15rem] rounded-2xl">
                     {thumbnailImg?.secureUrl ? (
                         <Image
                             src={thumbnailImg.secureUrl}
@@ -38,10 +38,10 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                         {badge}
                     </Badge>
                     <ProductLoveIcon postId={post.id} />
-                </div>
+                </Link>
                 <ProductCardSection post={post} />
             </div>
-        </Link>
+        </div>
     );
 };
 

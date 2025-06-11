@@ -112,6 +112,9 @@ const config: Config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         rainbow: "rainbow var(--speed, 2s) infinite linear",
       },
+      fontFamily:{
+        arimo: ["var(--font-arimo)"],
+      }
     },
   },
   plugins: [animatePlugin],
