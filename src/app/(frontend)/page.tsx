@@ -8,6 +8,8 @@ import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import HomeImage from "@/components/homepage/HomeImage";
 import Link from "next/link";
 import WhyUs from "@/components/homepage/WhyUs";
+import ProvincesCard from "@/components/homepage/ProvincesCard";
+import ReviewsCarousel from "@/components/homepage/ReviewsCarousel";
 
 interface HomePageProps {
   searchParams: Promise<{
@@ -29,15 +31,8 @@ export default async function Home({ searchParams }: HomePageProps) {
     pageSize: isNaN(pageSize) ? DEFAULT_PAGE_SIZE : pageSize,
   };
 
-  const banNhaCategory = categories.find(cat => cat.name === "Bán nhà" && cat.level === 1);
-  const choThueCategory = categories.find(cat => cat.name === "Cho thuê" && cat.level === 1);
-  const duAnCategory = categories.find(cat => cat.name === "Dự án" && cat.level === 1);
 
-  const homepageData = await getHomepageData(paginationParams, {
-    banNhaId: banNhaCategory?.id,
-    choThueId: choThueCategory?.id,
-    duAnId: duAnCategory?.id,
-  });
+  const homepageData = await getHomepageData(paginationParams,{});
   
 
   return (
@@ -57,10 +52,14 @@ export default async function Home({ searchParams }: HomePageProps) {
           </div>
         </div>
         <HomeImage href="/" imgUrl="/categoryImages/saigon.webp" />
-        <CategoryPicker />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
         <WhyUs />
-      </div>
+        <CategoryPicker />
+        <ProvincesCard />
+        <div className="min-w-full py-4 bg-gray-200 rounded-lg">
+         <ReviewsCarousel />
+        </div>
+      </div> 
     </CategoriesProvider>
   );
 }

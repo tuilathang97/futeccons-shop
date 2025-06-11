@@ -861,7 +861,7 @@ export const getHomepageData = customUnstableCache(
         .from(postsTable)
         .leftJoin(usersTable, eq(postsTable.userId, usersTable.id))
         .orderBy(desc(postsTable.createdAt))
-        .limit(4),
+        .limit(8),
 
       categoryIds.banNhaId ? 
         db.select(baseSelectFields)

@@ -55,7 +55,8 @@ function CategoryPicker({ filterCategories, className }: CategoryPickerProps) {
         return <></>
     }
     return (
-        <PageWrapper className='px-0 bg-none '>
+        <PageWrapper className='px-0 bg-none py-4 flex flex-col gap-4'>
+            <h2 className='text-2xl font-bold font-montserrat '>Tìm kiếm theo loại danh mục</h2>
             <Card className={cn("p-0 bg-transparent border-none shadow-none", className)}>
                 <CardContent className='p-0 gap-4 min-w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
                     {CategoriesRender(filterCategories ? filterCategories : defaultCategories,imagesUrl)}

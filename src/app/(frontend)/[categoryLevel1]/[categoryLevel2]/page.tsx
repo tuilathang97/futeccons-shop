@@ -4,7 +4,6 @@ import { getCategories, validateCategoryPath } from "@/lib/queries/categoryQueri
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
-import PageWrapper from "@/components/PageWrapper";
 import FilterBar from "@/components/filterComponent/FilterBar";
 
 export default async function ProductListing2LevelDeep({ params,searchParams }: {
@@ -32,14 +31,14 @@ export default async function ProductListing2LevelDeep({ params,searchParams }: 
                     level2Slug={categoryLevel2}
                 />
             </div>
-            <PageWrapper className="flex flex-col !px-0 gap-4 my-4 md:grid md:grid-cols-[70%_30%]">
+            <div className="flex flex-col gap-4 my-4">
                 <div className="min-w-full">
                     <ProductsContainer
                         data={data || []}
                         searchParam={searchConditions}
-                    />
+                        />
                 </div>
-            </PageWrapper>
+            </div>
 
             {article && (
                 <div className="mt-8">
