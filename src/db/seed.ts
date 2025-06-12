@@ -93,6 +93,8 @@ const categoryData = [
   { name: "Nhà phố thương mại", parentId: 40, level: 3 as const, slug: "/nha-pho-thuong-mai", path: "/du-an/nha-pho/nha-pho-thuong-mai" },
   { name: "Nhà phố liền kề", parentId: 40, level: 3 as const, slug: "/nha-pho-lien-ke", path: "/du-an/nha-pho/nha-pho-lien-ke" },
   { name: "Shophouse", parentId: 40, level: 3 as const, slug: "/shophouse", path: "/du-an/nha-pho/shophouse" },
+  // ===== LEVEL 1: Tất cả bài viết =====
+  { name: "Tất cả bài viết", parentId: null, level: 1 as const, slug: "/bai-viet", path: "/bai-viet" },
 ];
 
 async function seed() {

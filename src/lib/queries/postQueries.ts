@@ -776,19 +776,25 @@ export async function incrementPostViewCount(postId: number): Promise<void> {
 // Backward compatibility for existing code
 export async function getPosts(
   params?: PaginationParams,
-  level1CategoryId?: number
 ): Promise<PaginatedResult<Post>> {
-  if (level1CategoryId) {
-    const result = await getPostsByCategory(level1CategoryId, params || {});
-    return {
-      data: result.data as Post[],
-      metadata: result.metadata
-    };
-  } else {
+  if (params) {
     const result = await getPublishedPosts(params || {});
     return {
       data: result.data as Post[],
       metadata: result.metadata
+    };    
+  } else {
+    // const result = await db.select().from(postsTable).where(eq(postsTable.active, true));
+    // todo : chỉ lấy post đã active, nhưng để test thì bỏ where ra 
+    const result = await db.select().from(postsTable);
+    return {
+      data: result as Post[],
+      metadata: {
+        currentPage: 1,
+        pageSize: 1000,
+        totalPages: 1,
+        totalItems: 1000
+      }
     };
   }
 }

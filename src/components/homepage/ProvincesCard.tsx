@@ -30,12 +30,12 @@ function ProvincesRender(provinces: Province[], imagesUrl: string[]) {
       >
         <div className='relative min-w-full hover:shadow-md transition-shadow duration-300'>
           <div className="flex flex-col-reverse items-center gap-2">
-            <Image 
-              className='z-10 object-cover brightness-50 hover:brightness-100 transition-all duration-300 min-w-full min-h-full w-[10rem] h-[10rem] rounded-md' 
-              src={imagesUrl[index] || imagesUrl[0]} 
-              alt={province.name} 
-              width={200} 
-              height={200} 
+            <Image
+              className='z-10 object-cover brightness-50 hover:brightness-100 transition-all duration-300 min-w-full min-h-full w-[10rem] h-[10rem] rounded-md'
+              src={imagesUrl[index] || imagesUrl[0]}
+              alt={province.name}
+              width={200}
+              height={200}
             />
           </div>
           <p className="text-2xl flex justify-center w-full text-center text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 font-bold">
@@ -52,27 +52,45 @@ export default async function ProvincesCard({ className }: ProvincesCardProps) {
   const filePath = path.join(process.cwd(), '/src/constants/vietnamese-provinces.json');
   const jsonData = await fs.promises.readFile(filePath, 'utf-8');
   const allProvinces: Province[] = JSON.parse(jsonData);
-  const provinces = allProvinces.slice(0, 10);
-  
+  const location = ['Thành phố Hà Nội', 'Thành phố Hồ Chí Minh', 'Thành phố Hải Phòng', 'Thành phố Huế', 'Thành phố Đà Nẵng', 'Tỉnh Khánh Hòa', 'Tỉnh Ninh Thuận', "Tỉnh Quảng Ninh"]
+  const filteredProvinces = allProvinces.filter(province => location.includes(province.name));
   const imagesUrl = [
-    "/categoryImages/ban-nha-dat.webp", // Placeholder cho Hà Nội
-    "/categoryImages/cho-thue.webp", // Placeholder cho Hà Giang
-    "/categoryImages/du-an.webp", // Placeholder cho Cao Bằng
-    "/categoryImages/bietThuChoThue.webp", // Placeholder
-    "/categoryImages/chungCu.webp", // Placeholder
-    "/categoryImages/nhaPho.webp", // Placeholder
-    "/categoryImages/ban-nha-dat.webp", // Placeholder
-    "/categoryImages/cho-thue.webp", // Placeholder
-    "/categoryImages/du-an.webp", // Placeholder
-    "/categoryImages/bietThuChoThue.webp", // Placeholder
+    "/images/provinceImages/hanoi.webp",
+    "/images/provinceImages/quangNinh.webp",
+    "/images/provinceImages/haiphong.webp",
+    "/images/provinceImages/hue.webp",
+    "/images/provinceImages/daNang.webp",
+    "/images/provinceImages/khanhHoa.webp",
+    "/images/provinceImages/ninhThuan.webp",
+    "/images/provinceImages/hoChiMinh.webp",
   ]
-  
+
   return (
     <PageWrapper className='px-0 py-4 bg-none flex flex-col gap-4'>
-      <h2 className='text-2xl font-bold font-montserrat '>Browse by location</h2>
-      <Card className={cn("p-0 bg-transparent hover:shadow-md transition-shadow duration-300 border-none shadow-none", className)}>
+      <h2 className='text-2xl font-bold font-montserrat '>Tìm kiếm theo vị trí
+      </h2>
+      <Card className={cn("p-0 bg-transparent border-none shadow-none", className)}>
         <CardContent className='p-0 gap-4 min-w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
-          {ProvincesRender(provinces, imagesUrl)}
+          {ProvincesRender(filteredProvinces, imagesUrl)}
+          <Link
+            href={`/bai-viet/`}
+            className="group col-span-2 hover:shadow-lg min-w-full min-h-full flex flex-col items-center gap-2 rounded-md transition-colors hover:bg-slate-50"
+          >
+            <div className='relative min-w-full hover:shadow-md transition-shadow duration-300'>
+              <div className="flex flex-col-reverse items-center gap-2">
+                <Image
+                  className='z-10 object-cover brightness-50 hover:brightness-100 transition-all duration-300 min-w-full min-h-full w-[10rem] h-[10rem] rounded-md'
+                  src={"/images/backgroundImage.webp"}
+                  alt={"background"}
+                  width={200}
+                  height={200}
+                />
+              </div>
+              <p className="text-2xl flex justify-center w-full text-center text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 font-bold">
+                Tình/Thành phố khác
+              </p>
+            </div>
+          </Link>
         </CardContent>
       </Card>
     </PageWrapper>

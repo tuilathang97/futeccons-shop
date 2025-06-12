@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function HeaderNavigation() {
   const { categories } = useCategories()
-  const level1Categories = categories.filter((category) => category.level === 1)
+  const level1Categories = categories.filter((category) => category.level === 1 && category.name !== "Tất cả bài viết")
   function getChildCategories(searchId: number, className?: string) {
     const result = categories
       .filter(category => category.parentId === searchId)

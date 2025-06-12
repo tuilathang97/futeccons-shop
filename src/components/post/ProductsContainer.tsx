@@ -22,18 +22,30 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
     return null
 }
 
-function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {gia?: string, area?: string, bedrooms?: string}  }) {  
+function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {gia?: string, area?: string, bedrooms?: string,thanhPho?: string,quan?: string,phuong?: string}  }) {  
     if (!data || data.length === 0) {
         return <div>Không có bài viết phù hợp với yêu cầu </div>
     }
 
-    const { gia, area, bedrooms } = searchParam
+    const { gia, area, bedrooms,thanhPho,quan,phuong } = searchParam
     const formatedPrice = handleFormatPriceToNumber({ gia: gia || "" })
 
     const filteredResult = data?.filter((post: Post) => {
         let areaCondition = true;
         let bedroomsCondition = true;
         let priceCondition = true;
+        let thanhPhoCondition = true;
+        let quanCondition = true;
+        let phuongCondition = true;
+        if(thanhPho){
+            thanhPhoCondition = post.thanhPhoCodeName === thanhPho;
+        }
+        if(quan){
+            quanCondition = post.quanCodeName === quan;
+        }
+        if(phuong){
+            phuongCondition = post.phuongCodeName === phuong;
+        }
         if (area) {
             const [minArea, maxArea] = area.split("-").map(Number);
             if (minArea && maxArea) {
@@ -58,10 +70,8 @@ function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {
                 Number(post.giaTien) <= formatedPrice.max;
         }
 
-        
-        return areaCondition && bedroomsCondition && priceCondition;
+        return areaCondition && bedroomsCondition && priceCondition && thanhPhoCondition && quanCondition && phuongCondition;
     });
-
     return (
         <div className={`flex flex-col col-span-4 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 min-h-fit`}>
             {filteredResult && filteredResult.length > 0 ? filteredResult.map((data: Post, index: number) => {

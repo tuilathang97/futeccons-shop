@@ -52,11 +52,11 @@ export default async function Home({ searchParams }: HomePageProps) {
           </div>
         </div>
         <HomeImage href="/" imgUrl="/categoryImages/saigon.webp" />
+        <ProvincesCard />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
         <WhyUs />
         <CategoryPicker />
-        <ProvincesCard />
-        <div className="min-w-full py-4 bg-gray-200 rounded-lg">
+        <div className="min-w-full py-4 rounded-lg">
          <ReviewsCarousel />
         </div>
       </div> 

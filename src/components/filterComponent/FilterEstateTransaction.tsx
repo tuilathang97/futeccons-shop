@@ -18,7 +18,7 @@ function FilterEstateKind({
     currentCategory,
     categories
 }: {
-    currentCategory: Category,
+    currentCategory: Category | null,
     categories: Category[]
 }) {
     const router = useRouter()

@@ -52,12 +52,15 @@ export default function FilterBar({
   return (
     <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
       <ProductsListWithFilter />
-      {parentCategory && (
+      {parentCategory ? (
         <FilterEstateTransaction
           currentCategory={parentCategory}
           categories={filteredCategoriesForLevel1}
         />
-      )}
+      ) : <FilterEstateTransaction
+          currentCategory={null}
+          categories={filteredCategoriesForLevel1}
+        />}
       {shouldRenderFilterEstateType && (
         <FilterEstateType
           childCategories={filteredChildCategoriesForLevel2}

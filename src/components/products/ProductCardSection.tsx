@@ -77,7 +77,7 @@ export default function ProductCardSection({ post }: { post: Post }) {
           {post.noiDung || "Không có nội dung "}
         </div>
         <div className="flex flex-wrap items-center">
-          <p className="text-base transition-all duration-200">Giá : <span className='text-brand-medium text-lg font-semibold'>{formatPrice()}</span></p>
+          <p className="text-base font-light transition-all duration-200">Giá : <span className='text-brand-medium text-lg font-semibold'>{formatPrice()}</span></p>
         </div>
         {formatAddress()}
       </div>
