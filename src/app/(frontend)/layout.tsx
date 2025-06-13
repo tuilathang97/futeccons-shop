@@ -10,7 +10,6 @@ import { getCategories } from "@/lib/queries/categoryQueries";
 import { SessionProvider } from "@/contexts/SessionContext";
 import { Session, User } from "@/db/schema";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
-import { PostHogProvider } from "@/components/layout/PostHogProvider";
 import PageWrapper from "@/components/PageWrapper";
 
 const arimo = Arimo({
@@ -36,10 +35,8 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const dataSession = await auth.api.getSession({ headers: await headers() });
   const session = dataSession?.session || {} ;
-
   const user = dataSession?.user;
   const categories = await getCategories();
-
   return (
     <html lang="vi" className="h-svh">
       <body

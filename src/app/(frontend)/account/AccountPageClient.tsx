@@ -33,11 +33,11 @@ export default function AccountPageClient({
   const userImage = typeof user.image === 'string' ? user.image : undefined;
   return (
     <CategoriesProvider initialCategories={categories}>
-      <div className="space-y-6 ">
+      <div className="space-y-6 px-0 container">
         {showPhoneNumberBanner && <MissingPhoneNumberBanner callbackUrl={callbackUrl} />}
-        <h1 className="text-2xl font-semibold ">Thông tin tài khoản</h1>
-        <Card>
-          <CardHeader>
+        <Card className="border-none shadow-none">
+          <CardHeader className="flex flex-col gap-4 ">
+            <h1 className="text-2xl font-semibold  ">Thông tin tài khoản</h1>
             <CardTitle className="flex items-center gap-4">
               <Avatar className="h-12 w-12">
                 <AvatarImage className="object-cover" src={userImage} alt={user.name || "User avatar"} />
@@ -65,7 +65,7 @@ export default function AccountPageClient({
               </div>
             </div>
           </CardContent>
-          <div className="flex px-4 py-4">
+          <div className="flex px-4">
             <UserProfileForm user={user} />
           </div>
         </Card>

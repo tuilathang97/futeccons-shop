@@ -15,7 +15,7 @@ export default async function BaiViet({searchParams }: PageProps) {
         level1Slug: "bai-viet"
     });
     return (
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 container">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <FilterBar
                     level1Slug={"bai-viet"}

@@ -13,6 +13,7 @@ import { revalidateTag } from 'next/cache';
 import { eq } from 'drizzle-orm';
 import { db } from "@/db/drizzle";
 import { revalidatePostNotifications } from './notificationActions';
+import { redirect } from "next/navigation";
 
 export interface ActionResult {
   success: boolean;
@@ -231,6 +232,8 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
       success: false,
       message: `Đăng tải bài viết thất bại: ${error instanceof Error ? error.message : String(error)}`
     };
+  } finally {
+    redirect('/')
   }
 }
 

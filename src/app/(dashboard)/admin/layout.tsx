@@ -6,7 +6,6 @@ import { cookies } from 'next/headers';
 import React from 'react';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
-import { PostHogProvider } from '@/components/layout/PostHogProvider';
 import AdminProtectedRoute from '@/components/auth/AdminProtectedRoute';
 import "./globals.css";
 

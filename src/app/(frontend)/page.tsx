@@ -31,9 +31,7 @@ export default async function Home({ searchParams }: HomePageProps) {
     pageSize: isNaN(pageSize) ? DEFAULT_PAGE_SIZE : pageSize,
   };
 
-
   const homepageData = await getHomepageData(paginationParams,{});
-  console.log({homepageData})
 
   return (
     <CategoriesProvider initialCategories={categories}>
@@ -52,8 +50,10 @@ export default async function Home({ searchParams }: HomePageProps) {
           </div>
         </div>
         <HomeImage href="/bai-viet" imgUrl="/categoryImages/saigon.webp" />
+        <div className="container">
         <ProvincesCard />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
+        </div>
         <WhyUs />
         <CategoryPicker />
         <div className="min-w-full py-4 rounded-lg">

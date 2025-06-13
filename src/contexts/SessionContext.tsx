@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useMemo } from 'react';
 import { Session, User } from '@/db/schema';
 
 interface SessionContextType {
@@ -21,9 +21,13 @@ interface SessionProviderProps {
 export function SessionProvider({ children, session: initialSession, user: initialUser }: SessionProviderProps) {
   const [session, setSession] = useState<Session | null>(initialSession);
   const [user, setUser] = useState<User | null>(initialUser);
+  const contextValue = useMemo(
+    () => ({ session, user, setSession, setUser }),
+    [session, user, setSession, setUser]
+  );
 
   return (
-    <SessionContext.Provider value={{ session, user, setSession, setUser }}>
+    <SessionContext.Provider value={contextValue}>
       {children}
     </SessionContext.Provider>
   );
@@ -31,13 +35,18 @@ export function SessionProvider({ children, session: initialSession, user: initi
 
 export function useSession(): SessionContextType {
   const context = useContext(SessionContext);
-  if (context === undefined) {
-    return {
+  const fallbackValue = useMemo(
+    () => ({
       session: null,
       user: null,
       setSession: () => {},
       setUser: () => {},
-    };
+    }),
+    []
+  );
+
+  if (context === undefined) {
+    return fallbackValue;
   }
   return context;
 }
