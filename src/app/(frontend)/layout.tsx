@@ -35,7 +35,7 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const dataSession = await auth.api.getSession({ headers: await headers() });
-  const session = dataSession?.session;
+  const session = dataSession?.session || {} ;
 
   const user = dataSession?.user;
   const categories = await getCategories();
@@ -45,7 +45,6 @@ export default async function RootLayout({
       <body
         className={`${arimo.variable} ${montserrat.variable} font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
       >
-        <PostHogProvider>
           <SessionProvider session={session as Session} user={user as User}>
             <CategoriesProvider initialCategories={categories}>
               <Header />
@@ -56,7 +55,6 @@ export default async function RootLayout({
             </CategoriesProvider>
           </SessionProvider>
           <Toaster />
-        </PostHogProvider>
       </body>
     </html>
   );

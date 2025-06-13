@@ -32,7 +32,7 @@ export default async function AdminLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-white min-w-full antialiased !mx-0 max-w-[80rem] !pt-[7rem] !px-4 lg:!px-8 md:!pt-[5rem] container`}
       >
-        <PostHogProvider>
+
           <Toaster />
           <SidebarProvider defaultOpen={defaultOpen}>
             <AppSidebar />
@@ -47,7 +47,7 @@ export default async function AdminLayout({
               </PageContainer>
             </SidebarInset>
           </SidebarProvider>
-        </PostHogProvider>
+
       </body>
     </html>
   );

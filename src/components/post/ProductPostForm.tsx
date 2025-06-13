@@ -43,31 +43,20 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
     },
   });
   useEffect(() => {
-    if (state?.message)
+    if (state?.message) {
       toast({
         description: state?.message,
-      })
+      });
       if (state.success) { 
         form.reset();
         clearPreviews(); 
         setIsLoading(false);
       } else {
         setIsLoading(false);
-        router.refresh()
       }
-      return
-  }, [state?.message,clearPreviews,form,router,state?.success])
+    }
+  }, [state?.message, clearPreviews, form, state.success,]);
   const handleSubmit = form.handleSubmit(async () => {
-    setTimeout(() => {
-      setIsLoading(false)
-      form.reset()
-      clearPreviews()
-      router.refresh()
-      toast({
-        description: "Đăng tin thất bại vì thời gian hết hạn",
-        variant: "destructive",
-      })
-    }, 10000);
     setIsLoading(true);
     const formElement = formRef?.current;
     if (formElement) {

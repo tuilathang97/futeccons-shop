@@ -32,6 +32,14 @@ async function uploadImageToCloudinary(imageFile: File): Promise<UploadApiRespon
     const result = await cloudinaryInstance.uploader.upload(tmpFilePath, {
       folder: 'posts',
       resource_type: 'image',
+      quality: 'auto:good',
+      fetch_format: 'auto',
+      flags: 'progressive',
+      transformation: [
+        { width: 1200, height: 800, crop: 'limit' },
+        { quality: 'auto:good' },
+        { fetch_format: 'auto' }
+      ]
     });
     
     return result;
