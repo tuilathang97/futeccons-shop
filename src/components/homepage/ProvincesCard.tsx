@@ -66,7 +66,7 @@ export default async function ProvincesCard({ className }: ProvincesCardProps) {
   ]
 
   return (
-    <PageWrapper className='px-0 py-4 bg-none flex flex-col gap-4'>
+    <PageWrapper className='container px-0 py-4 bg-none flex flex-col gap-4'>
       <h2 className='text-2xl font-bold font-montserrat '>Tìm kiếm theo vị trí
       </h2>
       <Card className={cn("p-0 bg-transparent border-none shadow-none", className)}>

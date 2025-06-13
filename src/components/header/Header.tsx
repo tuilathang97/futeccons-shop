@@ -13,7 +13,7 @@ export default function Header() {
     const { user, session } = useSession()
     return (
         <header className="fixed z-[50] gap-4 top-0 left-0 flex h-16 min-w-full bg-white/10 backdrop-blur-2xl ">
-            <PageWrapper >
+            <div className="container px-0">
                 <nav className="items-center gap-2 flex justify-between py-2 w-full ml-auto mr-auto">
                     <div className="flex items-center gap-4">
                         <Link href="/" className="mr-6 hidden md:flex" prefetch={false}>
@@ -43,7 +43,7 @@ export default function Header() {
                         </Link>
                     </div>
                 </nav>
-            </PageWrapper>
+            </div>
         </header>
     )
 }

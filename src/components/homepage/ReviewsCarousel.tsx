@@ -70,7 +70,7 @@ export default function ReviewsCarousel() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4">
+    <div className="w-full max-w-4xl mx-auto px-4 mb-10 lg:mb-36">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold font-montserrat mb-4">
           Đánh Giá Từ Khách Hàng

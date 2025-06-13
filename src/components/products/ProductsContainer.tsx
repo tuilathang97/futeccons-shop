@@ -12,7 +12,7 @@ interface Container {
 
 function ProductsContainer({ title, posts, linkTitle }: Container) {
     if (posts?.length === 0) {
-        return <div className='min-h-[5rem] flex flex-col py-4 gap-4 w-full rounded-md'>
+        return <div className='container min-h-[5rem] flex flex-col py-4 gap-4 w-full rounded-md px-0'>
             <div className='flex'>
                 <h1 className='text-xl font-semibold md:text-2xl'>{title}</h1>
             </div>
@@ -22,7 +22,7 @@ function ProductsContainer({ title, posts, linkTitle }: Container) {
         </div>
     }
     return (
-        <div className='min-h-[5rem] flex flex-col py-4 gap-4 w-full rounded-md'>
+        <div className='container min-h-[5rem] flex flex-col py-4 gap-4 w-full rounded-md px-0'>
             <div className='flex'>
                 <h1 className='text-xl font-semibold md:text-2xl'>{title}</h1>
             </div>

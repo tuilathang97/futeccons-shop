@@ -39,7 +39,7 @@ export default async function Home({ searchParams }: HomePageProps) {
     <CategoriesProvider initialCategories={categories}>
       <div className="flex flex-col justify-center items-center gap-[1.15rem] ">
         <div className="min-w-full mx-auto">
-          <div className="flex flex-col sm:py-[3rem] py-[2rem] min-w-full items-center text-center text-sm/8 gap-4">
+          <div className="container flex flex-col sm:py-[3rem] py-[2rem] min-w-full items-center text-center text-sm/8 gap-4">
             <h1 className="max-w-4xl tracking-wide text-[2.5rem] leading-[3rem] font-bold font-montserrat">Tìm Kiếm Bất Động Sản Phù Hợp Với Nhu Cầu Của Bạn</h1>
             <p className="text-base tracking-wide font-montserrat sm:text-lg text-gray-500 ">Tại đây,chúng tôi sẽ giúp bạn 
               <span className="text-brand-medium text-xl mx-1">

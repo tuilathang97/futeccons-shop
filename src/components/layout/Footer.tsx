@@ -53,7 +53,7 @@ const contactInfo = [
 export default function Footer() {
 
 return (
-    <footer className="mt-36 bg-brand-medium text-white min-w-full">
+    <footer className="bg-brand-medium text-white min-w-full">
       <div className="py-12 container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-2 space-y-4">
