@@ -10,6 +10,7 @@ import { UploadForm } from '@/components/image-upload-form';
 import { ImageUploadProvider } from '@/contexts/ImageUploadContext';
 import LocationPickerServer from '@/components/post/LocationPickerServer';
 import { redirect } from 'next/navigation';
+import AdditionalInfo from '@/components/post/AdditionalInfo';
 
 async function PostPage() {
 	const session = await auth.api.getSession({
@@ -30,19 +31,12 @@ async function PostPage() {
 		<ImageUploadProvider>
 			<ProductPostForm>
 				<Suspense fallback={<div>Đang tải...</div>}>
-					<GeneralInfoServer />
-				</Suspense>
-				<Suspense fallback={<div>Đang tải...</div>}>
+		  	  <GeneralInfoServer />
 					<BasicInfoServer />
-				</Suspense>
-				<Suspense fallback={<div>Đang tải...</div>}>
 					<PostInfo />
-				</Suspense>
-				<Suspense fallback={<div>Đang tải bản đồ...</div>}>
 					<LocationPickerServer />
-				</Suspense>
-				<Suspense>
 					<UploadForm/>
+					<AdditionalInfo />
 				</Suspense>
 			</ProductPostForm>
 		</ImageUploadProvider>

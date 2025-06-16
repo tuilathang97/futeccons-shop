@@ -402,6 +402,59 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
 
             <FormField
               control={form.control}
+              name="dienTichSuDung"
+              render={({ field: { value, onChange, ...fieldProps } }) => (
+                <FormItem>
+                  <FormLabel>Diện tích sử dụng (m²) </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...fieldProps}
+                      placeholder="Nhập diện tích sử dụng"
+                      type="number"
+                      value={value ?? ''}
+                      onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="huongCuaChinh"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Hướng cửa chính <span className="text-red-500">*</span></FormLabel>
+                  <FormControl>
+                    <Select {...field} onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Chọn hướng cửa chính" />
+                          <span className="text-red-500">*</span>
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent >
+                        <SelectGroup>
+                          <SelectItem value="Đông">Đông</SelectItem>
+                          <SelectItem value="Tây">Tây</SelectItem>
+                          <SelectItem value="Nam">Nam</SelectItem>
+                          <SelectItem value="Bắc">Bắc</SelectItem>
+                          <SelectItem value="Đông Bắc">Đông Bắc</SelectItem>
+                          <SelectItem value="Đông Nam">Đông Nam</SelectItem>
+                          <SelectItem value="Tây Bắc">Tây Bắc</SelectItem>
+                          <SelectItem value="Tây Nam">Tây Nam</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
               name="soTang"
               render={({ field: { value, onChange, ...fieldProps } }) => (
                 <FormItem>

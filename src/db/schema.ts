@@ -44,6 +44,10 @@ export const postsTable = pgTable('posts', {
   noiDung: text('noi_dung').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  dienTichSuDung: integer('dien_tich_su_dung').default(0).notNull(),
+  huongCuaChinh: varchar('huong', { length: 255 }),
+  chieuNgang: integer('chieu_ngang').default(0).notNull(),
+  chieuDai: integer('chieu_dai').default(0).notNull(),
 });
 
 

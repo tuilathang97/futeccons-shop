@@ -25,7 +25,6 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
         getPostImageyById(numericPostId),
         getServerSession() as Promise<UserSession | null>
     ]);
-    
     let currentUser: DbUser | null = null;
     if (session?.user) {
         const sUser = session.user;

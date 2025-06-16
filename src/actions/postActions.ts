@@ -152,6 +152,10 @@ function preparePostData(formDataEntries: Record<string, string>, userId: string
     noiDung: formDataEntries.noiDung,
     latitude: latitude as typeof postsTable.$inferInsert.latitude,
     longitude: longitude as typeof postsTable.$inferInsert.longitude,
+    chieuNgang: Number(formDataEntries.chieuNgang),
+    chieuDai: Number(formDataEntries.chieuDai),
+    huongCuaChinh: formDataEntries.huongCuaChinh,
+    dienTichSuDung: Number(formDataEntries.dienTichSuDung),
   };
 }
 
@@ -174,7 +178,6 @@ export async function createPost(prevState: any, formData: FormData): Promise<Ac
     const formDataEntries = extractFormData(formData);
     const imagesCount = Number(formDataEntries.imagesCount || 0);
     const uploadedImageUrls = await processAndUploadImages(formData, imagesCount);
-    
     const postData = preparePostData(formDataEntries, user.id, isAdmin);
     const result = await createPostToDb(postData);
     
@@ -326,7 +329,6 @@ export async function updatePost(postId: number, formData: FormData): Promise<Ac
     }
 
     const rawData = Object.fromEntries(formData);
-    
     // Update post data with correct properties based on schema
     const updatedData: Partial<typeof postsTable.$inferInsert> = {
       tieuDeBaiViet: String(rawData.tieuDeBaiViet || post.tieuDeBaiViet),
@@ -343,6 +345,9 @@ export async function updatePost(postId: number, formData: FormData): Promise<Ac
       phuong: String(rawData.phuong || post.phuong),
       phuongCodeName: String(rawData.phuongCodeName || post.phuongCodeName),
       duong: String(rawData.duong || post.duong),
+      chieuNgang: rawData.chieuNgang ? Number(rawData.chieuNgang) : post.chieuNgang,
+      chieuDai: rawData.chieuDai ? Number(rawData.chieuDai) : post.chieuDai,
+      huongCuaChinh: post.huongCuaChinh,
       // latitude and longitude are decimal in the schema
       latitude: rawData.latitude ? String(rawData.latitude) : post.latitude?.toString(),
       longitude: rawData.longitude ? String(rawData.longitude) : post.longitude?.toString(),

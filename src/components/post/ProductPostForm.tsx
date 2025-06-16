@@ -40,7 +40,10 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
       soPhongVeSinh: 0,
       giayToPhapLy: "",
       noiDung: "",
-      tieuDeBaiViet: ""
+      tieuDeBaiViet: "",
+      dienTichSuDung: 0,
+      chieuNgang: 0,
+      chieuDai: 0,
     },
   });
 
@@ -55,7 +58,7 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
         clearPreviews(); 
       }
     }
-  }, [state?.message]);
+  }, [state?.message, clearPreviews, form, state?.success]);
 
   const handleSubmit = form.handleSubmit(async () => {
     const formElement = formRef?.current;

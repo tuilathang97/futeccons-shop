@@ -23,7 +23,6 @@ interface PostDetailProps {
 
 async function PostDetail({ post, images, article: initialArticle, fetchArticle = true }: PostDetailProps) {
     const { giaTien, duong, phuong, quan, thanhPho, createdAt } = post;
-    
     const article = (!initialArticle && fetchArticle) 
         ? await getPublishedArticleByParams({
             level1Slug: post.level1Category.toString()
@@ -68,12 +67,18 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                                 <p className='text-xl font-semibold text-brand-medium '>{formatPrice()}</p>
                             </div>
                             <div className='flex flex-col gap-2'>
-                                <p className='flex gap-2 font-medium items-center'> <span><MapPin size={16} /></span> {formatAddress()} </p>
-                                <p className='flex gap-2 font-medium items-center'> <span><Clock size={16} /></span> {formatDate()} </p>
+                                <p className='flex gap-2 items-center'> <span><MapPin size={16} /></span> {formatAddress()} </p>
+                                <p className='flex gap-2 items-center'> 
+                                    <span className='flex gap-2 items-center'>
+                                        <Clock size={16} />
+                                        Được đăng vào ngày : 
+                                        <span >{formatDate()}</span>
+                                    </span> 
+                                </p>
                             </div>
                         </div>
                     </PostSectionWrapper>
-                    <PostSectionWrapper>
+                    <PostSectionWrapper className='font-monserrat font-semibold'>
                         <p>{post.noiDung}</p>
                     </PostSectionWrapper>
                     <PostSectionWrapper>
@@ -83,7 +88,11 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                             <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
                                 <p className='flex gap-2 items-center'> <span><Toilet size={16} /></span> Số phòng vệ sinh: {post.soPhongVeSinh} </p>
                                 <p className='flex gap-2 items-center'> <span><Bed size={16} /></span> Số phòng ngủ: {post.soPhongNgu} </p>
-                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Diện tích sử dụng: {post.dienTichDat} m² </p>
+                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Diện tích đất: {post.dienTichDat} m² </p>
+                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Diện tích sử dụng: {post.dienTichSuDung} m² </p>
+                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Chiều ngang: {post.chieuNgang} m </p>
+                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Chiều dài: {post.chieuDai} m </p>
+                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Hướng cửa chính: {post.huongCuaChinh} </p>
                                 <p className='flex gap-2 items-center'> <span><Layers size={16} /></span> Số tầng: {post.soTang} </p>
                                 <p className='flex gap-2 items-center'> <span><Home size={16} /></span> Loại hình nhà ở: {post.loaiHinhNhaO} </p>
                                 <p className='flex gap-2 items-center'> <span><BuildingIcon size={16} /></span> Giấy tờ pháp lý: {post.giayToPhapLy} </p>

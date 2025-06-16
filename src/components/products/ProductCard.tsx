@@ -30,7 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-t-lg">
+                        <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-t-lg">
                             <span className="text-gray-500 text-sm">No Image</span>
                         </div>
                     )}
