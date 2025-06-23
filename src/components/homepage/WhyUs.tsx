@@ -28,12 +28,12 @@ export default function WhyUs() {
   return (
     <div 
       style={{ backgroundImage: "url('/images/backgroundImage.webp')", backgroundSize: "cover" }} 
-      className='min-w-full py-16 rounded-lg relative'
+      className='min-w-full py-16 xl:rounded-lg relative'
     >
       {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
+      <div className="absolute inset-0 bg-black/20 xl:rounded-lg"></div>
       
-      <div className='relative z-10 container mx-auto px-4'>
+      <div className='relative z-10 container mx-auto xl:px-0'>
         {/* Main heading */}
         <div className='text-center mb-12'>
           <h2 className='text-4xl md:text-5xl font-bold text-white mb-4'>

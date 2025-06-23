@@ -16,56 +16,40 @@ const categoryData = [
   // ===== LEVEL 2 under "Bán nhà" =====
   { name: "Nhà đất", parentId: 1, level: 2 as const, slug: "/nha-dat", path: "/ban-nha/nha-dat" },
   { name: "Chung cư", parentId: 1, level: 2 as const, slug: "/chung-cu", path: "/ban-nha/chung-cu" },
-  { name: "Biệt thự", parentId: 1, level: 2 as const, slug: "/biet-thu", path: "/ban-nha/biet-thu" },
-  { name: "Nhà phố", parentId: 1, level: 2 as const, slug: "/nha-pho", path: "/ban-nha/nha-pho" },
-  { name: "Đất nền", parentId: 1, level: 2 as const, slug: "/dat-nen", path: "/ban-nha/dat-nen" },
-  { name: "Văn phòng", parentId: 1, level: 2 as const, slug: "/van-phong", path: "/ban-nha/van-phong" },
   
   // ===== LEVEL 3 under "Nhà đất" =====
   { name: "Nhà cấp 4", parentId: 2, level: 3 as const, slug: "/nha-cap-4", path: "/ban-nha/nha-dat/nha-cap-4" },
   { name: "Nhà hẻm", parentId: 2, level: 3 as const, slug: "/nha-hem", path: "/ban-nha/nha-dat/nha-hem" },
   { name: "Nhà mặt tiền", parentId: 2, level: 3 as const, slug: "/nha-mat-tien", path: "/ban-nha/nha-dat/nha-mat-tien" },
   { name: "Nhà phố thương mại", parentId: 2, level: 3 as const, slug: "/nha-pho-thuong-mai", path: "/ban-nha/nha-dat/nha-pho-thuong-mai" },
+  { name: "Biệt thự", parentId: 2, level: 3 as const, slug: "/biet-thu", path: "/ban-nha/nha-dat/biet-thu" },
+  { name: "Nhà phố", parentId: 2, level: 3 as const, slug: "/nha-pho", path: "/ban-nha/nha-dat/nha-pho" },
+  { name: "Đất nền", parentId: 2, level: 3 as const, slug: "/dat-nen", path: "/ban-nha/nha-dat/dat-nen" },
+  { name: "Văn phòng", parentId: 2, level: 3 as const, slug: "/van-phong", path: "/ban-nha/nha-dat/van-phong" },
   
   // ===== LEVEL 3 under "Chung cư" =====
   { name: "Chung cư cao cấp", parentId: 3, level: 3 as const, slug: "/chung-cu-cao-cap", path: "/ban-nha/chung-cu/chung-cu-cao-cap" },
   { name: "Chung cư giá rẻ", parentId: 3, level: 3 as const, slug: "/chung-cu-gia-re", path: "/ban-nha/chung-cu/chung-cu-gia-re" },
-  { name: "Duplex", parentId: 3, level: 3 as const, slug: "/duplex", path: "/ban-nha/chung-cu/duplex" },
-  { name: "Penthouse", parentId: 3, level: 3 as const, slug: "/penthouse", path: "/ban-nha/chung-cu/penthouse" },
-  
-  // ===== LEVEL 3 under "Biệt thự" =====
-  { name: "Biệt thự liền kề", parentId: 4, level: 3 as const, slug: "/biet-thu-lien-ke", path: "/ban-nha/biet-thu/biet-thu-lien-ke" },
-  { name: "Biệt thự đơn lập", parentId: 4, level: 3 as const, slug: "/biet-thu-don-lap", path: "/ban-nha/biet-thu/biet-thu-don-lap" },
-  { name: "Biệt thự song lập", parentId: 4, level: 3 as const, slug: "/biet-thu-song-lap", path: "/ban-nha/biet-thu/biet-thu-song-lap" },
-  
-  // ===== LEVEL 3 under "Đất nền" =====
-  { name: "Đất dự án", parentId: 6, level: 3 as const, slug: "/dat-du-an", path: "/ban-nha/dat-nen/dat-du-an" },
-  { name: "Đất thổ cư", parentId: 6, level: 3 as const, slug: "/dat-tho-cu", path: "/ban-nha/dat-nen/dat-tho-cu" },
-  { name: "Đất nông nghiệp", parentId: 6, level: 3 as const, slug: "/dat-nong-nghiep", path: "/ban-nha/dat-nen/dat-nong-nghiep" },
-  
+    
   // ===== LEVEL 1: CHO THUÊ =====
   { name: "Cho thuê", parentId: null, level: 1 as const, slug: "/cho-thue", path: "/cho-thue" },
   
   // ===== LEVEL 2 under "Cho thuê" =====
   { name: "Nhà đất", parentId: 22, level: 2 as const, slug: "/nha-dat", path: "/cho-thue/nha-dat" },
   { name: "Chung cư", parentId: 22, level: 2 as const, slug: "/chung-cu", path: "/cho-thue/chung-cu" },
-  { name: "Văn phòng", parentId: 22, level: 2 as const, slug: "/van-phong", path: "/cho-thue/van-phong" },
-  { name: "Mặt bằng", parentId: 22, level: 2 as const, slug: "/mat-bang", path: "/cho-thue/mat-bang" },
-  { name: "Phòng trọ", parentId: 22, level: 2 as const, slug: "/phong-tro", path: "/cho-thue/phong-tro" },
   
   // ===== LEVEL 3 under "Cho thuê -> Nhà đất" =====
   { name: "Nhà mặt tiền", parentId: 23, level: 3 as const, slug: "/nha-mat-tien", path: "/cho-thue/nha-dat/nha-mat-tien" },
   { name: "Nhà phố", parentId: 23, level: 3 as const, slug: "/nha-pho", path: "/cho-thue/nha-dat/nha-pho" },
   { name: "Biệt thự", parentId: 23, level: 3 as const, slug: "/biet-thu", path: "/cho-thue/nha-dat/biet-thu" },
+  { name: "Văn phòng", parentId: 23, level: 3 as const, slug: "/van-phong", path: "/cho-thue/nha-dat/van-phong" },
+  { name: "Mặt bằng", parentId: 23, level: 3 as const, slug: "/mat-bang", path: "/cho-thue/nha-dat/mat-bang" },
+  { name: "Phòng trọ", parentId: 23, level: 3 as const, slug: "/phong-tro", path: "/cho-thue/nha-dat/phong-tro" },
   
   // ===== LEVEL 3 under "Cho thuê -> Chung cư" =====
   { name: "Chung cư mini", parentId: 24, level: 3 as const, slug: "/chung-cu-mini", path: "/cho-thue/chung-cu/chung-cu-mini" },
   { name: "Chung cư cao cấp", parentId: 24, level: 3 as const, slug: "/chung-cu-cao-cap", path: "/cho-thue/chung-cu/chung-cu-cao-cap" },
   { name: "Duplex", parentId: 24, level: 3 as const, slug: "/duplex", path: "/cho-thue/chung-cu/duplex" },
-  
-  // ===== LEVEL 3 under "Cho thuê -> Văn phòng" =====
-  { name: "Văn phòng trọn gói", parentId: 25, level: 3 as const, slug: "/van-phong-tron-goi", path: "/cho-thue/van-phong/van-phong-tron-goi" },
-  { name: "Văn phòng chia sẻ", parentId: 25, level: 3 as const, slug: "/van-phong-chia-se", path: "/cho-thue/van-phong/van-phong-chia-se" },
   
   // ===== LEVEL 1: DỰ ÁN =====
   { name: "Dự án", parentId: null, level: 1 as const, slug: "/du-an", path: "/du-an" },
@@ -94,7 +78,6 @@ const categoryData = [
   { name: "Nhà phố liền kề", parentId: 40, level: 3 as const, slug: "/nha-pho-lien-ke", path: "/du-an/nha-pho/nha-pho-lien-ke" },
   { name: "Shophouse", parentId: 40, level: 3 as const, slug: "/shophouse", path: "/du-an/nha-pho/shophouse" },
   // ===== LEVEL 1: Tất cả bài viết =====
-  { name: "Tất cả bài viết", parentId: null, level: 1 as const, slug: "/bai-viet", path: "/bai-viet" },
 ];
 
 async function seed() {

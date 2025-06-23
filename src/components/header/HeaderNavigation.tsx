@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export default function HeaderNavigation() {
   const { categories } = useCategories()
-  const level1Categories = categories.filter((category) => category.level === 1 && category.name !== "Tất cả bài viết")
+  const level1Categories = categories.filter((category) => category.level === 1 && category.name !== "Tất cả bài viết" && category.name !== "Dự án" )
   function getChildCategories(searchId: number, className?: string) {
     const result = categories
       .filter(category => category.parentId === searchId)
@@ -17,16 +17,15 @@ export default function HeaderNavigation() {
         childrenCount: categories.filter(c => c.parentId === category.id).length
       }))
       .sort((a, b) => b.childrenCount - a.childrenCount);
-
     return (
       result.map((category) => (
         <div key={category.id} className={cn("", className)}>
           <ul className="flex flex-col min-w-[400px] mt-4">
             <li className="cursor-pointer ">
-              <Link className="hover:underline hover:opacity-80" href={category?.path ?? ""}>{category.name}</Link>
+              <Link className="hover:underline hover:opacity-80 " href={category?.path ?? ""}>{category.name}</Link>
               <ul>
                 {
-                  getChildCategories(category.id, "font-normal my-2 gap-4 text-base hover:underline ")
+                  getChildCategories(category.id, "font-normal hover:font-semibold font-montserrat my-2 gap-4 text-base hover:underline ")
                 }
               </ul>
             </li>
@@ -49,7 +48,7 @@ export default function HeaderNavigation() {
                   <NavigationMenuLink asChild>
                     <ul className=" gap-3 grid min-w-[700px] grid-cols-3 p-6">
                       {
-                        getChildCategories(grandCategory.id, "font-semibold text-lg")
+                        getChildCategories(grandCategory.id, "font-bold font-montserrat text-lg")
                       }
                     </ul>
 

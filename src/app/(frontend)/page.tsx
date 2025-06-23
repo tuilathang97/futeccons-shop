@@ -10,6 +10,7 @@ import Link from "next/link";
 import WhyUs from "@/components/homepage/WhyUs";
 import ProvincesCard from "@/components/homepage/ProvincesCard";
 import ReviewsCarousel from "@/components/homepage/ReviewsCarousel";
+import SearchBar from "@/components/homepage/SearchBar";
 
 interface HomePageProps {
   searchParams: Promise<{
@@ -37,7 +38,7 @@ export default async function Home({ searchParams }: HomePageProps) {
     <CategoriesProvider initialCategories={categories}>
       <div className="flex flex-col justify-center items-center gap-[1.15rem] ">
         <div className="min-w-full mx-auto">
-          <div className="container flex flex-col sm:py-[3rem] py-[2rem] min-w-full items-center text-center text-sm/8 gap-4">
+          <div className="container flex flex-col sm:py-[3rem] py-[2rem] min-w-full items-center text-center text-sm/8 gap-6">
             <h1 className="max-w-4xl tracking-wide text-[2.5rem] leading-[3rem] font-bold font-montserrat">Tìm Kiếm Bất Động Sản Phù Hợp Với Nhu Cầu Của Bạn</h1>
             <p className="text-base tracking-wide font-montserrat sm:text-lg text-gray-500 ">Tại đây,chúng tôi sẽ giúp bạn 
               <span className="text-brand-medium text-xl mx-1">
@@ -47,10 +48,14 @@ export default async function Home({ searchParams }: HomePageProps) {
               <span className="text-brand-medium text-xl mx-1">
                 <Link href="/cho-thue" className="hover:text-brand-dark hover:underline">thuê / cho thuê </Link>
               </span> không gian lý tưởng</p>
+            
+            <div className="w-full max-w-4xl mt-4">
+              <SearchBar />
+            </div>
           </div>
         </div>
         <HomeImage href="/bai-viet" imgUrl="/categoryImages/saigon.webp" />
-        <div className="container">
+        <div className="container xl:px-0">
         <ProvincesCard />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
         </div>

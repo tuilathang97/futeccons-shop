@@ -12,9 +12,12 @@
     "db-migrate": "pnpm drizzle-kit migrate",
     "db-update": "pnpm drizzle-kit push",
     "seed-categories": "tsx ./src/db/seed.ts",
-    "seed-posts": "tsx ./src/db/seed-posts.ts"
+    "seed-posts": "tsx ./src/db/seed-posts.ts",
+    "start:typesense": "sudo /usr/bin/typesense-server --config=/etc/typesense/typesense-server.ini",
+    "dev-typesense": "concurrently \"pnpm run start:typesense\" \"next dev --turbopack\""
   },
   "dependencies": {
+    "@babel/runtime": "^7.27.6",
     "@cloudinary/react": "^1.14.1",
     "@cloudinary/url-gen": "^1.21.0",
     "@hookform/resolvers": "^3.10.0",
@@ -54,6 +57,7 @@
     "cloudinary": "^2.6.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
+    "concurrently": "^9.1.2",
     "dotenv": "^16.4.7",
     "dotenv-expand": "^12.0.1",
     "drizzle-orm": "^0.39.1",
@@ -78,6 +82,7 @@
     "sonner": "^2.0.3",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "typesense": "^2.0.3",
     "uuid": "^11.0.5",
     "validator.ts": "^0.2.2",
     "zod": "^3.24.1"

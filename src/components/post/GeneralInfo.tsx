@@ -79,7 +79,7 @@ const GeneralInfoClient = ({ categories }: { categories: Category[] }) => {
                 </FormControl>
                 <SelectContent>
                   {
-                    categories?.filter(category => category.level && category.level === 1)
+                    categories?.filter(category => category.level && category.level === 1 && category.name !== "Tất cả bài viết")
                       .map(category => {
                         return (
                           <SelectItem key={category.id} value={category.id.toString()}>{category.name}</SelectItem>

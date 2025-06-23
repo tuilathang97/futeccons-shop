@@ -1,6 +1,6 @@
 import React from 'react'
 import PostSectionWrapper from '@/components/postSectionWrapper'
-import { Bed, Clock, LandPlot, Layers, MapPin, Toilet, Home, BuildingIcon } from 'lucide-react'
+import { Bed, Clock, LandPlot, Layers, MapPin, Toilet, Home, BuildingIcon, Grid2X2, Milestone, SeparatorHorizontal, SeparatorVertical } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Image as ImageType, Post, Article } from '@/db/schema'
 import LocationMapServer from './LocationMapServer'
@@ -86,16 +86,16 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                             <h2 className='font-semibold text-lg'>Thông tin cơ bản</h2>
                             <Separator className='w-full' />
                             <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
-                                <p className='flex gap-2 items-center'> <span><Toilet size={16} /></span> Số phòng vệ sinh: {post.soPhongVeSinh} </p>
-                                <p className='flex gap-2 items-center'> <span><Bed size={16} /></span> Số phòng ngủ: {post.soPhongNgu} </p>
-                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Diện tích đất: {post.dienTichDat} m² </p>
-                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Diện tích sử dụng: {post.dienTichSuDung} m² </p>
-                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Chiều ngang: {post.chieuNgang} m </p>
-                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Chiều dài: {post.chieuDai} m </p>
-                                <p className='flex gap-2 items-center'> <span><LandPlot size={16} /></span> Hướng cửa chính: {post.huongCuaChinh} </p>
-                                <p className='flex gap-2 items-center'> <span><Layers size={16} /></span> Số tầng: {post.soTang} </p>
-                                <p className='flex gap-2 items-center'> <span><Home size={16} /></span> Loại hình nhà ở: {post.loaiHinhNhaO} </p>
-                                <p className='flex gap-2 items-center'> <span><BuildingIcon size={16} /></span> Giấy tờ pháp lý: {post.giayToPhapLy} </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><Toilet size={20} /></span> Số phòng vệ sinh: {post.soPhongVeSinh} </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><Bed size={20} /></span> Số phòng ngủ: {post.soPhongNgu} </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><LandPlot size={20} /></span> Diện tích đất: {post.dienTichDat} m² </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><Grid2X2 size={20} /></span> Diện tích sử dụng: {post.dienTichSuDung} m² </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><SeparatorVertical size={20} /></span> Chiều ngang: {post.chieuNgang} m </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><SeparatorHorizontal size={20} /></span> Chiều dài: {post.chieuDai} m </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><Milestone size={20} /></span> Hướng cửa chính: {post.huongCuaChinh} </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><Layers size={20} /></span> Số tầng: {post.soTang} </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><Home size={20} /></span> Loại hình nhà ở: {post.loaiHinhNhaO} </p>
+                                <p className='flex font-monserrat font-semibold gap-2 items-center'> <span><BuildingIcon size={20} /></span> Giấy tờ pháp lý: {post.giayToPhapLy} </p>
                             </div>
                         </div>
                     </PostSectionWrapper>
