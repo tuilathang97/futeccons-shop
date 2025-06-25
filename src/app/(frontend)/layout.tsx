@@ -40,12 +40,12 @@ export default async function RootLayout({
   return (
     <html lang="vi" className="h-svh">
       <body
-        className={`${arimo.variable} ${montserrat.variable} font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
+        className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
       >
           <SessionProvider session={session as Session} user={user as User}>
             <CategoriesProvider initialCategories={categories}>
               <Header />
-              <PageWrapper >
+              <PageWrapper className="flex-1">
                 <main>{children}</main>
               </PageWrapper>
               <Footer />

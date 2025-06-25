@@ -6,6 +6,7 @@ import ProductLoveIcon from './ProductLoveIcon';
 import Link from 'next/link';
 import { getPostThumbnailByPostId } from '@/lib/queries';
 import Image from 'next/image';
+import { IMAGE_PLACEHOLDER } from '@/constants/provinces-config';
 
 interface ProductCardProps {
     post: Post;
@@ -27,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                             alt={post.tieuDeBaiViet || "Property image"}
                             fill={true}
                             placeholder='blur'
-                            blurDataURL={blurDataURL}
+                            blurDataURL={blurDataURL || IMAGE_PLACEHOLDER}
                             priority={true}
                             className="object-cover shadow-md "
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

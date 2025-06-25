@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
+import { IMAGE_PLACEHOLDER } from '@/constants/provinces-config'
 
 export default function HomeImage({ 
   href = "/",
@@ -28,6 +29,8 @@ export default function HomeImage({
         <Image 
           src={imgUrl || "/lorem.png"} 
           alt="Home Image" 
+          placeholder="blur"
+          blurDataURL={IMAGE_PLACEHOLDER}
           className={cn(
             'min-w-full shadow-lg hover:scale-105 transition-all duration-300 max-h-[400px] md:max-h-[500px] lg:max-h-[600px] h-auto object-cover',
             isLoading ? 'opacity-0 absolute' : 'opacity-100',

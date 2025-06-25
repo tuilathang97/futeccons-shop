@@ -61,9 +61,7 @@ export default async function Home({ searchParams }: HomePageProps) {
         </div>
         <WhyUs />
         <CategoryPicker />
-        <div className="min-w-full py-4 rounded-lg">
          <ReviewsCarousel />
-        </div>
       </div> 
     </CategoriesProvider>
   );
