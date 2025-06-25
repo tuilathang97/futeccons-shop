@@ -1,0 +1,2 @@
+echo "0 * * * * cd /home/thangnguyen/projects/futeccons-shop && /home/thangnguyen/.nvm/versions/node/v22.12.0/bin/npx tsx src/app/script/seed.ts " | crontab
+echo " Cron job đã được thiết lập - chạy mỗi giờ" 
