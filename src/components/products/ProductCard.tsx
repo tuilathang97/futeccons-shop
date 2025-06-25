@@ -14,7 +14,8 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) => {
-    const {image} = await getPostThumbnailByPostId(post.id)
+    const {image,blurDataURL} = await getPostThumbnailByPostId(post.id)
+
     const thumbnailImg = image as ImageType
     return (
         <div className="min-w-full border-none shadow-none bg-transparent group flex flex-col overflow-hidden">
@@ -25,6 +26,8 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                             src={thumbnailImg.secureUrl}
                             alt={post.tieuDeBaiViet || "Property image"}
                             fill={true}
+                            placeholder='blur'
+                            blurDataURL={blurDataURL}
                             priority={true}
                             className="object-cover shadow-md "
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -9,7 +9,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Star } from "lucide-react";
+import { Star, Quote } from "lucide-react";
+import reviewsData from '@/constants/reviews-data.json';
 
 interface Review {
   id: number;
@@ -17,106 +18,105 @@ interface Review {
   avatar: string;
   content: string;
   rating: number;
+  position: string;
+  company: string;
 }
 
-const reviews: Review[] = [
-  {
-    id: 1,
-    name: "Nguyễn Văn An",
-    avatar: "https://ui-avatars.com/api/?name=Nguyen+Van+An&background=3b82f6&color=fff&size=100",
-    content: "Tôi đã tìm được căn hộ mơ ước nhờ nền tảng này. Dịch vụ hỗ trợ rất tận tình và chuyên nghiệp. Quy trình thuê nhà diễn ra nhanh chóng và minh bạch.",
-    rating: 5
-  },
-  {
-    id: 2,
-    name: "Trần Thị Bình",
-    avatar: "https://ui-avatars.com/api/?name=Tran+Thi+Binh&background=ef4444&color=fff&size=100",
-    content: "Rất hài lòng với chất lượng dịch vụ. Nhân viên tư vấn nhiệt tình, giúp tôi tìm được nhà phù hợp với ngân sách. Chắc chắn sẽ giới thiệu cho bạn bè.",
-    rating: 5
-  },
-  {
-    id: 3,
-    name: "Lê Minh Cường", 
-    avatar: "https://ui-avatars.com/api/?name=Le+Minh+Cuong&background=10b981&color=fff&size=100",
-    content: "Nền tảng có giao diện thân thiện, dễ sử dụng. Thông tin bất động sản đầy đủ và chính xác. Tôi đã bán được nhà trong thời gian ngắn với giá hợp lý.",
-    rating: 4
-  },
-  {
-    id: 4,
-    name: "Phạm Thị Dung",
-    avatar: "https://ui-avatars.com/api/?name=Pham+Thi+Dung&background=f59e0b&color=fff&size=100", 
-    content: "Đội ngũ hỗ trợ rất chuyên nghiệp. Họ giúp tôi hoàn thiện mọi thủ tục pháp lý một cách nhanh chóng. Dịch vụ đáng tin cậy và uy tín.",
-    rating: 5
-  },
-  {
-    id: 5,
-    name: "Hoàng Văn Em",
-    avatar: "https://ui-avatars.com/api/?name=Hoang+Van+Em&background=8b5cf6&color=fff&size=100",
-    content: "Trải nghiệm tuyệt vời! Tôi đã tìm được căn hộ cho thuê phù hợp trong vòng 1 tuần. Giá cả hợp lý, vị trí đẹp. Cảm ơn team đã hỗ trợ tôi.",
-    rating: 5
-  }
-];
-
 export default function ReviewsCarousel() {
+  const { reviews }: { reviews: Review[] } = reviewsData;
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
       <Star
         key={index}
-        className={`w-4 h-4 ${
-          index < rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+        className={`w-5 h-5 ${
+          index < rating 
+            ? 'fill-amber-400 text-amber-400' 
+            : 'fill-gray-200 text-gray-200'
         }`}
       />
     ));
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 mb-10 lg:mb-36">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold font-montserrat mb-4">
-          Đánh Giá Từ Khách Hàng
+    <section className="w-full max-w-7xl mx-auto px-4 py-16 lg:py-24">
+      <div className="text-center mb-16">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6">
+          <Quote className="w-8 h-8 text-white" />
+        </div>
+        <h2 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent mb-6">
+          Khách Hàng Nói Gì Về Chúng Tôi
         </h2>
-        <p className="text-gray-600 text-lg font-montserrat">
-          Những phản hồi chân thực từ khách hàng đã sử dụng dịch vụ của chúng tôi
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Những phản hồi chân thực từ khách hàng đã tin tưởng và sử dụng dịch vụ của FutecCons Shop
         </p>
       </div>
       
-      <Carousel className="w-full">
-        <CarouselContent>
+      <Carousel 
+        className="w-full" 
+        opts={{
+          align: "start",
+          loop: true,
+        }}
+      >
+        <CarouselContent className="-ml-2 md:-ml-4">
           {reviews.map((review) => (
-            <CarouselItem key={review.id} className="flex justify-center">
-              <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-white to-gray-50">
-                <CardContent className="p-8 text-center">
-                  <div className="flex flex-col items-center space-y-6">
-                    {/* Avatar */}
-                    <Avatar className="w-20 h-20 border-4 border-brand-light">
-                      <AvatarImage 
-                        src={review.avatar} 
-                        alt={`Avatar của ${review.name}`}
-                        className="object-cover"
-                      />
-                      <AvatarFallback className="bg-brand-light text-brand-dark text-lg font-semibold">
-                        {review.name.split(' ').map(n => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
+            <CarouselItem key={review.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+              <Card className="h-full bg-white border-0 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
+                <CardContent className="p-0 h-full">
+                  <div className="relative h-full">
+                    {/* Background gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     
-                    {/* Rating */}
-                    <div className="flex items-center space-x-1">
-                      {renderStars(review.rating)}
-                    </div>
-                    
-                    {/* Content */}
-                    <blockquote className="text-gray-700 text-lg leading-relaxed italic max-w-lg">
-                      &ldquo;{review.content}&rdquo;
-                    </blockquote>
-                    
-                    {/* Name */}
-                    <div className="border-t pt-4 w-full">
-                      <p className="font-semibold text-gray-900 text-xl">
-                        {review.name}
-                      </p>
-                      <p className="text-brand-medium text-sm">
-                        Khách hàng thân thiết
-                      </p>
+                    <div className="relative p-8 h-full flex flex-col">
+                      {/* Rating stars */}
+                      <div className="flex items-center justify-center mb-6">
+                        <div className="flex items-center space-x-1 bg-amber-50 px-4 py-2 rounded-full">
+                          {renderStars(review.rating)}
+                        </div>
+                      </div>
+                      
+                      {/* Quote icon */}
+                      <div className="flex justify-center mb-6">
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                          <Quote className="w-6 h-6 text-white" />
+                        </div>
+                      </div>
+                      
+                      {/* Content */}
+                      <blockquote className="text-gray-700 text-lg leading-relaxed text-center mb-8 flex-grow italic">
+                        &ldquo;{review.content}&rdquo;
+                      </blockquote>
+                      
+                      {/* Author info */}
+                      <div className="text-center border-t pt-6">
+                        <div className="flex flex-col items-center space-y-4">
+                          {/* Avatar */}
+                          <Avatar className="w-16 h-16 border-4 border-white shadow-lg ring-2 ring-blue-100">
+                            <AvatarImage 
+                              src={review.avatar} 
+                              alt={`Avatar của ${review.name}`}
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg font-semibold">
+                              {review.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          
+                          {/* Name and position */}
+                          <div className="space-y-1">
+                            <h4 className="font-bold text-gray-900 text-xl">
+                              {review.name}
+                            </h4>
+                            <p className="text-blue-600 font-medium">
+                              {review.position}
+                            </p>
+                            <p className="text-gray-500 text-sm">
+                              {review.company}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -125,9 +125,21 @@ export default function ReviewsCarousel() {
           ))}
         </CarouselContent>
         
-        <CarouselPrevious className="bg-brand-light hover:bg-brand-medium text-brand-dark border-brand-medium shadow-lg" />
-        <CarouselNext className="bg-brand-light hover:bg-brand-medium text-brand-dark border-brand-medium shadow-lg" />
+        <CarouselPrevious className="bg-white hover:bg-blue-50 text-gray-700 border-2 border-blue-100 shadow-lg hover:border-blue-300 transition-all duration-200 -left-6" />
+        <CarouselNext className="bg-white hover:bg-blue-50 text-gray-700 border-2 border-blue-100 shadow-lg hover:border-blue-300 transition-all duration-200 -right-6" />
       </Carousel>
-    </div>
+      
+      {/* Bottom decoration */}
+      <div className="flex justify-center mt-12">
+        <div className="flex space-x-2">
+          {[...Array(3)].map((_, i) => (
+            <div 
+              key={i} 
+              className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full opacity-60"
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 } 

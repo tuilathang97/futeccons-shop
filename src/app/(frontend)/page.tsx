@@ -8,7 +8,7 @@ import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import HomeImage from "@/components/homepage/HomeImage";
 import Link from "next/link";
 import WhyUs from "@/components/homepage/WhyUs";
-import ProvincesCard from "@/components/homepage/ProvincesCard";
+import ProvincesCardWithSuspense from "@/components/homepage/ProvincesCardWithSuspense";
 import ReviewsCarousel from "@/components/homepage/ReviewsCarousel";
 import SearchBar from "@/components/homepage/SearchBar";
 
@@ -56,7 +56,7 @@ export default async function Home({ searchParams }: HomePageProps) {
         </div>
         <HomeImage href="/bai-viet" imgUrl="/categoryImages/saigon.webp" />
         <div className="container xl:px-0">
-        <ProvincesCard />
+        <ProvincesCardWithSuspense />
         <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
         </div>
         <WhyUs />

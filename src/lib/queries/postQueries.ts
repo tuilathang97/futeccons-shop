@@ -5,6 +5,11 @@ import { eq, desc, asc, and, count as drizzleCount, ilike, or, type SQL } from "
 import { PaginationParams, PaginatedResult } from "./paginateQuery";
 import { customUnstableCache } from '@/lib/cache';
 import { user as usersTable } from '@/db/schema';
+import dotenv from 'dotenv';
+import { get } from "https";
+dotenv.config();
+
+
 
 // Type for posts with user information
 export type PostWithUser = Post & {
@@ -945,16 +950,43 @@ export const getPostImagesByIds = customUnstableCache(
   }
 );
 
+export async function getBase64FromUrl(url: string): Promise<string | null> {
+  return new Promise((resolve, reject) => {
+    get(url, (res) => {
+      const contentType = res.headers['content-type'];
+      if (!contentType) {
+        reject(new Error('Không xác định được content-type'));
+        return;
+      }
+
+      const data: Uint8Array[] = [];
+      res.on('data', (chunk) => data.push(chunk));
+      res.on('end', () => {
+        const buffer = Buffer.concat(data);
+        const base64 = buffer.toString('base64');
+        resolve(`data:${contentType};base64,${base64}`);
+      });
+    }).on('error', (err) => {
+      reject(err);
+    });
+  });
+}
+
+
+
 export const getPostThumbnailByPostId = async (postId: number) => {
   try{
     const images = await db
       .select()
       .from(postImagesTable)
       .where(eq(postImagesTable.postId, postId))
-      .limit(1)
+      .limit(1);
+
+      const base64 = await getBase64FromUrl(`https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/w_20,e_blur:200,q_auto/${images[0]?.publicId}.webp`)
     return {
       success: true,
-      image: images[0]
+      image: images[0],
+      blurDataURL: base64
     };
   }catch(error){
     console.error(error)

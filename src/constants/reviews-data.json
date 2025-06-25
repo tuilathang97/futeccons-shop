@@ -1,0 +1,76 @@
+{
+  "reviews": [
+    {
+      "id": 1,
+      "name": "Nguyễn Văn Minh",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      "content": "Tôi đã tìm được căn hộ mơ ước nhờ FutecCons Shop. Dịch vụ hỗ trợ rất tận tình và chuyên nghiệp. Quy trình thuê nhà diễn ra nhanh chóng và minh bạch.",
+      "rating": 5,
+      "position": "Giám đốc Marketing",
+      "company": "Tech Solutions"
+    },
+    {
+      "id": 2,
+      "name": "Trần Thị Hương",
+      "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      "content": "Rất hài lòng với chất lượng dịch vụ. Nhân viên tư vấn nhiệt tình, giúp tôi tìm được nhà phù hợp với ngân sách. Chắc chắn sẽ giới thiệu cho bạn bè.",
+      "rating": 5,
+      "position": "Kế toán trưởng",
+      "company": "ABC Group"
+    },
+    {
+      "id": 3,
+      "name": "Lê Minh Tuấn", 
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      "content": "Nền tảng có giao diện thân thiện, dễ sử dụng. Thông tin bất động sản đầy đủ và chính xác. Tôi đã bán được nhà trong thời gian ngắn với giá hợp lý.",
+      "rating": 4,
+      "position": "Kiến trúc sư",
+      "company": "Design Studio"
+    },
+    {
+      "id": 4,
+      "name": "Phạm Thị Lan",
+      "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", 
+      "content": "Đội ngũ hỗ trợ rất chuyên nghiệp. Họ giúp tôi hoàn thiện mọi thủ tục pháp lý một cách nhanh chóng. Dịch vụ đáng tin cậy và uy tín.",
+      "rating": 5,
+      "position": "Luật sư",
+      "company": "Law Firm"
+    },
+    {
+      "id": 5,
+      "name": "Hoàng Văn Đức",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+      "content": "Trải nghiệm tuyệt vời! Tôi đã tìm được căn hộ cho thuê phù hợp trong vòng 1 tuần. Giá cả hợp lý, vị trí đẹp. Cảm ơn team đã hỗ trợ tôi.",
+      "rating": 5,
+      "position": "Developer",
+      "company": "StartUp Inc"
+    },
+    {
+      "id": 6,
+      "name": "Vũ Thị Mai",
+      "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      "content": "Dịch vụ tuyệt vời với đội ngũ tư vấn am hiểu thị trường. Tôi đã đầu tư thành công vào nhiều dự án bất động sản thông qua nền tảng này.",
+      "rating": 5,
+      "position": "Nhà đầu tư",
+      "company": "Investment Fund"
+    },
+    {
+      "id": 7,
+      "name": "Đặng Minh Khôi",
+      "avatar": "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&crop=face",
+      "content": "Giao diện hiện đại, tìm kiếm nhanh chóng. Thông tin bất động sản cập nhật liên tục. Đây là nền tảng tin cậy nhất mà tôi từng sử dụng.",
+      "rating": 4,
+      "position": "Product Manager",
+      "company": "Tech Hub"
+    },
+    {
+      "id": 8,
+      "name": "Bùi Thị Nga",
+      "avatar": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face",
+      "content": "Nhờ FutecCons mà tôi đã bán được căn nhà cũ và mua được căn mới trong cùng một tháng. Quy trình rất thuận tiện và minh bạch.",
+      "rating": 5,
+      "position": "Nhà thiết kế",
+      "company": "Creative Agency"
+    }
+  ]
+} 

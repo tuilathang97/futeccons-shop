@@ -22,7 +22,14 @@ function handleFormatPriceToNumber({ gia }: { gia: string }) {
     return null
 }
 
-function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {gia?: string, area?: string, bedrooms?: string,thanhPho?: string,quan?: string,phuong?: string}  }) {  
+function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {
+    gia?: string,
+    area?: string,
+    bedrooms?: string,
+    thanhPho?: string,
+    quan?: string,
+    phuong?: string,
+}  }) {  
     if (!data || data.length === 0) {
         return <div>Không có bài viết phù hợp với yêu cầu </div>
     }
