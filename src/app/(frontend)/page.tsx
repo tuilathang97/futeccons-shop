@@ -48,16 +48,15 @@ export default async function Home({ searchParams }: HomePageProps) {
               <span className="text-brand-medium text-xl mx-1">
                 <Link href="/cho-thue" className="hover:text-brand-dark hover:underline">thuê / cho thuê </Link>
               </span> không gian lý tưởng</p>
-            
-            <div className="w-full max-w-4xl mt-4">
-              <SearchBar />
-            </div>
           </div>
         </div>
+        <div className="flex md:hidden w-full container 2xl:px-0">
+          <SearchBar />
+        </div>
         <HomeImage href="/bai-viet" imgUrl="/categoryImages/saigon.webp" />
-        <div className="container xl:px-0">
-        <ProvincesCardWithSuspense />
-        <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
+        <div className="container 2xl:px-0">
+          <ProvincesCardWithSuspense />
+          <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />
         </div>
         <WhyUs />
         <CategoryPicker />

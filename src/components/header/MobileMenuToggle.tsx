@@ -147,7 +147,7 @@ export default function MobileMenuToggle() {
           <AlignJustify strokeWidth={1.5} size={24} />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className=" min-w-[80%] flex overflow-auto flex-col gap-4">
+      <SheetContent side="left" className=" min-w-[100%] flex overflow-auto flex-col gap-4">
         <SheetHeader>
           <SheetTitle className="flex flex-col items-center gap-2">
             {user?.id ? (

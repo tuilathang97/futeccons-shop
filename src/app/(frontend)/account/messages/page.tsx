@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import React from 'react';
 import { getServerSession } from '@/lib/auth-utils';
 import { redirect } from 'next/navigation';

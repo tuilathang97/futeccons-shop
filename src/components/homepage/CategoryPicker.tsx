@@ -6,13 +6,14 @@ import { cn } from '@/lib/utils'
 import { Category } from '@/db/schema'
 import Image from 'next/image'
 import Link from 'next/link'
+import { IMAGE_PLACEHOLDER } from '@/constants/provinces-config'
 interface CategoryPickerProps {
     filterCategories?: Category[]
     className?: string
 }
 
 
-function CategoriesRender(categories: Category[],imagesUrl:string[]) {
+function CategoriesRender(categories: Category[], imagesUrl: string[]) {
     const renderCategories = categories.map((category, index) => {
         return (
             <Link
@@ -21,8 +22,15 @@ function CategoriesRender(categories: Category[],imagesUrl:string[]) {
                 className="group hover:shadow-lg min-w-full min-h-full flex flex-col items-center gap-2 rounded-md transition-colors hover:bg-slate-50"
             >
                 <div className='relative min-w-full hover:shadow-md transition-shadow duration-300'>
-                    <div className="flex flex-col-reverse items-center gap-2">
-                        <Image className='z-10 object-cover brightness-50 min-w-full min-h-full w-[10rem] h-[10rem] rounded-md' src={imagesUrl[index]} alt={category.name || ""} width={200} height={200} />
+                    <div className="relative w-full h-40">
+                        <Image
+                            src={imagesUrl[index]}
+                            alt={`Ảnh minh hoạ danh mục ${category.name}`} 
+                            fill
+                            className="object-cover rounded-md group-hover:brightness-[75%] transition-all duration-300 brightness-50"
+                            placeholder="blur"
+                            blurDataURL={IMAGE_PLACEHOLDER}
+                        />
                     </div>
                     <p className="text-2xl flex justify-center w-full text-center flex text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 font-bold">{category.name}</p>
                 </div>
@@ -58,7 +66,7 @@ function CategoryPicker({ filterCategories, className }: CategoryPickerProps) {
             <h2 className='text-2xl font-bold font-montserrat '>Tìm kiếm theo loại danh mục</h2>
             <Card className={cn("p-0 bg-transparent border-none shadow-none", className)}>
                 <CardContent className='p-0 gap-4 min-w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
-                    {CategoriesRender(filterCategories ? filterCategories : defaultCategories,imagesUrl)}
+                    {CategoriesRender(filterCategories ? filterCategories : defaultCategories, imagesUrl)}
                 </CardContent>
             </Card>
         </div>

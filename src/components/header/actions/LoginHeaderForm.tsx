@@ -6,7 +6,7 @@ function LoginHeaderForm() {
     return (
         <div>
             <Link href="/auth/sign-in">
-                <Button>
+                <Button variant="secondary">
                     Đăng nhập
                 </Button>
             </Link>

@@ -33,7 +33,7 @@ export default function WhyUs() {
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/20 xl:rounded-lg"></div>
       
-      <div className='relative z-10 container mx-auto xl:px-0'>
+      <div className='relative z-10 container mx-auto 2xl:px-0'>
         {/* Main heading */}
         <div className='text-center mb-12'>
           <h2 className='text-4xl md:text-5xl font-bold text-white mb-4'>

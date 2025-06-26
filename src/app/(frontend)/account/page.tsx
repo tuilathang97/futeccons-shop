@@ -1,12 +1,12 @@
+export const dynamic = 'force-dynamic';
 import { getServerSession } from "@/lib/auth-utils";
 import { redirect } from 'next/navigation';
 import { getPostBelongToUser } from "@/lib/queries/postQueries";
-// import { getPostImages } from "@/lib/queries/postImagesQueries"; // No longer needed here
 import AccountPageClient from "./AccountPageClient";
-import type { User, Post as PostType } from "@/db/schema"; // Renamed Post to PostType to avoid conflict
+import type { User, Post as PostType } from "@/db/schema";
 import { getCategories } from "@/lib/queries/categoryQueries";
-import ProductCard from "@/components/products/ProductCard"; // Import ProductCard
-import React from "react"; // Import React for JSX
+import ProductCard from "@/components/products/ProductCard";
+import React from "react";
 
 interface AccountPageProps {
   searchParams?: Promise<{
