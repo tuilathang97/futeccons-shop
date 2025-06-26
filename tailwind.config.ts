@@ -71,7 +71,7 @@ const config: Config = {
         "color-5": "hsl(var(--color-5))",
         brand: {
           light: "#FBDB93",
-          medium: "#BE5B50",
+          medium: "#8C322D",
           dark: "#8A2D3B",
           darkest: "#641B2E",
         },

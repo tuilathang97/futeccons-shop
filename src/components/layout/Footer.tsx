@@ -30,9 +30,7 @@ const footerSections = [
     items: [
       { title: "Giới thiệu", href: "/gioi-thieu" },
       { title: "Tuyển dụng", href: "/tuyen-dung" },
-      { title: "Đối tác", href: "/doi-tac" },
-      { title: "Báo chí", href: "/bao-chi" },
-      { title: "Thành tích", href: "/thanh-tich" },
+      { title: "Đối tác", href: "/lien-he" },
     ],
   },
 ];
@@ -40,8 +38,6 @@ const footerSections = [
 const socialLinks = [
   { icon: Facebook, href: "https://facebook.com/futeccons", label: "Facebook" },
   { icon: Instagram, href: "https://instagram.com/futeccons", label: "Instagram" },
-  { icon: Youtube, href: "https://youtube.com/futeccons", label: "Youtube" },
-  { icon: Twitter, href: "https://twitter.com/futeccons", label: "Twitter" },
 ];
 
 const contactInfo = [

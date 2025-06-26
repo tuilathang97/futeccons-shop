@@ -24,7 +24,7 @@ interface ProvincesCardProps {
 function ProvincesRender(provinces: Province[], imagesUrl: string[]) {
   return provinces.map((province, index) => (
     <Link
-      href={`/ban-nha/${province.codename}`}
+      href={`/ban-nha?thanhPho=${province.codename}`}
       key={province.code}
       className="group hover:shadow-lg min-w-full min-h-full flex flex-col items-center gap-2 rounded-md transition-colors hover:bg-slate-50"
     >

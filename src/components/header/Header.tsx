@@ -37,7 +37,7 @@ export default function Header() {
                         <Link
                             href="/post-page"
                         >
-                            <Button variant={"destructive"} className="flex gap-2">
+                            <Button className="flex gap-2 bg-brand-medium text-white">
                                 <p>Đăng tin</p>
                                 <SquarePen size={16} />
                             </Button>
