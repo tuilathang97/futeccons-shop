@@ -7,7 +7,7 @@ import UserDropDown from "./UserDropDown"
 import { useSession } from "@/contexts/SessionContext"
 import MobileMenuToggle from "./MobileMenuToggle"
 import HeaderNavigation from "./HeaderNavigation"   
-import SearchBar from "../homepage/SearchBar"
+import HeaderSearchDialog from "./HeaderSearchDialog"
 
 export default function Header() {
     const { user, session } = useSession()
@@ -21,16 +21,14 @@ export default function Header() {
                         </Link>
                         <HeaderNavigation />
                     </div>
-                    <div className="hidden md:flex w-full">
-                        <SearchBar />
-                    </div>
                     <div className="flex gap-4 items-center min-w-full justify-between md:min-w-fit">
+                        <HeaderSearchDialog />
                         <div>
                             <div className="hidden md:flex">
                                 {user?.id && session?.id ? (
                                     <UserDropDown />
                                 ) : <UserActionGroup />
-                                }
+                            }
                             </div>
                             <div className="flex md:hidden">
                                 <MobileMenuToggle />

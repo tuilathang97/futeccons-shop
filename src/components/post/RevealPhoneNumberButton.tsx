@@ -38,7 +38,7 @@ export default function RevealPhoneNumberButton({
 
   if (isRevealed && isCurrentUserLoggedIn && phoneNumber) {
     return (
-      <Button asChild className="w-full">
+      <Button variant={"destructive"} asChild className="w-full">
         <a href={`tel:${phoneNumber}`}>
           {phoneNumber} 
           <Phone className="ml-2" size={16} />
@@ -48,7 +48,7 @@ export default function RevealPhoneNumberButton({
   }
 
   return (
-    <Button onClick={handleClick} className="w-full">
+    <Button onClick={handleClick} variant={"destructive"} className="w-full">
       {`Bấm để hiện số: ${maskPhoneNumber(phoneNumber)}`}
       <Phone className="ml-2" size={16} />
     </Button>

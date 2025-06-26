@@ -50,10 +50,10 @@ export default async function Home({ searchParams }: HomePageProps) {
               </span> không gian lý tưởng</p>
           </div>
         </div>
-        <div className="flex md:hidden w-full container 2xl:px-0">
+        <div className="w-full container 2xl:px-0">
           <SearchBar />
         </div>
-        <HomeImage href="/bai-viet" imgUrl="/categoryImages/saigon.webp" />
+        <HomeImage href="/tim-kiem-theo-tu-khoa" imgUrl="/categoryImages/saigon.webp" />
         <div className="container 2xl:px-0">
           <ProvincesCardWithSuspense />
           <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts}  />

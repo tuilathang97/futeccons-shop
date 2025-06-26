@@ -43,7 +43,7 @@ function ProductsContainer({ title, posts, linkTitle }: Container) {
                 })}
             </div>
             <div className='flex justify-center mt-4'>
-                <Link href={`/bai-viet`}>
+                <Link href={`/tim-kiem-theo-tu-khoa`}>
                     <Button className='max-w-[15rem]'>
                         Xem thêm {linkTitle}
                     </Button>

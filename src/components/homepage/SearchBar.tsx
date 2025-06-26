@@ -14,7 +14,6 @@ const SearchBar = () => {
   const [showResults, setShowResults] = useState(false)
   const router = useRouter()
 
-  // Debounced search for suggestions
   const searchPosts = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) {
       setResults([])
@@ -55,7 +54,7 @@ const SearchBar = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!query.trim()) return
-    router.push(`bai-viet?query=${encodeURIComponent(query)}`)
+    router.push(`/tim-kiem-theo-tu-khoa?query=${encodeURIComponent(query)}`)
     clearSearch()
   }
 
@@ -66,7 +65,7 @@ const SearchBar = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative w-full max-w-2xl mx-auto">
+    <form onSubmit={handleSubmit} className="relative w-full max-w-3xl mx-auto">
       <div className="relative flex">
         <button
           type="submit"
