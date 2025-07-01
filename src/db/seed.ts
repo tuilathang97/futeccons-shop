@@ -50,34 +50,9 @@ const categoryData = [
   { name: "Chung cư mini", parentId: 24, level: 3 as const, slug: "/chung-cu-mini", path: "/cho-thue/chung-cu/chung-cu-mini" },
   { name: "Chung cư cao cấp", parentId: 24, level: 3 as const, slug: "/chung-cu-cao-cap", path: "/cho-thue/chung-cu/chung-cu-cao-cap" },
   { name: "Duplex", parentId: 24, level: 3 as const, slug: "/duplex", path: "/cho-thue/chung-cu/duplex" },
-  
-  // ===== LEVEL 1: DỰ ÁN =====
-  { name: "Dự án", parentId: null, level: 1 as const, slug: "/du-an", path: "/du-an" },
-  
-  // ===== LEVEL 2 under "Dự án" =====
-  { name: "Căn hộ", parentId: 36, level: 2 as const, slug: "/can-ho", path: "/du-an/can-ho" },
-  { name: "Đất nền", parentId: 36, level: 2 as const, slug: "/dat-nen", path: "/du-an/dat-nen" },
-  { name: "Biệt thự", parentId: 36, level: 2 as const, slug: "/biet-thu", path: "/du-an/biet-thu" },
-  { name: "Nhà phố", parentId: 36, level: 2 as const, slug: "/nha-pho", path: "/du-an/nha-pho" },
-  
-  // ===== LEVEL 3 under "Dự án -> Căn hộ" =====
-  { name: "Cao cấp", parentId: 37, level: 3 as const, slug: "/cao-cap", path: "/du-an/can-ho/cao-cap" },
-  { name: "Trung cấp", parentId: 37, level: 3 as const, slug: "/trung-cap", path: "/du-an/can-ho/trung-cap" },
-  { name: "Bình dân", parentId: 37, level: 3 as const, slug: "/binh-dan", path: "/du-an/can-ho/binh-dan" },
-  
-  // ===== LEVEL 3 under "Dự án -> Đất nền" =====
-  { name: "Đất nền phân lô", parentId: 38, level: 3 as const, slug: "/dat-nen-phan-lo", path: "/du-an/dat-nen/dat-nen-phan-lo" },
-  { name: "Đất nền dự án", parentId: 38, level: 3 as const, slug: "/dat-nen-du-an", path: "/du-an/dat-nen/dat-nen-du-an" },
-  
-  // ===== LEVEL 3 under "Dự án -> Biệt thự" =====
-  { name: "Biệt thự nghỉ dưỡng", parentId: 39, level: 3 as const, slug: "/biet-thu-nghi-duong", path: "/du-an/biet-thu/biet-thu-nghi-duong" },
-  { name: "Biệt thự liền kề", parentId: 39, level: 3 as const, slug: "/biet-thu-lien-ke", path: "/du-an/biet-thu/biet-thu-lien-ke" },
-  
-  // ===== LEVEL 3 under "Dự án -> Nhà phố" =====
-  { name: "Nhà phố thương mại", parentId: 40, level: 3 as const, slug: "/nha-pho-thuong-mai", path: "/du-an/nha-pho/nha-pho-thuong-mai" },
-  { name: "Nhà phố liền kề", parentId: 40, level: 3 as const, slug: "/nha-pho-lien-ke", path: "/du-an/nha-pho/nha-pho-lien-ke" },
-  { name: "Shophouse", parentId: 40, level: 3 as const, slug: "/shophouse", path: "/du-an/nha-pho/shophouse" },
+      
   // ===== LEVEL 1: Tất cả bài viết =====
+  { name: "Tất cả bài viết", parentId: null, level: 1 as const, slug: "/tim-kiem-theo-tu-khoa", path: "/tim-kiem-theo-tu-khoa" },
 ];
 
 async function seed() {

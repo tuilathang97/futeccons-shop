@@ -60,7 +60,6 @@ export default async function BaiViet({searchParams }: PageProps) {
             }
           }
         : await getPosts(paginationParams);
-    
     const article = await getPublishedArticleByParams({
         level1Slug: "tim-kiem-theo-tu-khoa"
     });
@@ -94,7 +93,7 @@ export default async function BaiViet({searchParams }: PageProps) {
                 </div>
             </div>
             {article && (
-                <div className="mt-8">
+                <div className="my-16">
                     <ArticleContent article={article} />
                 </div>
             )}

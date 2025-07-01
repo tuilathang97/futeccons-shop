@@ -35,13 +35,13 @@ function SearchBar() {
                     {isLoading ? (
                         <LoaderCircle
                             className="animate-spin"
-                            size={16}
+                            size={24}
                             strokeWidth={2}
                             role="status"
                             aria-label="Loading..."
                         />
                     ) : (
-                        <Search size={16} strokeWidth={2} aria-hidden="true" />
+                        <Search size={24} strokeWidth={2} aria-hidden="true" />
                     )}
                 </div>
             </div>

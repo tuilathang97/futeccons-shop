@@ -7,7 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { LogOut, User2, MessageCircle, CheckCircle2 } from "lucide-react"
+import { LogOut, User2, MessageCircle, CheckCircle2, HousePlus } from "lucide-react"
 import Link from 'next/link'
 import { signOut } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
@@ -39,10 +39,11 @@ function UserDropdown() {
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div className="relative">
-                    <Avatar className="h-10 w-10 rounded-full cursor-pointer">
+                    <Avatar aria-label="user-avatar" className="h-10 w-10 rounded-full cursor-pointer">
                         <AvatarImage className="object-cover" src={user?.image || "/lorem.png"} alt={user.name || "User avatar"} />
                         <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
+
                     {hasNotifications && (
                         <div className="absolute -top-1 -right-1 h-4 w-4 bg-brand-medium border-2 border-white rounded-full flex items-center justify-center">
                             <div className="h-2 w-2 bg-white rounded-full animate-pulse"></div>
@@ -51,7 +52,14 @@ function UserDropdown() {
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 mt-12 md:mt-4 ml-12 " align="end">
-                <DropdownMenuSeparator />
+                 {isAdmin && (
+                    <DropdownMenuItem>
+                        <HousePlus className="mr-2 h-4 w-4" />
+                        <Link href={`/admin/category`} className="flex items-center justify-between w-full">
+                            <span>Trang chủ quản trị viên </span>
+                        </Link>
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuItem>
                     <User2 className="mr-2 h-4 w-4" />
                     <Link href={`/account`}>Thông tin cá nhân</Link>
@@ -74,11 +82,6 @@ function UserDropdown() {
                         </Link>
                     </DropdownMenuItem>
                 )}
-
-                {/* <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Cài đặt</span>
-                </DropdownMenuItem> */}
 
                 <DropdownMenuSeparator />
 

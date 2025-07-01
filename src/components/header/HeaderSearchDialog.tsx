@@ -68,9 +68,9 @@ const HeaderSearchDialog = () => {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger className="flex gap-4 items-center mr-4 ">
-          <p>Tìm kiếm</p>
-          <Search className="w-4 h-4" />
+      <DialogTrigger className="flex gap-2 items-center mr-4 ">
+          <p className='font-semibold text-base font-montserrat'>Tìm kiếm</p>
+          <Search className="w-4 h-4 " />
       </DialogTrigger>
       <DialogContent className="w-full">
         <DialogTitle className='font-montserrat'>Tìm kiếm</DialogTitle>
@@ -136,7 +136,7 @@ const HeaderSearchDialog = () => {
                 ))}
                 {
                   results.length > 4 && (
-                    <p className='text-sm w-full text-center text-gray-500'>xem thêm <Link href={`/bai-viet?query=${query}`} className='text-brand-medium'> {results.length - 4} bài viết với từ khoá <strong>{query}</strong></Link></p>
+                    <p className='text-sm w-full text-center text-gray-500'>xem thêm <Link href={`/tim-kiem-theo-tu-khoa?query=${query}`} className='text-brand-medium'> {results.length - 4} bài viết với từ khoá <strong>{query}</strong></Link></p>
                   )
                 }
               </>

@@ -39,7 +39,7 @@ export default async function ProductListing1LevelDeep({ params,searchParams }: 
                 </div>
             </div>
             {article && (
-                <div className="mt-8">
+                <div className="my-16">
                     <ArticleContent article={article} />
                 </div>
             )}
