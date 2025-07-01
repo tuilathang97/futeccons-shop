@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Building, Users, Award, Target, Shield, HeartHandshake } from 'lucide-react';
+import Link from 'next/link';
 
 export default function GioiThieuPage() {
   const stats = [
@@ -151,18 +152,18 @@ export default function GioiThieuPage() {
             Khám phá những cơ hội bất động sản tuyệt vời và trở thành một phần của cộng đồng Futeccons Shop
           </p>
           <div className="flex justify-center gap-4">
-            <a 
+            <Link 
               href="/post-page"
               className="inline-flex items-center justify-center px-6 py-3 bg-brand-medium text-white rounded-lg hover:bg-brand-dark transition-colors font-medium"
             >
               Đăng tin ngay
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/lien-he"
               className="inline-flex items-center justify-center px-6 py-3 border border-brand-medium text-brand-medium rounded-lg hover:bg-brand-light transition-colors font-medium"
             >
               Liên hệ với chúng tôi
-            </a>
+            </Link>
           </div>
         </div>
       </div>

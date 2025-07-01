@@ -38,7 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                             <span className="text-gray-500 text-sm">No Image</span>
                         </div>
                     )}
-                    <Badge className="absolute top-2 left-2 text-white bg-red-500 shadow-md z-10 px-2 py-0.5 text-xs font-semibold">
+                    <Badge className="absolute top-2 left-2 text-white bg-brand-medium shadow-md z-10 px-2 py-0.5 text-xs font-semibold">
                         {badge}
                     </Badge>
                     <ProductLoveIcon postId={post.id} />

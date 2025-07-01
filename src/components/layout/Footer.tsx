@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Building, Phone, Mail, MapPin, Facebook, Instagram, Youtube, Twitter } from "lucide-react";
+import { Building, Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const footerSections = [
