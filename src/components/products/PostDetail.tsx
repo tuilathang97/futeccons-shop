@@ -112,7 +112,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                     </PostSectionWrapper>
                     <PostSectionWrapper className='flex flex-col  gap-2'>
                         <h2 className='font-semibold text-lg'>Chức năng khác </h2>
-                        <PostDetailClientActions postId={post.id as number} postTitle={post.tieuDeBaiViet} />
+                        <PostDetailClientActions />
                     </PostSectionWrapper>
                 </div>
             </div>
