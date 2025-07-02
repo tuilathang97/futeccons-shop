@@ -5,11 +5,11 @@ import { auth } from '@/lib/auth'
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (['/account', '/post-page', '/admin'].some((path) => pathname.startsWith(path))) {
+  if (['/account', '/dang-tin', '/admin'].some((path) => pathname.startsWith(path))) {
     const session = await auth.api.getSession({ headers: request.headers });
 
     if (!session?.user) {
-      return NextResponse.redirect(new URL('/auth/sign-in?callbackUrl=' + pathname, request.url));
+      return NextResponse.redirect(new URL('/dang-nhap?callbackUrl=' + pathname, request.url));
     }
   }
 

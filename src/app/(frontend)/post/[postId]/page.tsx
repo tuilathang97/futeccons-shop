@@ -109,13 +109,13 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
                             <RevealPhoneNumberButton
                                 phoneNumber={ownerUserForButton.number}
                                 isCurrentUserLoggedIn={!!currentUser}
-                                loginUrl="/auth/sign-in"
+                                loginUrl="/dang-nhap"
                                 pageCallbackUrl={currentPath}
                             />
                             <ContactOwnerButton
                                 post={postForDetail}
                                 currentUser={currentUser}
-                                loginUrl="/auth/sign-in"
+                                loginUrl="/dang-nhap"
                                 pageCallbackUrl={currentPath}
                             />
                         </PostSectionWrapper>

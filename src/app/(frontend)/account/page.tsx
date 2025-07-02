@@ -20,7 +20,7 @@ export default async function AccountPage({ searchParams }: AccountPageProps) {
   const categories = await getCategories();
   const conditionsParams = await searchParams;
   if (!userSession?.user || !userSession.user.id) {
-    redirect("/auth/sign-in?callbackUrl=/account");
+    redirect("/dang-nhap?callbackUrl=/account");
   }
 
   const user = userSession.user as User;

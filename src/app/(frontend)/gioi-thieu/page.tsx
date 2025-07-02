@@ -153,7 +153,7 @@ export default function GioiThieuPage() {
           </p>
           <div className="flex justify-center gap-4">
             <Link 
-              href="/post-page"
+              href="/dang-tin"
               className="inline-flex items-center justify-center px-6 py-3 bg-brand-medium text-white rounded-lg hover:bg-brand-dark transition-colors font-medium"
             >
               Đăng tin ngay

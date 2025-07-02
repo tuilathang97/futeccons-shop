@@ -492,7 +492,7 @@ export default function SignUpPage() {
 						</div>
 						
 						<Link 
-							href="/auth/sign-in" 
+							href="/dang-nhap" 
 							className="w-full"
 						>
 							<Button 

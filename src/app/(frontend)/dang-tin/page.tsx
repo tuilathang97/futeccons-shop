@@ -20,7 +20,7 @@ async function PostPage() {
 	const user = session?.user
 
 	if (!currentSession || !user) {
-		return redirect(`/auth/sign-in?callbackUrl=${encodeURIComponent('/post-page')}`);
+		return redirect(`/dang-nhap?callbackUrl=${encodeURIComponent('/post-page')}`);
 	}
 
 	if (!user.number) {

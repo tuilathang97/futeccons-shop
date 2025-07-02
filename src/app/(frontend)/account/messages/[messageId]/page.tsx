@@ -14,7 +14,7 @@ export default async function MessagePage({ params }: MessagePageProps) {
   const { messageId: messageIdStr } = await params;
 
   if (!session?.user) {
-    redirect('/auth/sign-in?callbackUrl=/account/messages');
+    redirect('/dang-nhap?callbackUrl=/account/messages');
   }
 
   if (!session.user.number) {

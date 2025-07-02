@@ -226,7 +226,7 @@ export default function SignInPage() {
             </div>
             
             <Link 
-              href="/auth/sign-up" 
+              href="/dang-ky" 
               className="w-full"
             >
               <Button 

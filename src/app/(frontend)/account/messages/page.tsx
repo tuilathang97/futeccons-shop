@@ -20,7 +20,7 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
   const session = await getServerSession();
 
   if (!session?.user) {
-    redirect('/auth/sign-in?callbackUrl=/account/messages');
+    redirect('/dang-nhap?callbackUrl=/account/messages');
   }
 
   if (!session.user.number) {

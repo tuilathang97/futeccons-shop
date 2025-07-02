@@ -17,7 +17,7 @@ export default function Header() {
     const {toast} = useToast()
     const handleDirect = () => {
         if (user?.id && session?.id) {
-            router.push("/post-page")
+            router.push("/dang-tin")
         } else {
             toast({
                 title: "Vui lòng đăng nhập để đăng tin",

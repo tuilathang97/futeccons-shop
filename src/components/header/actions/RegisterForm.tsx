@@ -6,7 +6,7 @@ function RegisterForm() {
 
     return (
         <div>
-            <Link href="/auth/sign-up">
+            <Link href="/dang-ky">
                 <Button variant="secondary">
                     Đăng ký
                 </Button>

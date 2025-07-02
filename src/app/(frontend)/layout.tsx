@@ -50,12 +50,6 @@ export default async function RootLayout({
         <meta name="og:image" content="/images/logo.png" />
         <meta name="og:type" content="website" />
         <meta name="og:site_name" content="Futeccons Shop" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@Futeccons" />
-        <meta name="twitter:creator" content="@Futeccons" />
-        <meta name="twitter:title" content="Futeccons Shop" />
-        <meta name="twitter:description" content="Mua bán bất động sản" />
-        <meta name="twitter:image" content="/images/logo.png" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"} />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />

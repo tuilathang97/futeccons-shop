@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Building, Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
+import { Building, Phone, Mail, MapPin, Facebook, Instagram,  } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const footerSections = [
@@ -12,7 +12,7 @@ const footerSections = [
       { title: "Cho thuê", href: "/cho-thue" },
       { title: "Dự án", href: "/du-an" },
       { title: "Tin tức", href: "/tin-tuc" },
-      { title: "Đăng tin", href: "/post-page" },
+      { title: "Đăng tin", href: "/dang-tin" },
     ],
   },
   {
