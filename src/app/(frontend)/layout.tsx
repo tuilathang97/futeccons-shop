@@ -39,6 +39,32 @@ export default async function RootLayout({
   const categories = await getCategories();
   return (
     <html lang="vi" className="h-svh">
+      <head>
+        <meta name="description" content="Mua bán bất động sản" />
+        <meta name="keywords" content="Mua bán bất động sản, bất động sản, đất đai, nhà đất, đầu tư bất động sản" />
+        <meta name="author" content="Futeccons" />
+        <meta name="robots" content="index, follow" />
+        <meta name="google-site-verification" content="your-google-site-verification-code" />
+        <meta name="og:title" content="Futeccons Shop" />
+        <meta name="og:description" content="Mua bán bất động sản" />
+        <meta name="og:image" content="/images/logo.png" />
+        <meta name="og:type" content="website" />
+        <meta name="og:site_name" content="Futeccons Shop" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@Futeccons" />
+        <meta name="twitter:creator" content="@Futeccons" />
+        <meta name="twitter:title" content="Futeccons Shop" />
+        <meta name="twitter:description" content="Mua bán bất động sản" />
+        <meta name="twitter:image" content="/images/logo.png" />
+        <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"} />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </head>
       <body
         className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
       >
@@ -52,7 +78,34 @@ export default async function RootLayout({
             </CategoriesProvider>
           </SessionProvider>
           <Toaster />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c'),
+            }}
+          />
       </body>
     </html>
   );
 }
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Futeccons Shop",
+  "description": "Nền tảng bất động sản hàng đầu Việt Nam",
+  "url": "http://localhost:3000",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "1900-xxx-xxx",
+    "contactType": "customer service"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "VN",
+    "postalCode": "10000",
+    "addressLocality": "Hà Nội",
+    "addressRegion": "Hà Nội",
+    "streetAddress": "123 Đường ABC"
+  }
+};

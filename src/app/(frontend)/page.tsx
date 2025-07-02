@@ -40,7 +40,7 @@ export default async function Home({ searchParams }: HomePageProps) {
     <CategoriesProvider initialCategories={categories}>
       <div className="flex flex-col justify-center items-center gap-[2rem] ">
         <div className="min-w-full mx-auto">
-          <div className="container flex flex-col sm:py-[3rem] py-[2rem] min-w-full items-center text-center text-sm/8 gap-6">
+          <div className="container flex flex-col sm:pt-[3rem] pt-[2rem] min-w-full items-center text-center text-sm/8 gap-6">
             <h1 className="max-w-4xl tracking-wide text-[2.5rem] leading-[3rem] font-bold font-montserrat">Tìm Kiếm Bất Động Sản Phù Hợp Với Nhu Cầu Của Bạn</h1>
             <p className="text-base tracking-wide font-montserrat sm:text-lg text-gray-500 ">Tại đây,chúng tôi sẽ giúp bạn
               <span className="text-brand-medium text-xl mx-1">
@@ -52,7 +52,7 @@ export default async function Home({ searchParams }: HomePageProps) {
               </span> không gian lý tưởng</p>
           </div>
         </div>
-        <div className="w-full container xl:px-0">
+        <div className="w-full mb-8 container xl:px-0">
           <SearchBar />
         </div>
         <HomeImage href="/tim-kiem-theo-tu-khoa" imgUrl="/categoryImages/saigon.webp" />
@@ -69,7 +69,14 @@ export default async function Home({ searchParams }: HomePageProps) {
         <section className="container 2xl:px-0">
           <RealEstateSEOSection />
         </section>
-      </div>      
+      </div>
+      <div className="aaaaaaaaaaaaaa"></div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c'),
+        }}
+      />
     </CategoriesProvider>
   );
 }
@@ -80,5 +87,56 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
-  }
-} 
+  },
+  openGraph: {
+    title: 'Futeccons Shop',
+    description: 'Futeccons Shop - Real Estate Platform',
+    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    siteName: 'Futeccons Shop',
+    images: [
+      {
+        url: '/favicon.svg',
+        width: 800,
+        height: 600,
+        alt: 'Futeccons Shop',
+      },
+    ],
+    locale: 'vi_VN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Futeccons Shop',
+    description: 'Futeccons Shop - Real Estate Platform',
+    images: ['/favicon.svg'],
+  },
+  other: {
+    'og:url': process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    'og:site_name': 'Futeccons Shop',
+    'og:title': 'Futeccons Shop',
+    'og:description': 'Futeccons Shop - Real Estate Platform',
+    'og:image': '/favicon.svg',
+    'twitter:url': process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    'twitter:title': 'Futeccons Shop',
+    'twitter:description': 'Futeccons Shop - Real Estate Platform',
+    'twitter:image': '/favicon.svg',
+    'msapplication-TileColor': '#da532c',
+    'msapplication-config': '/favicon/browserconfig.xml',
+    'theme-color': '#ffffff',
+  },
+}
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization", 
+  "name": "Futeccons Shop",
+  "description": "Nền tảng bất động sản hàng đầu Việt Nam",
+  "url": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "1900-xxx-xxx", 
+    "contactType": "customer service",
+    "availableLanguage": "Vietnamese"
+  },
+  
+};

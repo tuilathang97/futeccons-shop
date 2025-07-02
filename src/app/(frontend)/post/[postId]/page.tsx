@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
         return <div>ID bài viết không hợp lệ</div>;
     }
 
-    const [postFoundResult, postImagesResult, session] = await Promise.all([
+    const [postResult, postImagesResult, session] = await Promise.all([
         getPostDetailsById(numericPostId),
         getPostImageyById(numericPostId),
         getServerSession() as Promise<UserSession | null>
@@ -30,8 +30,8 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
         const sUser = session.user;
         currentUser = {
             id: sUser.id,
-            name: sUser.name, 
-            email: sUser.email, 
+            name: sUser.name,
+            email: sUser.email,
             number: sUser.number ?? "",
             emailVerified: sUser.emailVerified,
             image: sUser.image ?? "",
@@ -48,14 +48,43 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
         ? postImagesResult
         : (postImagesResult ? [postImagesResult] : []);
 
-    if (!postFoundResult || !postFoundResult.user) {
+    if (!postResult || !postResult.user) {
         return <div>Không tìm thấy thông tin bài viết hoặc chủ sở hữu. <Link href={"/"} className='text-red-500'>Quay về trang chủ</Link></div>;
     }
-    
+
     const postForDetail: PostWithUserAndImages & { user: DbUser } = {
-        ...postFoundResult,
-        user: postFoundResult.user, 
+        ...postResult,
+        user: postResult.user,
     };
+    const urlForJsonLd = postImagesForDetail.map((image) => image.secureUrl);
+
+    const jsonLdForPost = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": postForDetail.tieuDeBaiViet,
+        "description": postForDetail.noiDung,
+        "datePublished": postForDetail.createdAt,
+        "url": `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/post/${numericPostId}`,
+        "image": urlForJsonLd,
+        "offers": {
+            "@type": "Offer",
+            "price": postForDetail.giaTien,
+            "priceCurrency": "VND",
+            "availability": "https://schema.org/InStock"
+        },
+        "brand": {
+            "@type": "Organization",
+            "name": "Futeccons Shop"
+        },
+        "seller": {
+            "@type": "Person",
+            "name": postForDetail.user.name,
+            "email": postForDetail.user.email,
+            "telephone": postForDetail.user.number,
+            "image": postForDetail.user.image
+        }
+    };
+
 
     const ownerUserForButton = postForDetail.user;
     const currentPath = `/post/${numericPostId}`;
@@ -77,15 +106,15 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
                                 <p className="font-semibold">{ownerUserForButton.name || "Không có tên"}</p>
                             </div>
                             <Separator className='w-full' />
-                            <RevealPhoneNumberButton 
+                            <RevealPhoneNumberButton
                                 phoneNumber={ownerUserForButton.number}
                                 isCurrentUserLoggedIn={!!currentUser}
                                 loginUrl="/auth/sign-in"
                                 pageCallbackUrl={currentPath}
                             />
-                            <ContactOwnerButton 
+                            <ContactOwnerButton
                                 post={postForDetail}
-                                currentUser={currentUser} 
+                                currentUser={currentUser}
                                 loginUrl="/auth/sign-in"
                                 pageCallbackUrl={currentPath}
                             />
@@ -93,6 +122,12 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
                     </div>
                 </div>
             </div>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(jsonLdForPost).replace(/</g, '\\u003c'),
+                }}
+            />
         </div>
     )
 }

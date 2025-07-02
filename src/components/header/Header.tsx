@@ -8,9 +8,25 @@ import { useSession } from "@/contexts/SessionContext"
 import MobileMenuToggle from "./MobileMenuToggle"
 import HeaderNavigation from "./HeaderNavigation"   
 import HeaderSearchDialog from "./HeaderSearchDialog"
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
 
 export default function Header() {
     const { user, session } = useSession()
+    const router = useRouter()
+    const {toast} = useToast()
+    const handleDirect = () => {
+        if (user?.id && session?.id) {
+            router.push("/post-page")
+        } else {
+            toast({
+                title: "Vui lòng đăng nhập để đăng tin",
+                description: "Chưa đăng nhập ko thể đăng tin",
+                variant: "destructive",
+            })
+        }
+    }
+
     return (
         <header className="fixed z-[50] gap-4 top-0 left-0 flex h-16 min-w-full bg-white/10 backdrop-blur-2xl ">
             <div className="container xl:px-0">
@@ -36,14 +52,10 @@ export default function Header() {
                                 <MobileMenuToggle />
                             </div>
                         </div>
-                        <Link
-                            href="/post-page"
-                        >
-                            <Button className="flex gap-2 bg-brand-medium text-white">
-                                <p>Đăng tin</p>
-                                <SquarePen size={16} />
-                            </Button>
-                        </Link>
+                        <Button className="flex gap-2 bg-brand-medium text-white" onClick={handleDirect}>
+                            <p>Đăng tin</p>
+                            <SquarePen size={16} />
+                        </Button>
                     </div>
                 </nav>
             </div>
