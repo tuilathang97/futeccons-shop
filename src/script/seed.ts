@@ -61,7 +61,6 @@ const postsSchema = {
 
 
 async function seedTypesense() {
-  console.log("start seeding... ")
   const collectionName = "posts";
   
   try {
@@ -75,11 +74,6 @@ async function seedTypesense() {
       ],
       apiKey: process.env.TYPESENSE_API_KEY as string
     }); 
-    // check if collection exist
-    // const isCollectionExist = await typesense.collections(collectionName).exists();
-    // const postsCollection = (await typesense.collections(collectionName).retrieve()).num_documents;
-    // console.log(isCollectionExist ? "Collection exists" : "Collection does not exist");
-    // console.log(postsCollection ? "Collection has " + postsCollection + " documents" : "Collection has no documents");
     
     const isCollectionExist = await typesense.collections(collectionName).exists();
     if (!isCollectionExist) {
@@ -130,14 +124,9 @@ async function seedTypesense() {
         updatedAt: post.updatedAt.getTime(),
       }
     });
-    console.log("Importing data to Typesense...")
     await typesense.collections(collectionName)
     .documents()
     .import(posts);
-    console.log("Importing data to Typesense... done")
-    const collection = await typesense.collections(collectionName).retrieve()
-    console.log("Collection created with " + collection.num_documents + " documents");
-    console.log(" Seeding completed successfully");
     return true;
 
   } catch (error) {

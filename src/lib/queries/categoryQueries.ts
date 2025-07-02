@@ -11,7 +11,6 @@ export async function createCategory(name: string, parentId: number | null, leve
 
 export const getAllCategories = customUnstableCache(
   async (hierarchical: boolean = false): Promise<Category[]> => {
-    console.log(`Executing DB query for getAllCategories (hierarchical: ${hierarchical})`);
     const query = db.select().from(categoriesTable).orderBy(asc(categoriesTable.name));
     const allCategories = await query;
 

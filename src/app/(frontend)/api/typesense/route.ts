@@ -1,6 +1,8 @@
 // app/api/typesense/route.ts
 import { NextResponse } from 'next/server'
 import Typesense from 'typesense'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const client = new Typesense.Client({
   nodes: [
@@ -10,7 +12,7 @@ const client = new Typesense.Client({
       protocol: 'http'
     }
   ],
-  apiKey: process.env.TYPESENSE_API_KEY || '7E2TJ0JxgkUNdLLuo47Wg6p5QmdTtO64Kb9FImBOzeFOu8Cf',
+  apiKey: process.env.TYPESENSE_API_KEY as string,
   connectionTimeoutSeconds: 2
 });
 
