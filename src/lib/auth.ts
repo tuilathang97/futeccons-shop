@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins"
+import { admin, username } from "better-auth/plugins"
 
 import { db } from "@/db/drizzle";
 
@@ -32,6 +32,7 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24, // 1 day (every 1 day the session expiration is updated)
   },
   plugins: [
-    admin() 
+    admin(),
+    username()
   ]
 })
