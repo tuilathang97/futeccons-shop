@@ -1,4 +1,3 @@
-// app/api/typesense/route.ts
 import { NextResponse } from 'next/server'
 import Typesense from 'typesense'
 import dotenv from 'dotenv'
@@ -39,6 +38,4 @@ export async function POST(request: Request) {
     console.error('Error searching Typesense:', error)
     return NextResponse.json({data:[]})
   }
-}
-
-
+} 
