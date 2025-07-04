@@ -59,7 +59,7 @@ const LocationMap: React.FC<LocationMapProps> = ({
   }
 
   return (
-    <div className="h-[300px] w-full border border-gray-200 rounded-md overflow-hidden">
+    <div className="h-[300px] z-0 w-full border border-gray-200 rounded-md overflow-hidden">
       {mapLoaded && (
         <MapContainer
           center={position}
