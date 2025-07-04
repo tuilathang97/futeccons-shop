@@ -14,7 +14,9 @@
     "seed-categories": "tsx ./src/db/seed.ts",
     "seed-posts": "tsx ./src/db/seed-posts.ts",
     "start:typesense": "sudo /usr/bin/typesense-server --config=/etc/typesense/typesense-server.ini",
-    "dev-typesense": "./scripts/setup-cron.sh",
+    "setup-typesense-cron": "sudo ./scripts/setup-cron.sh",
+    "sync-typesense": "tsx ./src/script/seed.ts",
+    "sync-typesense-manual": "./scripts/sync-wrapper.sh",
     "crontab-typesense-check": "crontab -l",
     "crontab-typesense-remove": "crontab -r"
   },
