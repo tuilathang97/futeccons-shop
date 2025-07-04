@@ -261,8 +261,8 @@ export default function TermsOfServicePage() {
                 <div className="space-y-2 text-brand-darkest">
                   <p><strong>Công ty:</strong> Futeccons</p>
                   <p><strong>Website:</strong> futeccons.com</p>
-                  <p><strong>Email:</strong> support@futeccons.com</p>
-                  <p><strong>Hotline:</strong> 1900-xxx-xxx</p>
+                  <p><strong>Email:</strong> thanhlb1990@gmail.com</p>
+                  <p><strong>Hotline:</strong> 0765563567</p>
                   <p><strong>Địa chỉ:</strong> [Địa chỉ công ty Futeccons]</p>
                 </div>
               </div>

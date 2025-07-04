@@ -113,7 +113,7 @@ export default function BaoCaoLoiPage() {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-brand-medium" />
-                <span className="text-sm">support@futeccons.com</span>
+                <span className="text-sm">thanhlb1990@gmail.com</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-brand-medium" />

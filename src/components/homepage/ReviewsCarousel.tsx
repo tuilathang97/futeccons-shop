@@ -67,6 +67,7 @@ export default function ReviewsCarousel() {
                 <AvatarImage
                   src={review.avatar}
                   alt={review.name}
+                  className='object-cover'
                 />
                 <AvatarFallback>
                   {review.name

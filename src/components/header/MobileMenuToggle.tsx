@@ -198,7 +198,7 @@ export default function MobileMenuToggle() {
           )}
         </div>
         <div className="border-t pt-4 mt-2">
-          <div className="font-semibold mb-2 px-4">Danh mục :</div>
+          <div className="font-semibold mb-2 px-4">Danh mục</div>
           <nav className='px-1'>{renderCategories()}</nav>
         </div>
       </SheetContent>

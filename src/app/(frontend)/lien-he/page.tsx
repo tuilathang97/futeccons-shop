@@ -28,7 +28,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-brand-darkest">Hotline</h3>
-                  <p className="text-brand-dark">1900-xxx-xxx</p>
+                  <p className="text-brand-dark">0765563567</p>
                   <p className="text-sm text-gray-600">Miễn phí từ 8:00 - 22:00</p>
                 </div>
               </div>
@@ -39,7 +39,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-brand-darkest">Email</h3>
-                  <p className="text-brand-dark">support@futeccons.com</p>
+                  <p className="text-brand-dark">thanhlb1990@gmail.com</p>
                   <p className="text-sm text-gray-600">Phản hồi trong 24h</p>
                 </div>
               </div>
@@ -50,7 +50,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-brand-darkest">Địa chỉ</h3>
-                  <p className="text-brand-dark">123 Đường ABC, Quận 1, TP.HCM</p>
+                  <p className="text-brand-dark">12/66/3 đường ấp 4, Đông Thạnh, Hóc Môn, Hồ Chí Minh</p>
                   <p className="text-sm text-gray-600">Văn phòng chính</p>
                 </div>
               </div>

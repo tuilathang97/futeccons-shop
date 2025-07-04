@@ -203,7 +203,7 @@ export default function PrivacyPolicyPage() {
               <div className="bg-brand-light/20 p-4 rounded-lg mt-6 border border-brand-light">
                 <p className="text-brand-darkest text-sm">
                   <strong>Cách thực hiện quyền:</strong> Liên hệ với chúng tôi qua email 
-                  support@futeccons.com hoặc sử dụng các tùy chọn trong tài khoản của bạn.
+                  thanhlb1990@gmail.com hoặc sử dụng các tùy chọn trong tài khoản của bạn.
                 </p>
               </div>
             </section>
@@ -283,8 +283,8 @@ export default function PrivacyPolicyPage() {
                 <div className="space-y-2 text-brand-darkest">
                   <p><strong>Bộ phận Bảo mật Dữ liệu:</strong> Futeccons</p>
                   <p><strong>Email:</strong> privacy@futeccons.com</p>
-                  <p><strong>Email hỗ trợ:</strong> support@futeccons.com</p>
-                  <p><strong>Hotline:</strong> 1900-xxx-xxx</p>
+                  <p><strong>Email hỗ trợ:</strong> thanhlb1990@gmail.com</p>
+                  <p><strong>Hotline:</strong> 0765563567</p>
                   <p><strong>Địa chỉ:</strong> [Địa chỉ công ty Futeccons]</p>
                 </div>
               </div>

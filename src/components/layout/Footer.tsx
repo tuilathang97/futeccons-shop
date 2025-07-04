@@ -40,9 +40,9 @@ const socialLinks = [
 ];
 
 const contactInfo = [
-  { icon: Phone, label: "Hotline", value: "1900-xxx-xxx" },
-  { icon: Mail, label: "Email", value: "support@futeccons.com" },
-  { icon: MapPin, label: "Địa chỉ", value: "123 Đường ABC, Quận 1, TP.HCM" },
+  { icon: Phone, label: "Hotline", value: "0765563567" },
+  { icon: Mail, label: "Email", value: "thanhlb1990@gmail.com" },
+  { icon: MapPin, label: "Địa chỉ", value: "12/66/3 đường ấp 4, Đông Thạnh, Hóc Môn, Hồ Chí Minh" },
 ];
 
 export default function Footer() {

@@ -48,23 +48,6 @@ const RealEstateSEOSection = () => {
           </p>
         </details>
       </div>
-
-      <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Liên kết nội bộ</h3>
-      <ul className="flex flex-wrap gap-4 mb-8">
-        <li><Link href="/nha-dat-ban" className="inline-block px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Mua bán nhà đất</Link></li>
-        <li><Link href="/nha-cho-thue" className="inline-block px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Cho thuê căn hộ</Link></li>
-        <li><Link href="/tin-tuc" className="inline-block px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Tin tức bất động sản</Link></li>
-        <li><Link href="/lien-he" className="inline-block px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Liên hệ</Link></li>
-      </ul>
-
-      <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Thông tin liên hệ</h3>
-      <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-          <strong className="text-gray-900 dark:text-white">Địa chỉ:</strong> 123 Đường ABC, Phường XYZ, Quận 1, TP.HCM<br />
-          <strong className="text-gray-900 dark:text-white">Hotline:</strong> 0909xxxxxx<br />
-          <strong className="text-gray-900 dark:text-white">Email:</strong> info@website.com
-        </p>
-      </div>
     </section>
   );
 };

@@ -60,7 +60,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 !pt-[7rem] md:pt-[5rem] `}
+        className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 pt-16`}
       >
           <SessionProvider session={session as Session} user={user as User}>
             <CategoriesProvider initialCategories={categories}>
@@ -91,15 +91,15 @@ const organizationSchema = {
   "url": "http://localhost:3000",
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "1900-xxx-xxx",
+    "telephone": "0765563567",
     "contactType": "customer service"
   },
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "VN",
     "postalCode": "10000",
-    "addressLocality": "Hà Nội",
-    "addressRegion": "Hà Nội",
-    "streetAddress": "123 Đường ABC"
+    "addressLocality": "Hồ Chí Minh",
+    "addressRegion": "Hồ Chí Minh",
+    "streetAddress": "12/66/3 đường ấp 4, Đông Thạnh, Hóc Môn, Hồ Chí Minh"
   }
 };

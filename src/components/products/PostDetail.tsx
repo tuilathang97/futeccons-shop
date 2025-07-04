@@ -78,7 +78,7 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                             </div>
                         </div>
                     </PostSectionWrapper>
-                    <PostSectionWrapper className='font-monserrat font-semibold'>
+                    <PostSectionWrapper className='font-monserrat'>
                         <p>{post.noiDung}</p>
                     </PostSectionWrapper>
                     <PostSectionWrapper>

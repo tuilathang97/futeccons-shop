@@ -8,22 +8,16 @@ import { useSession } from "@/contexts/SessionContext"
 import MobileMenuToggle from "./MobileMenuToggle"
 import HeaderNavigation from "./HeaderNavigation"   
 import HeaderSearchDialog from "./HeaderSearchDialog"
-import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 
 export default function Header() {
     const { user, session } = useSession()
     const router = useRouter()
-    const {toast} = useToast()
     const handleDirect = () => {
         if (user?.id && session?.id) {
             router.push("/dang-tin")
         } else {
-            toast({
-                title: "Vui lòng đăng nhập để đăng tin",
-                description: "Chưa đăng nhập ko thể đăng tin",
-                variant: "destructive",
-            })
+            router.push("/dang-nhap")
         }
     }
 

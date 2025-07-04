@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Nguyễn Văn Minh",
-      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      "avatar": "/previewImages/nam.webp",
       "content": "Tôi đã tìm được căn hộ mơ ước nhờ FutecCons Shop. Dịch vụ hỗ trợ rất tận tình và chuyên nghiệp. Quy trình thuê nhà diễn ra nhanh chóng và minh bạch. Đặc biệt ấn tượng với tính năng tìm kiếm thông minh và hệ thống lọc theo nhiều tiêu chí khác nhau. Nhân viên tư vấn luôn sẵn sàng hỗ trợ 24/7, giải đáp mọi thắc mắc một cách chi tiết và cụ thể.",
       "rating": 5,
       "position": "Giám đốc Marketing",
@@ -12,7 +12,7 @@
     {
       "id": 2,
       "name": "Trần Thị Hương",
-      "avatar": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      "avatar": "/previewImages/nu.webp",
       "content": "Rất hài lòng với chất lượng dịch vụ. Nhân viên tư vấn nhiệt tình, giúp tôi tìm được nhà phù hợp với ngân sách. Chắc chắn sẽ giới thiệu cho bạn bè. Nền tảng có giao diện thân thiện, dễ sử dụng ngay cả với người lớn tuổi như tôi. Thông tin về giá cả, vị trí, pháp lý đều được cập nhật chính xác và kịp thời. Đây thực sự là một nền tảng đáng tin cậy cho những ai đang tìm kiếm bất động sản.",
       "rating": 5,
       "position": "Kế toán trưởng",
@@ -21,7 +21,7 @@
     {
       "id": 3,
       "name": "Lê Minh Tuấn", 
-      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      "avatar": "/previewImages/nam2.webp",
       "content": "Nền tảng có giao diện thân thiện, dễ sử dụng. Thông tin bất động sản đầy đủ và chính xác. Tôi đã bán được nhà trong thời gian ngắn với giá hợp lý. Hệ thống đăng tin rất dễ dàng, chỉ cần vài bước đơn giản là có thể đưa tin lên website. Tính năng quản lý tin đăng cũng rất tiện lợi, có thể theo dõi lượt xem, lượt liên hệ một cách chi tiết. Cảm ơn FutecCons đã giúp tôi tiếp cận được nhiều khách hàng tiềm năng.",
       "rating": 4,
       "position": "Kiến trúc sư",
@@ -30,7 +30,7 @@
     {
       "id": 4,
       "name": "Phạm Thị Lan",
-      "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face", 
+      "avatar": "/previewImages/nu2.webp", 
       "content": "Đội ngũ hỗ trợ rất chuyên nghiệp. Họ giúp tôi hoàn thiện mọi thủ tục pháp lý một cách nhanh chóng. Dịch vụ đáng tin cậy và uy tín. Với kinh nghiệm làm luật sư, tôi đánh giá cao tính minh bạch trong các quy trình giao dịch trên nền tảng này. Mọi hợp đồng, giấy tờ đều được kiểm tra kỹ lưỡng trước khi ký kết. Đây là yếu tố quan trọng để xây dựng lòng tin với khách hàng.",
       "rating": 5,
       "position": "Luật sư",
@@ -39,7 +39,7 @@
     {
       "id": 5,
       "name": "Hoàng Văn Đức",
-      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
+      "avatar": "/previewImages/nam3.webp",
       "content": "Trải nghiệm tuyệt vời! Tôi đã tìm được căn hộ cho thuê phù hợp trong vòng 1 tuần. Giá cả hợp lý, vị trí đẹp. Cảm ơn team đã hỗ trợ tôi. Đặc biệt là tính năng xem nhà trực tuyến qua video call rất hữu ích, giúp tôi tiết kiệm thời gian di chuyển. Hệ thống thông báo qua email và SMS cũng rất kịp thời, không bỏ lỡ bất kỳ cơ hội nào. Chắc chắn sẽ tiếp tục sử dụng dịch vụ này trong tương lai.",
       "rating": 5,
       "position": "Developer",
@@ -48,7 +48,7 @@
     {
       "id": 6,
       "name": "Vũ Thị Mai",
-      "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
+      "avatar": "/previewImages/nu3.webp",
       "content": "Dịch vụ tuyệt vời với đội ngũ tư vấn am hiểu thị trường. Tôi đã đầu tư thành công vào nhiều dự án bất động sản thông qua nền tảng này. Báo cáo thị trường được cung cấp hàng tháng rất chất lượng, giúp tôi đưa ra quyết định đầu tư đúng đắn. Tính năng phân tích xu hướng giá và dự báo thị trường cũng là điểm cộng lớn. Đây là công cụ không thể thiếu cho các nhà đầu tư chuyên nghiệp như tôi.",
       "rating": 5,
       "position": "Nhà đầu tư",
@@ -57,7 +57,7 @@
     {
       "id": 7,
       "name": "Đặng Minh Khôi",
-      "avatar": "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&crop=face",
+      "avatar": "/previewImages/nam4.webp",
       "content": "Giao diện hiện đại, tìm kiếm nhanh chóng. Thông tin bất động sản cập nhật liên tục. Đây là nền tảng tin cậy nhất mà tôi từng sử dụng. Với background là Product Manager, tôi rất ấn tượng với UX/UI design của website. Tất cả tính năng đều được bố trí hợp lý, dễ tiếp cận. Tốc độ load trang cũng rất nhanh, không gây khó chịu cho người dùng. Hệ thống responsive trên mobile cũng được tối ưu rất tốt.",
       "rating": 4,
       "position": "Product Manager",
@@ -66,7 +66,7 @@
     {
       "id": 8,
       "name": "Bùi Thị Nga",
-      "avatar": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=150&h=150&fit=crop&crop=face",
+      "avatar": "/previewImages/nu4.webp",
       "content": "Nhờ FutecCons mà tôi đã bán được căn nhà cũ và mua được căn mới trong cùng một tháng. Quy trình rất thuận tiện và minh bạch. Dịch vụ định giá nhà miễn phí giúp tôi có cái nhìn thực tế về giá trị tài sản. Đội ngũ nhiếp ảnh chuyên nghiệp đã chụp những bức ảnh đẹp, làm nổi bật ưu điểm của ngôi nhà. Nhờ đó mà tin đăng của tôi thu hút được nhiều sự quan tâm từ khách hàng.",
       "rating": 5,
       "position": "Nhà thiết kế",

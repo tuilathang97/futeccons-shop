@@ -70,7 +70,6 @@ export default async function Home({ searchParams }: HomePageProps) {
           <RealEstateSEOSection />
         </section>
       </div>
-      <div className="aaaaaaaaaaaaaa"></div>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -88,42 +87,6 @@ export const metadata: Metadata = {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
   },
-  openGraph: {
-    title: 'Futeccons Shop',
-    description: 'Futeccons Shop - Real Estate Platform',
-    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    siteName: 'Futeccons Shop',
-    images: [
-      {
-        url: '/favicon.svg',
-        width: 800,
-        height: 600,
-        alt: 'Futeccons Shop',
-      },
-    ],
-    locale: 'vi_VN',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Futeccons Shop',
-    description: 'Futeccons Shop - Real Estate Platform',
-    images: ['/favicon.svg'],
-  },
-  other: {
-    'og:url': process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    'og:site_name': 'Futeccons Shop',
-    'og:title': 'Futeccons Shop',
-    'og:description': 'Futeccons Shop - Real Estate Platform',
-    'og:image': '/favicon.svg',
-    'twitter:url': process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-    'twitter:title': 'Futeccons Shop',
-    'twitter:description': 'Futeccons Shop - Real Estate Platform',
-    'twitter:image': '/favicon.svg',
-    'msapplication-TileColor': '#da532c',
-    'msapplication-config': '/favicon/browserconfig.xml',
-    'theme-color': '#ffffff',
-  },
 }
 
 const organizationSchema = {
@@ -134,7 +97,7 @@ const organizationSchema = {
   "url": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "1900-xxx-xxx", 
+    "telephone": "0765563567", 
     "contactType": "customer service",
     "availableLanguage": "Vietnamese"
   },
