@@ -11,6 +11,7 @@ import { SessionProvider } from "@/contexts/SessionContext";
 import { Session, User } from "@/db/schema";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import PageWrapper from "@/components/PageWrapper";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const arimo = Arimo({
   variable: "--font-arimo",
@@ -72,6 +73,7 @@ export default async function RootLayout({
             </CategoriesProvider>
           </SessionProvider>
           <Toaster />
+          <SpeedInsights />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
