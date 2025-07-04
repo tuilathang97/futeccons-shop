@@ -179,7 +179,8 @@ async function seedTypesense(): Promise<boolean> {
     });
     
     log('INFO', `Importing ${posts.length} posts to Typesense...`);
-    const importResult = await typesense.collections(collectionName)
+
+    await typesense.collections(collectionName)
       .documents()
       .import(posts);
     
