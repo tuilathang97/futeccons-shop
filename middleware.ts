@@ -22,30 +22,31 @@ export async function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 204 })
   }
 
+  // Handle API routes with CORS first
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    const response = NextResponse.next()
+    
+    if (allowedOrigins.includes(origin)) {
+      response.headers.set('Access-Control-Allow-Origin', origin)
+      response.headers.set('Access-Control-Allow-Credentials', 'true')
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    }
+    
+    return response
+  }
+
   // Handle authentication for protected routes
   const { pathname } = request.nextUrl
-  let response: NextResponse
   if (['/account', '/dang-tin', '/admin'].some((path) => pathname.startsWith(path))) {
     const session = await auth.api.getSession({ headers: request.headers })
 
     if (!session?.user) {
-      response = NextResponse.redirect(new URL('/dang-nhap?callbackUrl=' + pathname, request.url))
-    } else {
-      response = NextResponse.next()
-    }
-  } else {
-    response = NextResponse.next()
-  }
-
-  // Add CORS headers to actual requests
-  if (request.nextUrl.pathname.startsWith('/api/')) {
-    if (allowedOrigins.includes(origin)) {
-      response.headers.set('Access-Control-Allow-Origin', origin)
-      response.headers.set('Access-Control-Allow-Credentials', 'true')
+      return NextResponse.redirect(new URL('/dang-nhap?callbackUrl=' + pathname, request.url))
     }
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {
