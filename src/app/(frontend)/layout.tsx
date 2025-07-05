@@ -33,7 +33,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // Initialize with null values - session will be loaded client-side
   const session = null;
   const user = null;
   const categories = await getCategories();

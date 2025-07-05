@@ -3,7 +3,6 @@ import ProductsContainer from "@/components/products/ProductsContainer";
 import { getCategories } from "@/lib/queries/categoryQueries";
 import { getHomepageData } from "@/lib/queries/postQueries";
 import { Metadata } from "next";
-import { PaginationParams } from '@/lib/queries/paginateQuery';
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import HomeImage from "@/components/homepage/HomeImage";
 import Link from "next/link";
@@ -14,27 +13,15 @@ import SearchBar from "@/components/homepage/SearchBar";
 import ProvincesLinks from "@/components/Links/ProvincesLinks";
 import RealEstateSEOSection from "@/components/SEO/RealEstateSEOSection";
 
-interface HomePageProps {
-  searchParams: Promise<{
-    page?: string;
-    pageSize?: string;
-  }>;
-}
+const DEFAULT_PAGE_SIZE = 20;
 
-const DEFAULT_PAGE_SIZE = 10;
-
-export default async function Home({ searchParams }: HomePageProps) {
+export default async function Home() {
   const categories = await getCategories();
-  const searchParamsValue = await searchParams;
-  const page = searchParamsValue.page ? parseInt(searchParamsValue.page, 10) : 1;
-  const pageSize = searchParamsValue.pageSize ? parseInt(searchParamsValue.pageSize, 10) : DEFAULT_PAGE_SIZE;
 
-  const paginationParams: PaginationParams = {
-    page: isNaN(page) ? 1 : page,
-    pageSize: isNaN(pageSize) ? DEFAULT_PAGE_SIZE : pageSize,
-  };
-  
-  const homepageData = await getHomepageData(paginationParams, {});
+  const homepageData = await getHomepageData({
+    page: 1,
+    pageSize: DEFAULT_PAGE_SIZE,
+  }, {});
 
   return (
     <CategoriesProvider initialCategories={categories}>
