@@ -80,6 +80,9 @@ export default async function Home({ searchParams }: HomePageProps) {
   );
 }
 
+// ISR Configuration - Revalidate every 24 hours (86400 seconds)
+export const revalidate = 86400;
+
 export const metadata: Metadata = {
   title: 'Futeccons Shop',
   description: 'Futeccons Shop - Real Estate Platform',

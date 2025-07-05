@@ -34,6 +34,8 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '1900mb',
     },
   },
+  // ISR configuration
+  cacheMaxMemorySize: 0, // Use default cache size for ISR
 
   async rewrites() {
     return [

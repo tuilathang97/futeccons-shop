@@ -1,10 +1,13 @@
 import ProductsContainer from "@/components/post/ProductsContainer";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, validateCategoryPath } from "@/lib/queries/categoryQueries";
+import { getCategories, validateCategoryPath, getCategoriesByParentId } from "@/lib/queries/categoryQueries";
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
 import FilterBar from "@/components/filterComponent/FilterBar";
+
+// ISR Configuration - Revalidate every 24 hours (86400 seconds)
+export const revalidate = 86400;
 
 export default async function ProductListing2LevelDeep({ params,searchParams }: {
     params: Promise<{ categoryLevel1: string, categoryLevel2: string }>;
@@ -47,4 +50,23 @@ export default async function ProductListing2LevelDeep({ params,searchParams }: 
             )}
         </section>
     );
+}
+
+// Static generation for level 2 categories
+export async function generateStaticParams() {
+    const topLevelCategories = await getCategoriesByParentId(null);
+    const allParams = [];
+    
+    for (const level1Category of topLevelCategories) {
+        const level2Categories = await getCategoriesByParentId(level1Category.id);
+        
+        for (const level2Category of level2Categories) {
+            allParams.push({
+                categoryLevel1: level1Category.slug || level1Category.id.toString(),
+                categoryLevel2: level2Category.slug || level2Category.id.toString(),
+            });
+        }
+    }
+    
+    return allParams;
 }

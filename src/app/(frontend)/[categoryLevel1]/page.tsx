@@ -1,10 +1,13 @@
 import ProductsContainer from "@/components/post/ProductsContainer";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, validateCategoryPath } from "@/lib/queries/categoryQueries";
+import { getCategories, validateCategoryPath, getCategoriesByParentId } from "@/lib/queries/categoryQueries";
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
 import FilterBar from "@/components/filterComponent/FilterBar";
+
+// ISR Configuration - Revalidate every 24 hours (86400 seconds)
+export const revalidate = 86400;
 
 interface PageProps {
     params: Promise<{ categoryLevel1: string }>;
@@ -45,4 +48,13 @@ export default async function ProductListing1LevelDeep({ params,searchParams }: 
             )}
         </section>
     );
+}
+
+// Static generation for level 1 categories
+export async function generateStaticParams() {
+    const topLevelCategories = await getCategoriesByParentId(null);
+    
+    return topLevelCategories.map((category) => ({
+        categoryLevel1: category.slug || category.id.toString(),
+    }));
 }
