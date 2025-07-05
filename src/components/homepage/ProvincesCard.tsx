@@ -36,7 +36,7 @@ function ProvincesRender(provinces: Province[], imagesUrl: string[]) {
             alt={province.name}
             width={200}
             height={200}
-            priority={index < 4} // Prioritize first 4 images
+            loading="lazy"
             placeholder="blur"
             blurDataURL={IMAGE_PLACEHOLDER}
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
@@ -74,7 +74,7 @@ export default async function ProvincesCard({ className }: ProvincesCardProps) {
                   alt={"background"}
                   width={200}
                   height={200}
-                  priority={false}
+                  loading="lazy"
                   placeholder="blur"
                   blurDataURL={IMAGE_PLACEHOLDER}
                   sizes="(max-width: 768px) 100vw, 50vw"

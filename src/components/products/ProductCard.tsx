@@ -29,7 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                             fill={true}
                             placeholder='blur'
                             blurDataURL={blurDataURL || IMAGE_PLACEHOLDER}
-                            priority={true}
+                            loading="lazy"
                             className="object-cover shadow-md "
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
