@@ -2,21 +2,52 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? ['https://www.fuland.vn', 'https://fuland.vn']
+  : ['http://localhost:3000']
 
+export async function middleware(request: NextRequest) {
+  const origin = request.headers.get('origin') ?? ''
+
+  // Handle CORS preflight requests
+  if (request.method === 'OPTIONS' && request.nextUrl.pathname.startsWith('/api/')) {
+    if (allowedOrigins.includes(origin)) {
+      const response = new NextResponse(null, { status: 204 })
+      response.headers.set('Access-Control-Allow-Origin', origin)
+      response.headers.set('Access-Control-Allow-Credentials', 'true')
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+      return response
+    }
+    return new NextResponse(null, { status: 204 })
+  }
+
+  // Handle authentication for protected routes
+  const { pathname } = request.nextUrl
+  let response: NextResponse
   if (['/account', '/dang-tin', '/admin'].some((path) => pathname.startsWith(path))) {
-    const session = await auth.api.getSession({ headers: request.headers });
+    const session = await auth.api.getSession({ headers: request.headers })
 
     if (!session?.user) {
-      return NextResponse.redirect(new URL('/dang-nhap?callbackUrl=' + pathname, request.url));
+      response = NextResponse.redirect(new URL('/dang-nhap?callbackUrl=' + pathname, request.url))
+    } else {
+      response = NextResponse.next()
+    }
+  } else {
+    response = NextResponse.next()
+  }
+
+  // Add CORS headers to actual requests
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    if (allowedOrigins.includes(origin)) {
+      response.headers.set('Access-Control-Allow-Origin', origin)
+      response.headers.set('Access-Control-Allow-Credentials', 'true')
     }
   }
 
-  return NextResponse.next();
-
+  return response
 }
 
 export const config = {
-  matcher: ['/account/:path*', '/dang-tin/:path*', '/admin/:path*']
+  matcher: ['/api/:path*', '/account/:path*', '/dang-tin/:path*', '/admin/:path*'],
 } 
