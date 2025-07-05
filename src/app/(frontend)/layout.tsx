@@ -4,11 +4,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import Footer from "@/components/layout/Footer";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+// Removed auth and headers imports for static generation
 import { getCategories } from "@/lib/queries/categoryQueries";
 import { SessionProvider } from "@/contexts/SessionContext";
-import { Session, User } from "@/db/schema";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import PageWrapper from "@/components/PageWrapper";
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -35,9 +33,9 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const dataSession = await auth.api.getSession({ headers: await headers() });
-  const session = dataSession?.session || {} ;
-  const user = dataSession?.user;
+  // Initialize with null values - session will be loaded client-side
+  const session = null;
+  const user = null;
   const categories = await getCategories();
   return (
     <html lang="vi" className="h-svh">
@@ -64,7 +62,7 @@ export default async function RootLayout({
       <body
         className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 pt-16`}
       >
-          <SessionProvider session={session as Session} user={user as User}>
+          <SessionProvider session={session} user={user}>
             <CategoriesProvider initialCategories={categories}>
               <Header />
               <PageWrapper className="flex-1">

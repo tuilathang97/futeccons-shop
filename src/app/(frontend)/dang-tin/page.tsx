@@ -1,5 +1,8 @@
 import React, { Suspense } from 'react'
 
+// Force dynamic rendering for auth-required page  
+export const dynamic = 'force-dynamic';
+
 import { ProductPostForm } from '@/components/post/ProductPostForm';
 import GeneralInfoServer from '@/components/post/GeneralInfoServer';
 import BasicInfoServer from '@/components/post/BasicInfoServer';
