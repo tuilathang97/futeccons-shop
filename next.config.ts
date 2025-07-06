@@ -37,6 +37,32 @@ const nextConfig: NextConfig = {
   // ISR configuration
   cacheMaxMemorySize: 0, // Use default cache size for ISR
 
+  async headers() {
+    return [
+      {
+        source: "/api/auth/:path*",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://fuland.vn, https://www.fuland.vn",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, POST, PUT, DELETE, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization, X-Requested-With",
+          },
+          {
+            key: "Access-Control-Allow-Credentials",
+            value: "true",
+          },
+        ],
+      },
+    ];
+  },
+
   async rewrites() {
     return [
       {
