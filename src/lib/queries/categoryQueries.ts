@@ -53,18 +53,11 @@ export const getCategoryById = customUnstableCache(
   }
 );
 
-export const getCategoryByPath = customUnstableCache(
-  async (path: string): Promise<Category | null> => {
-    console.log(`Executing DB query for getCategoryByPath: ${path}`);
-    const result = await db.select().from(categoriesTable).where(eq(categoriesTable.path, path));
-    return result[0] || null;
-  },
-  ['categories', 'path'],
-  {
-    tags: ['categories', 'category-by-path'],
-    revalidate: 86400,
-  }
-);
+export async function getCategoryByPath(path: string): Promise<Category | null> {
+  const allCategories = await getAllCategories();
+  const category = allCategories.find(cat => cat.path === path);
+  return category || null;
+}
 
 export const getCategoryBySlug = customUnstableCache(
   async (slug: string): Promise<Category | null> => {
@@ -247,3 +240,16 @@ export const getCategoriesForSitemap = customUnstableCache(
 );
 
 export const getCategories = getAllCategories;
+
+// Bulk category lookup helper for better performance
+export async function getCategoriesByPathsBulk(paths: string[]): Promise<Record<string, Category | null>> {
+  const allCategories = await getAllCategories();
+  const result: Record<string, Category | null> = {};
+  
+  for (const path of paths) {
+    const category = allCategories.find(cat => cat.path === path);
+    result[path] = category || null;
+  }
+  
+  return result;
+}
