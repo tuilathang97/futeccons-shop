@@ -10,6 +10,7 @@ import { SessionProvider } from "@/contexts/SessionContext";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import PageWrapper from "@/components/PageWrapper";
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from "@vercel/analytics/react";
 
 
 const arimo = Arimo({
@@ -78,6 +79,7 @@ export default async function RootLayout({
             }}
           />
           <SpeedInsights />
+          <Analytics />
       </body>
     </html>
   );
