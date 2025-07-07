@@ -31,6 +31,7 @@ function CategoriesRender(categories: Category[], imagesUrl: string[]) {
                             placeholder="blur"
                             blurDataURL={IMAGE_PLACEHOLDER}
                             loading="lazy"
+                            sizes="(max-width: 350px) 100vw,(max-width: 640px) 100vw,(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     </div>
                     <p className="text-2xl flex justify-center w-full text-center flex text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 font-bold">{category.name}</p>
