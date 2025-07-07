@@ -41,6 +41,8 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
             banned: sUser.banned ?? null,
             banReason: sUser.banReason ?? null,
             banExpires: sUser.banExpires ?? null,
+            username: sUser.username ?? null,
+            displayUsername: sUser.displayUsername ?? null,
         };
     }
 

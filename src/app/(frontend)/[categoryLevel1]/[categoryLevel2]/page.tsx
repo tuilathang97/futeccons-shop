@@ -1,6 +1,6 @@
 import ProductsContainer from "@/components/post/ProductsContainer";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, validateCategoryPath, getCategoriesByParentId } from "@/lib/queries/categoryQueries";
+import { validateCategoryPath, getCategoriesByParentId } from "@/lib/queries/categoryQueries";
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
@@ -14,18 +14,20 @@ export default async function ProductListing2LevelDeep({ params,searchParams }: 
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
     const { categoryLevel1,categoryLevel2} = await params;
-    const categories = await getCategories();
-    const isValidPath = await validateCategoryPath(`/${categoryLevel1}/${categoryLevel2}`);
     const searchConditions = await searchParams;
-    if (!isValidPath || !categories ) {
+    
+    const [isValidPath, data, article] = await Promise.all([
+        validateCategoryPath(`/${categoryLevel1}/${categoryLevel2}`),
+        getPostByCategoryPath(categoryLevel1, categoryLevel2),
+        getPublishedArticleByParams({
+            level1Slug: categoryLevel1,
+            level2Slug: categoryLevel2
+        })
+    ]);
+    
+    if (!isValidPath) {
         notFound();
     }
-    const article = await getPublishedArticleByParams({
-        level1Slug: categoryLevel1,
-        level2Slug: categoryLevel2
-    });
-
-    const data = await getPostByCategoryPath(categoryLevel1, categoryLevel2);
     return (
         <section className="flex container flex-col 2xl:px-0 w-full gap-4 pt-4 md:pt-8">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">

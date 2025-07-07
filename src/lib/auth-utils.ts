@@ -28,6 +28,8 @@ export type UserSession = {
     banned?: boolean | null;
     banReason?: string | null;
     banExpires?: Date | null;
+    username?: string | null;
+    displayUsername?: string | null;
   };
 };
 

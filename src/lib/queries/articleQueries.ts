@@ -494,58 +494,110 @@ export const getPublishedArticleByParams = customUnstableCache(
     city?: string  // Assuming articlesTable has targetCity
   }): Promise<Article | null> => {
     console.log(`Executing DB query for getPublishedArticleByParams: ${JSON.stringify(params)}`);
+    
+    // Use optimized category lookups
+    const { getCategoriesByPathsBulk } = await import('./categoryQueries');
+    
+    // Build paths for category lookup
+    const paths = [];
+    if (params.level1Slug) paths.push(`/${params.level1Slug}`);
+    if (params.level2Slug) paths.push(`/${params.level1Slug}/${params.level2Slug}`);
+    if (params.level3Slug) paths.push(`/${params.level1Slug}/${params.level2Slug}/${params.level3Slug}`);
+    
+    if (paths.length === 0) return null;
+    
+    // Get categories in bulk
+    const categoryMap = await getCategoriesByPathsBulk(paths);
+    
+    // Extract category IDs
     let level1Id: number | undefined;
     let level2Id: number | undefined;
     let level3Id: number | undefined;
     
-    // Fetch category IDs using optimized cached category lookups
-    const allCategories = await getAllCategories();
-    
     if (params.level1Slug) {
-      const level1Category = allCategories.find(cat => cat.slug === params.level1Slug && cat.level === 1);
+      const level1Category = categoryMap[`/${params.level1Slug}`];
       level1Id = level1Category?.id;
     }
     if (params.level2Slug && level1Id) {
-      const level2Category = allCategories.find(cat => cat.slug === params.level2Slug && cat.level === 2 && cat.parentId === level1Id);
+      const level2Category = categoryMap[`/${params.level1Slug}/${params.level2Slug}`];
       level2Id = level2Category?.id;
     }
     if (params.level3Slug && level2Id) {
-      const level3Category = allCategories.find(cat => cat.slug === params.level3Slug && cat.level === 3 && cat.parentId === level2Id);
+      const level3Category = categoryMap[`/${params.level1Slug}/${params.level2Slug}/${params.level3Slug}`];
       level3Id = level3Category?.id;
     }
     
     if (!level1Id) return null;
     
-    let categoryConditions: SQL[] = []; // Explicitly type as SQL[]
+    // Build category conditions
+    const categoryConditions: SQL[] = [eq(articlesTable.status, 'published')];
+    
     if (level3Id && level2Id) { 
-      categoryConditions = [eq(articlesTable.level1CategoryId, level1Id), eq(articlesTable.level2CategoryId, level2Id), eq(articlesTable.level3CategoryId, level3Id)];
+      categoryConditions.push(
+        eq(articlesTable.level1CategoryId, level1Id),
+        eq(articlesTable.level2CategoryId, level2Id),
+        eq(articlesTable.level3CategoryId, level3Id)
+      );
     } else if (level2Id) {
-      categoryConditions = [eq(articlesTable.level1CategoryId, level1Id), eq(articlesTable.level2CategoryId, level2Id), isNull(articlesTable.level3CategoryId)];
+      categoryConditions.push(
+        eq(articlesTable.level1CategoryId, level1Id),
+        eq(articlesTable.level2CategoryId, level2Id),
+        isNull(articlesTable.level3CategoryId)
+      );
     } else {
-      categoryConditions = [eq(articlesTable.level1CategoryId, level1Id), isNull(articlesTable.level2CategoryId), isNull(articlesTable.level3CategoryId)];
+      categoryConditions.push(
+        eq(articlesTable.level1CategoryId, level1Id),
+        isNull(articlesTable.level2CategoryId),
+        isNull(articlesTable.level3CategoryId)
+      );
     }
     
-    const baseConditions: SQL[] = [...categoryConditions, eq(articlesTable.status, 'published')]; // Explicitly type
+    // Try different location targeting strategies in priority order
+    const queries: SQL[] = [];
     
-    // Try with specific city and state
+    // 1. Most specific: city + state
     if (params.city && params.state) {
-      const cityStateArticle = await db.query.articlesTable.findFirst({ where: and(...baseConditions, eq(articlesTable.targetState, params.state), eq(articlesTable.targetCity, params.city)) });
-      if (cityStateArticle) return cityStateArticle as Article;
+      const cityStateQuery = and(
+        ...categoryConditions,
+        eq(articlesTable.targetState, params.state),
+        eq(articlesTable.targetCity, params.city)
+      );
+      if (cityStateQuery) queries.push(cityStateQuery);
     }
     
-    // Try with state only
+    // 2. State only
     if (params.state) {
-      const stateArticle = await db.query.articlesTable.findFirst({ where: and(...baseConditions, eq(articlesTable.targetState, params.state), isNull(articlesTable.targetCity)) });
-      if (stateArticle) return stateArticle as Article;
+      const stateQuery = and(
+        ...categoryConditions,
+        eq(articlesTable.targetState, params.state),
+        isNull(articlesTable.targetCity)
+      );
+      if (stateQuery) queries.push(stateQuery);
     }
     
-    // Try with no location
-    const generalArticle = await db.query.articlesTable.findFirst({ where: and(...baseConditions, isNull(articlesTable.targetState), isNull(articlesTable.targetCity)) });
-    return generalArticle as Article || null;
+    // 3. No location targeting
+    const generalQuery = and(
+      ...categoryConditions,
+      isNull(articlesTable.targetState),
+      isNull(articlesTable.targetCity)
+    );
+    if (generalQuery) queries.push(generalQuery);
+    
+    // Execute queries in order until we find a match
+    for (const query of queries) {
+      const result = await db.query.articlesTable.findFirst({ 
+        where: query,
+        orderBy: desc(articlesTable.updatedAt) // Get most recent
+      });
+      
+      if (result) return result as Article;
+    }
+    
+    return null;
   },
   ['articles', 'published-by-params'],
   {
-    tags: ['articles', 'categories', 'articles:published-by-params'], // Broad tags due to complexity
+    tags: ['articles', 'categories', 'articles:published-by-params'],
     revalidate: 900, // 15 mins
   }
 ); 
