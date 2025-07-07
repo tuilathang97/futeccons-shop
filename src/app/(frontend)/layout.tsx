@@ -11,6 +11,7 @@ import { CategoriesProvider } from "@/contexts/CategoriesContext";
 import PageWrapper from "@/components/PageWrapper";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from "@vercel/analytics/react";
+import ProgressProviderComponent from "@/components/provider/ProgressProvider";
 
 
 const arimo = Arimo({
@@ -42,14 +43,14 @@ export default async function RootLayout({
       <head>
         <meta name="description" content="Mua bán bất động sản" />
         <meta name="keywords" content="Mua bán bất động sản, bất động sản, đất đai, nhà đất, đầu tư bất động sản" />
-        <meta name="author" content="Futeccons" />
+        <meta name="author" content="Fuland Shop" />
         <meta name="robots" content="index, follow" />
         <meta name="google-site-verification" content="your-google-site-verification-code" />
-        <meta name="og:title" content="Futeccons Shop" />
+        <meta name="og:title" content="Fuland Shop" />
         <meta name="og:description" content="Mua bán bất động sản" />
         <meta name="og:image" content="/images/logo.png" />
         <meta name="og:type" content="website" />
-        <meta name="og:site_name" content="Futeccons Shop" />
+        <meta name="og:site_name" content="Fuland Shop" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"} />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -66,7 +67,11 @@ export default async function RootLayout({
             <CategoriesProvider initialCategories={categories}>
               <Header />
               <PageWrapper className="flex-1">
-                <main>{children}</main>
+                  <main>
+                <ProgressProviderComponent>
+                    {children}
+                </ProgressProviderComponent>
+                  </main>
               </PageWrapper>
               <Footer />
             </CategoriesProvider>

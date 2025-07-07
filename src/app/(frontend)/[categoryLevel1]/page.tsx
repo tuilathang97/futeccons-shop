@@ -1,6 +1,6 @@
 import ProductsContainer from "@/components/post/ProductsContainer";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, validateCategoryPath, getCategoriesByParentId } from "@/lib/queries/categoryQueries";
+import { validateCategoryPath, getCategoriesByParentId, getAllCategories } from "@/lib/queries/categoryQueries";
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
@@ -17,7 +17,7 @@ interface PageProps {
 export default async function ProductListing1LevelDeep({ params,searchParams }: PageProps) {
     const { categoryLevel1 } = await params;
     const isValidPath = await validateCategoryPath(`/${categoryLevel1}`);
-    const categories = await getCategories();
+    const categories = await getAllCategories();
     const result = await getPostByCategoryPath(categoryLevel1);
     const searchConditions = await searchParams;
     if (!isValidPath || !categories) {
