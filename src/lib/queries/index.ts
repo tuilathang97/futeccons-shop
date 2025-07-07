@@ -2,7 +2,6 @@ import {db} from "@/db/drizzle";
 import { eq, and } from 'drizzle-orm';
 import { postsTable } from "@/db/schema";
 import { customUnstableCache } from '@/lib/cache';
-import { getAllCategories } from './categoryQueries';
 
 export * from './categoryQueries';
 export * from './postQueries';
@@ -12,52 +11,53 @@ export * from './paginateQuery';
 
 export const getPostByCategoryPath = customUnstableCache(
     async (slug1?: string, slug2?: string, slug3?: string,) => {
-        const path1 = `${slug1 ? '/' + slug1 : ''}`;
-        const path2 = path1 + `${slug2 ? '/' + slug2 : ''}`
-        const path3 = path2 + `${slug3 ? '/' + slug3 : ''}`
+        // Build paths for direct category lookup
+        const paths = [];
+        if (slug1) paths.push(`/${slug1}`);
+        if (slug2) paths.push(`/${slug1}/${slug2}`);
+        if (slug3) paths.push(`/${slug1}/${slug2}/${slug3}`);
+        
+        if (paths.length === 0) return null;
 
-        // Use cached categories instead of DB query
-        const allCategories = await getAllCategories();
-        const categories = allCategories.filter(cat => {
-            return (path1 && cat.path === path1) ||
-                   (path2 && cat.path === path2) ||
-                   (path3 && cat.path === path3);
-        });
-
-        const categoryNameByLevel: Record<string, number> = {};
-        for (const cat of categories) {
-            categoryNameByLevel[cat.level] = cat.id;
-        }
-
+        // Use bulk category lookup for better performance
+        const { getCategoriesByPathsBulk } = await import('./categoryQueries');
+        const categoryMap = await getCategoriesByPathsBulk(paths);
+        
+        // Extract category IDs based on the provided slugs
+        const categoryIds: Record<number, number> = {};
         const segmentsLength = [slug1, slug2, slug3].filter(Boolean).length;
-
+        
         for (let i = 0; i < segmentsLength; i++) {
             const level = i + 1;
-            if (!categoryNameByLevel[level]) {
-               return null;
+            const path = paths[i];
+            const category = categoryMap[path];
+            
+            if (!category) {
+                return null; // Invalid path
             }
+            
+            categoryIds[level] = category.id;
         }
 
-        const postConditions = [];
+        // Build optimized query conditions
+        const postConditions = [eq(postsTable.active, true)];
 
-        if (categoryNameByLevel[1]) {
-            postConditions.push(eq(postsTable.level1Category, categoryNameByLevel[1]));
+        if (categoryIds[1]) {
+            postConditions.push(eq(postsTable.level1Category, categoryIds[1]));
         }
 
-        if (categoryNameByLevel[2]) {
-            postConditions.push(eq(postsTable.level2Category, categoryNameByLevel[2]));
+        if (categoryIds[2]) {
+            postConditions.push(eq(postsTable.level2Category, categoryIds[2]));
         }
 
-        if (categoryNameByLevel[3]) {
-            postConditions.push(eq(postsTable.level3Category, categoryNameByLevel[3]));
+        if (categoryIds[3]) {
+            postConditions.push(eq(postsTable.level3Category, categoryIds[3]));
         }
-
-        // Only return active posts
-        postConditions.push(eq(postsTable.active, true));
 
         return await db.select()
             .from(postsTable)
-            .where(and(...postConditions));
+            .where(and(...postConditions))
+            .orderBy(postsTable.createdAt);
     },
     ['posts', 'category', 'path'],
     {

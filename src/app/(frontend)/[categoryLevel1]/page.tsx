@@ -16,16 +16,19 @@ interface PageProps {
 
 export default async function ProductListing1LevelDeep({ params,searchParams }: PageProps) {
     const { categoryLevel1 } = await params;
-    const isValidPath = await validateCategoryPath(`/${categoryLevel1}`);
-    const categories = await getAllCategories();
-    const result = await getPostByCategoryPath(categoryLevel1);
     const searchConditions = await searchParams;
-    if (!isValidPath || !categories) {
+    
+    const [isValidPath, result, article] = await Promise.all([
+        validateCategoryPath(`/${categoryLevel1}`),
+        getPostByCategoryPath(categoryLevel1),
+        getPublishedArticleByParams({
+            level1Slug: categoryLevel1
+        })
+    ]);
+    
+    if (!isValidPath) {
         notFound();
     }
-    const article = await getPublishedArticleByParams({
-        level1Slug: categoryLevel1
-    });
     return (
         <section className="flex flex-col gap-4 container 2xl:px-0">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">

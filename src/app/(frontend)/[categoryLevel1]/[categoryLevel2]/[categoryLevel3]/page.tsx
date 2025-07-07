@@ -16,20 +16,20 @@ export default async function ProductListing3LevelDeep({ params,searchParams }: 
 }) {
     const { categoryLevel1, categoryLevel2, categoryLevel3 } = await params
     const searchConditions = await searchParams;
-    const isValidPath = await validateCategoryPath(`/${categoryLevel1}/${categoryLevel2}/${categoryLevel3}`);
     
-    const categories = await getCategories();
-    const result = await getPostByCategoryPath(categoryLevel1, categoryLevel2, categoryLevel3);
+    const [isValidPath, result, article] = await Promise.all([
+        validateCategoryPath(`/${categoryLevel1}/${categoryLevel2}/${categoryLevel3}`),
+        getPostByCategoryPath(categoryLevel1, categoryLevel2, categoryLevel3),
+        getPublishedArticleByParams({
+            level1Slug: categoryLevel1,
+            level2Slug: categoryLevel2,
+            level3Slug: categoryLevel3
+        })
+    ]);
     
-    if (!isValidPath || !categories) {
+    if (!isValidPath) {
         notFound();
     }
-
-    const article = await getPublishedArticleByParams({
-        level1Slug: categoryLevel1,
-        level2Slug: categoryLevel2,
-        level3Slug: categoryLevel3
-    });
 
 
     return (

@@ -48,7 +48,26 @@ export const postsTable = pgTable('posts', {
   huongCuaChinh: varchar('huong', { length: 255 }),
   chieuNgang: integer('chieu_ngang').default(0).notNull(),
   chieuDai: integer('chieu_dai').default(0).notNull(),
-});
+}, (table) => [
+  // Core category and active status index - most important for filtering
+  index('posts_category_active_idx').on(table.level1Category, table.level2Category, table.level3Category, table.active),
+  // Active posts index for general queries
+  index('posts_active_idx').on(table.active),
+  // Location-based indexes for geographical queries
+  index('posts_location_idx').on(table.thanhPhoCodeName, table.quanCodeName, table.phuongCodeName),
+  // Price range queries
+  index('posts_price_idx').on(table.giaTien),
+  // Date-based queries for recent posts
+  index('posts_created_idx').on(table.createdAt.desc()),
+  // User's posts lookup
+  index('posts_user_idx').on(table.userId),
+  // Path-based lookup for direct URL access
+  index('posts_path_idx').on(table.path),
+  // Combined price and date for common filters
+  index('posts_price_date_idx').on(table.giaTien, table.createdAt.desc()),
+  // Location + active for geographical filtered queries
+  index('posts_location_active_idx').on(table.thanhPhoCodeName, table.active),
+]);
 
 
 export type Post = typeof postsTable.$inferSelect;
@@ -179,9 +198,26 @@ export const articlesTable = pgTable('articles', {
 }, (table) => {
   return {
     slugIdx: index('articles_slug_idx').on(table.slug),
+    // Enhanced category hierarchy with status - most critical for article queries
     categoryStatusIdx: index('articles_category_status_idx').on(table.level1CategoryId, table.level2CategoryId, table.level3CategoryId, table.status),
+    // Location targeting with status
     locationStatusIdx: index('articles_location_status_idx').on(table.targetState, table.targetCity, table.status),
+    // Author lookup
     authorIdx: index('articles_author_idx').on(table.authorId),
+    // Status-only index for general published articles
+    statusIdx: index('articles_status_idx').on(table.status),
+    // Level 1 category with status for broad category queries
+    level1StatusIdx: index('articles_level1_status_idx').on(table.level1CategoryId, table.status),
+    // Level 2 category with status for mid-level category queries
+    level2StatusIdx: index('articles_level2_status_idx').on(table.level2CategoryId, table.status),
+    // Level 3 category with status for specific category queries
+    level3StatusIdx: index('articles_level3_status_idx').on(table.level3CategoryId, table.status),
+    // Location-only index for geographical queries
+    locationIdx: index('articles_location_idx').on(table.targetState, table.targetCity),
+    // Published date for recent articles
+    publishedDateIdx: index('articles_published_date_idx').on(table.publishedAt.desc()),
+    // Combined location and category for geographically targeted articles
+    locationCategoryIdx: index('articles_location_category_idx').on(table.targetState, table.targetCity, table.level1CategoryId, table.status),
   };
 });
 
