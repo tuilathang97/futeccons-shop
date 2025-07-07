@@ -31,7 +31,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                             blurDataURL={blurDataURL || IMAGE_PLACEHOLDER}
                             priority={true}
                             className="object-cover shadow-md "
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            sizes="(max-width: 350px) 100vw,(max-width: 640px) 100vw,(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     ) : (
                         <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-t-lg">

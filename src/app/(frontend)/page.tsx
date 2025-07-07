@@ -66,7 +66,7 @@ export default async function Home({ searchParams }: HomePageProps) {
           <ReviewsCarousel />
         </div>
         <ProvincesLinks />
-        <section className="container 2xl:px-0">
+        <section className="container xl:px-0">
           <RealEstateSEOSection />
         </section>
       </div>
@@ -81,8 +81,8 @@ export default async function Home({ searchParams }: HomePageProps) {
 }
 
 export const metadata: Metadata = {
-  title: 'Futeccons Shop',
-  description: 'Futeccons Shop - Real Estate Platform',
+  title: 'Futeccons Land',
+  description: 'Fuland Shop - Real Estate Platform',
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
@@ -92,7 +92,7 @@ export const metadata: Metadata = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization", 
-  "name": "Futeccons Shop",
+  "name": "Fuland Shop",
   "description": "Nền tảng bất động sản hàng đầu Việt Nam",
   "url": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
   "contactPoint": {

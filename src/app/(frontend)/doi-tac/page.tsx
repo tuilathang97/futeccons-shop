@@ -52,7 +52,7 @@ export default function DoiTacPage() {
             Đối tác chiến lược
           </h1>
           <p className="text-lg text-brand-dark max-w-2xl mx-auto">
-            Cùng Futeccons Shop xây dựng hệ sinh thái bất động sản toàn diện và phát triển bền vững
+            Cùng Fuland Shop xây dựng hệ sinh thái bất động sản toàn diện và phát triển bền vững
           </p>
         </div>
 

@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
         },
         "brand": {
             "@type": "Organization",
-            "name": "Futeccons Shop"
+            "name": "Fuland Shop"
         },
         "seller": {
             "@type": "Person",
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
     const currentPath = `/post/${numericPostId}`;
 
     return (
-        <div className='container 2xl:px-0'>
+        <div className='container xl:px-0'>
             <div className='flex flex-col gap-4'>
                 <div className='grid grid-cols-12 gap-4 py-2'>
                     <div className='col-span-12 md:col-span-8 gap-4'>

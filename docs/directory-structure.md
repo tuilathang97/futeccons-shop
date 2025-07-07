@@ -1,4 +1,4 @@
-# Futeccons Shop Directory Structure Guidelines
+# Fuland Shop Directory Structure Guidelines
 
 ## App Router Structure
 

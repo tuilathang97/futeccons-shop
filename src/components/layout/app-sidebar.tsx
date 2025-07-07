@@ -39,7 +39,7 @@ import { Icons } from '../icons';
 import { navItems } from '@/constants/data';
 
 export const company = {
-  name: 'Futeccons shop',
+  name: 'Fuland Shop',
   logo: GalleryVerticalEnd,
   plan: 'Trang quản lí'
 };

@@ -27,7 +27,7 @@ const ProvincesLinksClient = ({ provinces }: ProvincesLinksClientProps) => {
   }
 
   return (
-    <section className='container 2xl:px-0 py-16'>
+    <section className='container xl:px-0 py-16'>
       <div className='max-w-6xl mx-auto'>
         {/* Header */}
         <div className='text-center mb-10'>

@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-brand-darkest mb-2">
-            Futeccons Shop
+            Fuland Shop
           </h1>
           <p className="text-brand-dark">
             Nền tảng bất động sản hàng đầu
@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-brand-darkest mb-4">1. Giới Thiệu</h2>
               <p className="text-brand-dark leading-relaxed">
-                Futeccons Shop cam kết bảo vệ thông tin cá nhân của bạn. Chính sách bảo mật này 
+                Fuland Shop cam kết bảo vệ thông tin cá nhân của bạn. Chính sách bảo mật này 
                 giải thích cách chúng tôi thu thập, sử dụng, chia sẻ và bảo vệ thông tin cá nhân 
                 khi bạn sử dụng nền tảng thương mại điện tử bất động sản của chúng tôi.
               </p>
@@ -258,61 +258,40 @@ export default function PrivacyPolicyPage() {
 
             {/* 10. Thay đổi chính sách */}
             <section>
-              <h2 className="text-2xl font-semibold text-brand-darkest mb-4">10. Thay Đổi Chính Sách Bảo Mật</h2>
+              <h2 className="text-2xl font-semibold text-brand-darkest mb-4">10. Thay Đổi Chính Sách</h2>
               <p className="text-brand-dark leading-relaxed">
-                Chúng tôi có thể cập nhật chính sách bảo mật này để phản ánh thay đổi trong 
-                thực hành hoặc yêu cầu pháp lý. Thay đổi quan trọng sẽ được thông báo qua:
+                Chúng tôi có thể cập nhật chính sách bảo mật này theo thời gian. Mọi thay đổi 
+                sẽ được thông báo trên trang này và ngày cập nhật sẽ được sửa đổi. Bạn nên 
+                xem lại định kỳ để biết những thay đổi. Việc tiếp tục sử dụng dịch vụ sau khi 
+                có thay đổi đồng nghĩa với việc bạn chấp nhận chính sách mới.
               </p>
-              <ul className="list-disc pl-6 space-y-2 text-brand-dark mt-4">
-                <li>Email thông báo đến người dùng đã đăng ký</li>
-                <li>Thông báo nổi bật trên website</li>
-                <li>Cập nhật ngày hiệu lực ở đầu chính sách này</li>
-              </ul>
             </section>
 
             <Separator className="border-brand-light" />
 
             {/* 11. Liên hệ */}
             <section>
-              <h2 className="text-2xl font-semibold text-brand-darkest mb-4">11. Liên Hệ Về Bảo Mật</h2>
-              <div className="bg-brand-light/30 p-6 rounded-lg border border-brand-light">
-                <p className="text-brand-darkest leading-relaxed mb-4">
-                  Nếu bạn có câu hỏi về chính sách bảo mật này hoặc muốn thực hiện các quyền 
-                  của mình, vui lòng liên hệ:
-                </p>
-                <div className="space-y-2 text-brand-darkest">
-                  <p><strong>Bộ phận Bảo mật Dữ liệu:</strong> Futeccons</p>
-                  <p><strong>Email:</strong> privacy@futeccons.com</p>
-                  <p><strong>Email hỗ trợ:</strong> thanhlb1990@gmail.com</p>
-                  <p><strong>Hotline:</strong> 0765563567</p>
-                  <p><strong>Địa chỉ:</strong> [Địa chỉ công ty Futeccons]</p>
-                </div>
-              </div>
+              <h2 className="text-2xl font-semibold text-brand-darkest mb-4">9. Liên Hệ</h2>
+              <p className="text-brand-dark leading-relaxed">
+                Nếu bạn có bất kỳ câu hỏi, mối quan tâm hoặc yêu cầu nào liên quan đến chính sách 
+                bảo mật, vui lòng liên hệ với chúng tôi qua trang <Link href="/lien-he" className="text-brand-medium hover:underline">Liên hệ</Link>. 
+                Chúng tôi sẽ phản hồi trong thời gian sớm nhất.
+              </p>
+              <p className="text-brand-dark leading-relaxed mt-4">
+                Việc bảo vệ dữ liệu của bạn là ưu tiên hàng đầu của chúng tôi. Chúng tôi cam kết 
+                minh bạch và trách nhiệm trong việc xử lý thông tin cá nhân, đảm bảo quyền riêng 
+                tư và nghĩa vụ khi sử dụng dịch vụ Fuland Shop.
+              </p>
             </section>
 
             <Separator className="border-brand-light" />
 
-            {/* 12. Điều khoản liên quan */}
-            <section>
-              <h2 className="text-2xl font-semibold text-brand-darkest mb-4">12. Điều Khoản Liên Quan</h2>
-              <p className="text-brand-dark leading-relaxed">
-                Chính sách bảo mật này hoạt động cùng với{' '}
-                <Link href="/terms" className="text-brand-medium hover:text-brand-dark underline font-medium">
-                  Điều Khoản Dịch Vụ
-                </Link>{' '}
-                của chúng tôi. Vui lòng đọc cả hai tài liệu để hiểu đầy đủ về quyền và 
-                nghĩa vụ khi sử dụng dịch vụ Futeccons Shop.
+            <div className="text-center text-brand-dark pt-8">
+              <p>
+                Cảm ơn bạn đã tin tưởng Fuland Shop. Chúng tôi cam kết bảo vệ thông tin 
+                của bạn một cách tốt nhất.
               </p>
-            </section>
-
-            {/* Acknowledgment */}
-            <section className="bg-gradient-to-r from-brand-light/30 to-brand-medium/20 p-6 rounded-lg border border-brand-medium/30">
-              <p className="text-brand-darkest font-medium">
-                Cảm ơn bạn đã tin tưởng Futeccons Shop. Chúng tôi cam kết bảo vệ thông tin 
-                cá nhân của bạn và sử dụng dữ liệu một cách có trách nhiệm để cung cấp 
-                dịch vụ tốt nhất.
-              </p>
-            </section>
+            </div>
           </CardContent>
         </Card>
       </div>

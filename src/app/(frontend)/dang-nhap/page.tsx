@@ -98,7 +98,7 @@ export default function SignInPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-brand-darkest mb-2">
-            Futeccons Shop
+            Fuland Shop
           </h1>
           <p className="text-brand-dark">
             Nền tảng bất động sản hàng đầu

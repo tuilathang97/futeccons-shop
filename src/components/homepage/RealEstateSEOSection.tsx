@@ -28,7 +28,7 @@ const RealEstateSEOSection = () => {
   ];
 
   return (
-    <section className="container 2xl:px-0 py-12 md:py-16 lg:py-20">
+    <section className="container xl:px-0 py-12 md:py-16 lg:py-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="text-center mb-12 md:mb-16">
@@ -50,7 +50,7 @@ const RealEstateSEOSection = () => {
             {/* Main Content */}
             <article className="prose prose-gray max-w-none">
               <p className="text-sm md:text-base lg:text-lg leading-relaxed text-gray-700 mb-4 md:mb-6">
-                <strong className="text-brand-darkest">Futeccons Shop</strong> tự hào là nền tảng bất động sản trực tuyến uy tín, 
+                <strong className="text-brand-darkest">Fuland Shop</strong> tự hào là nền tảng bất động sản trực tuyến uy tín, 
                 cung cấp thông tin về hàng chục nghìn dự án <em>nhà đất, chung cư, biệt thự</em> trên toàn quốc. 
                 Với hơn 10 năm kinh nghiệm trong lĩnh vực <strong>môi giới bất động sản</strong>, chúng tôi cam kết 
                 mang đến dịch vụ tốt nhất cho khách hàng.
@@ -145,7 +145,7 @@ const RealEstateSEOSection = () => {
         <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-200">
           <div className="text-center">
             <p className="text-xs md:text-sm text-gray-600 leading-relaxed max-w-4xl mx-auto">
-              <strong className="text-brand-darkest">Futeccons Shop</strong> - Nơi hội tụ của những cơ hội đầu tư bất động sản tiềm năng. 
+              <strong className="text-brand-darkest">Fuland Shop</strong> - Nơi hội tụ của những cơ hội đầu tư bất động sản tiềm năng. 
               Với cam kết mang đến <em>dịch vụ chuyên nghiệp, thông tin chính xác và hỗ trợ tận tâm</em>, 
               chúng tôi là đối tác tin cậy cho mọi giao dịch bất động sản của bạn. 
               Hãy khám phá ngay hàng nghìn tin đăng chất lượng và tìm thấy ngôi nhà mơ ước của mình.

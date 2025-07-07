@@ -49,7 +49,7 @@ export default function Footer() {
 
 return (
     <footer className="bg-brand-medium text-white min-w-full">
-      <div className="py-12 container">
+      <div className="py-12 xl:px-0 container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
@@ -57,7 +57,7 @@ return (
                 <Building className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Futeccons Shop</h3>
+                <h3 className="text-xl font-bold text-white">Fuland Shop</h3>
                 <p className="text-brand-light text-sm">Nền tảng bất động sản hàng đầu</p>
               </div>
             </div>
@@ -123,7 +123,7 @@ return (
       <div className="py-6 container">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-sm text-gray-300">
           <div className="flex flex-col md:flex-row gap-4">
-            <p>&copy; 2025 Futeccons Shop. Tất cả quyền được bảo lưu.</p>
+            <p>&copy; 2025 Fuland Shop. Tất cả quyền được bảo lưu.</p>
             <div className="flex gap-4">
               <Link
                 href="/terms"

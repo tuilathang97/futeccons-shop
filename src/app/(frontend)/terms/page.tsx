@@ -15,7 +15,7 @@ export default function TermsOfServicePage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-brand-darkest mb-2">
-            Futeccons Shop
+            Fuland Shop
           </h1>
           <p className="text-brand-dark">
             Nền tảng bất động sản hàng đầu
@@ -38,13 +38,13 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-brand-darkest mb-4">1. Giới Thiệu</h2>
               <p className="text-brand-dark leading-relaxed">
-                Chào mừng bạn đến với Futeccons Shop - nền tảng thương mại điện tử bất động sản hàng đầu. 
+                Chào mừng bạn đến với Fuland Shop - nền tảng thương mại điện tử bất động sản hàng đầu. 
                 Bằng việc truy cập và sử dụng website này, bạn đồng ý tuân thủ và bị ràng buộc bởi các 
                 điều khoản và điều kiện sau đây. Nếu bạn không đồng ý với bất kỳ phần nào của các điều 
                 khoản này, vui lòng không sử dụng dịch vụ của chúng tôi.
               </p>
               <p className="text-brand-dark leading-relaxed">
-                Futeccons Shop được vận hành bởi Futeccons, cung cấp dịch vụ kết nối người mua và người 
+                Fuland Shop được vận hành bởi Futeccons, cung cấp dịch vụ kết nối người mua và người 
                 bán bất động sản thông qua nền tảng trực tuyến.
               </p>
             </section>
@@ -55,9 +55,9 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-brand-darkest mb-4">2. Định Nghĩa</h2>
               <ul className="space-y-2 text-brand-dark">
-                <li><strong>&ldquo;Chúng tôi&rdquo;, &ldquo;Công ty&rdquo;:</strong> Futeccons và nền tảng Futeccons Shop</li>
+                <li><strong>&ldquo;Chúng tôi&rdquo;, &ldquo;Công ty&rdquo;:</strong> Futeccons và nền tảng Fuland Shop</li>
                 <li><strong>&ldquo;Bạn&rdquo;, &ldquo;Người dùng&rdquo;:</strong> Cá nhân hoặc tổ chức sử dụng dịch vụ</li>
-                <li><strong>&ldquo;Dịch vụ&rdquo;:</strong> Nền tảng thương mại điện tử bất động sản Futeccons Shop</li>
+                <li><strong>&ldquo;Dịch vụ&rdquo;:</strong> Nền tảng thương mại điện tử bất động sản Fuland Shop</li>
                 <li><strong>&ldquo;Nội dung&rdquo;:</strong> Thông tin, hình ảnh, văn bản, dữ liệu được đăng tải</li>
                 <li><strong>&ldquo;Tài khoản&rdquo;:</strong> Tài khoản người dùng được đăng ký trên hệ thống</li>
               </ul>
@@ -271,10 +271,16 @@ export default function TermsOfServicePage() {
             {/* Acknowledgment */}
             <section className="bg-gradient-to-r from-brand-light/30 to-brand-medium/20 p-6 rounded-lg border border-brand-medium/30">
               <p className="text-brand-darkest font-medium">
-                Bằng việc tiếp tục sử dụng dịch vụ Futeccons Shop, bạn xác nhận rằng đã đọc, 
+                Bằng việc tiếp tục sử dụng dịch vụ Fuland Shop, bạn xác nhận rằng đã đọc, 
                 hiểu và đồng ý tuân thủ tất cả các điều khoản và điều kiện nêu trên.
               </p>
             </section>
+
+            <div className="text-center text-brand-dark pt-8">
+              <p>
+                Cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng tôi.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
