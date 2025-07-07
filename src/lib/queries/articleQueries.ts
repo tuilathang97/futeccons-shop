@@ -1,10 +1,11 @@
 'use server'
 
 import { db } from '@/db/drizzle';
-import { articlesTable, categoriesTable, type Article, type Category, type NewArticle, type User } from '@/db/schema';
+import { articlesTable, type Article, type Category, type NewArticle, type User } from '@/db/schema';
 import { eq, and, or, isNull, desc, asc, count as drizzleCount, ilike, not, type SQL, type AnyColumn } from 'drizzle-orm';
 import { customUnstableCache } from '@/lib/cache';
 import type { PaginationParams, PaginatedResult } from './paginateQuery';
+import { getAllCategories, getCategoryBySlug } from './categoryQueries';
 
 type ArticleWithRelations = Article & { 
   level1Category?: Category | null; 
@@ -114,9 +115,7 @@ export const getArticlesByCategorySlug = customUnstableCache(
     const pageSize = params.pageSize || 10;
     const offset = (page - 1) * pageSize;
 
-    const category = await db.query.categoriesTable.findFirst({
-      where: eq(categoriesTable.slug, slug),
-    });
+    const category = await getCategoryBySlug(slug);
 
     if (!category) {
       return { data: [], metadata: { currentPage: page, pageSize, totalPages: 0, totalItems: 0 } };
@@ -433,7 +432,7 @@ export async function deleteArticle(id: number) {
 export const getCategoriesWithArticleStatus = customUnstableCache(
   async (): Promise<CategoryWithArticleStatusType[]> => {
     console.log('Executing DB query for getCategoriesWithArticleStatus');
-    const categories: Category[] = await db.select().from(categoriesTable);
+    const categories: Category[] = await getAllCategories();
     
     const categoriesWithStatus: CategoryWithArticleStatusType[] = await Promise.all(
       categories.map(async (category) => {
@@ -499,17 +498,19 @@ export const getPublishedArticleByParams = customUnstableCache(
     let level2Id: number | undefined;
     let level3Id: number | undefined;
     
-    // Fetch category IDs (these category queries will use their own caches if defined in categoryQueries.ts)
+    // Fetch category IDs using optimized cached category lookups
+    const allCategories = await getAllCategories();
+    
     if (params.level1Slug) {
-      const level1Category = await db.query.categoriesTable.findFirst({where: and(eq(categoriesTable.slug, params.level1Slug), eq(categoriesTable.level, 1))});
+      const level1Category = allCategories.find(cat => cat.slug === params.level1Slug && cat.level === 1);
       level1Id = level1Category?.id;
     }
     if (params.level2Slug && level1Id) {
-      const level2Category = await db.query.categoriesTable.findFirst({where: and(eq(categoriesTable.slug, params.level2Slug), eq(categoriesTable.level, 2), eq(categoriesTable.parentId, level1Id))});
+      const level2Category = allCategories.find(cat => cat.slug === params.level2Slug && cat.level === 2 && cat.parentId === level1Id);
       level2Id = level2Category?.id;
     }
     if (params.level3Slug && level2Id) {
-      const level3Category = await db.query.categoriesTable.findFirst({where: and(eq(categoriesTable.slug, params.level3Slug), eq(categoriesTable.level, 3), eq(categoriesTable.parentId, level2Id))});
+      const level3Category = allCategories.find(cat => cat.slug === params.level3Slug && cat.level === 3 && cat.parentId === level2Id);
       level3Id = level3Category?.id;
     }
     

@@ -1,7 +1,8 @@
 import {db} from "@/db/drizzle";
-import { eq, ilike, or, and } from 'drizzle-orm';
-import { categoriesTable, postsTable } from "@/db/schema";
+import { eq, and } from 'drizzle-orm';
+import { postsTable } from "@/db/schema";
 import { customUnstableCache } from '@/lib/cache';
+import { getAllCategories } from './categoryQueries';
 
 export * from './categoryQueries';
 export * from './postQueries';
@@ -15,13 +16,13 @@ export const getPostByCategoryPath = customUnstableCache(
         const path2 = path1 + `${slug2 ? '/' + slug2 : ''}`
         const path3 = path2 + `${slug3 ? '/' + slug3 : ''}`
 
-        const categories = await db.select()
-            .from(categoriesTable)
-            .where(or(
-                path1 ? ilike(categoriesTable.path, path1) : undefined,
-                path2 ? ilike(categoriesTable.path, path2) : undefined,
-                path3 ? ilike(categoriesTable.path, path3) : undefined
-            ));
+        // Use cached categories instead of DB query
+        const allCategories = await getAllCategories();
+        const categories = allCategories.filter(cat => {
+            return (path1 && cat.path === path1) ||
+                   (path2 && cat.path === path2) ||
+                   (path3 && cat.path === path3);
+        });
 
         const categoryNameByLevel: Record<string, number> = {};
         for (const cat of categories) {

@@ -2,7 +2,7 @@
 
 import { db } from '@/db/drizzle';
 import { categoriesTable, Category } from '@/db/schema';
-import { eq, asc, isNull, sql } from 'drizzle-orm';
+import { eq, asc, sql } from 'drizzle-orm';
 import { customUnstableCache } from '@/lib/cache';
 
 export async function createCategory(name: string, parentId: number | null, level: 1 | 2 | 3, slug: string, path: string, note: string = '') {
@@ -40,18 +40,11 @@ export const getAllCategories = customUnstableCache(
   }
 );
 
-export const getCategoryById = customUnstableCache(
-  async (id: number): Promise<Category | null> => {
-    console.log(`Executing DB query for getCategoryById: ${id}`);
-    const result = await db.select().from(categoriesTable).where(eq(categoriesTable.id, id));
-    return result[0] || null;
-  },
-  ['categories', 'id'],
-  {
-    tags: ['categories', 'category-by-id'],
-    revalidate: 86400,
-  }
-);
+export async function getCategoryById(id: number): Promise<Category | null> {
+  const allCategories = await getAllCategories();
+  const category = allCategories.find(cat => cat.id === id);
+  return category || null;
+}
 
 export async function getCategoryByPath(path: string): Promise<Category | null> {
   const allCategories = await getAllCategories();
@@ -59,18 +52,11 @@ export async function getCategoryByPath(path: string): Promise<Category | null> 
   return category || null;
 }
 
-export const getCategoryBySlug = customUnstableCache(
-  async (slug: string): Promise<Category | null> => {
-    console.log(`Executing DB query for getCategoryBySlug: ${slug}`);
-    const result = await db.select().from(categoriesTable).where(eq(categoriesTable.slug, slug));
-    return result[0] || null;
-  },
-  ['categories', 'slug'],
-  {
-    tags: ['categories', 'category-by-slug'],
-    revalidate: 86400,
-  }
-);
+export async function getCategoryBySlug(slug: string): Promise<Category | null> {
+  const allCategories = await getAllCategories();
+  const category = allCategories.find(cat => cat.slug === slug);
+  return category || null;
+}
 
 export async function updateCategory(id: number, name: string, parentId: number | null, note: string | null, slug: string | null, path: string | null) {
   await db.update(categoriesTable).set({ name, parentId, note, slug, path }).where(eq(categoriesTable.id, id));
@@ -91,60 +77,36 @@ export async function validateCategoryPath(path: string): Promise<boolean> {
   return category !== null && category !== undefined;
 }
 
-export const getCategoriesByParentId = customUnstableCache(
-  async (parentId: number | null): Promise<Category[]> => {
-    console.log(`Executing DB query for getCategoriesByParentId: ${parentId}`);
-    if (parentId === null) {
-      return db.select().from(categoriesTable).where(isNull(categoriesTable.parentId)).orderBy(asc(categoriesTable.name));
+export async function getCategoriesByParentId(parentId: number | null): Promise<Category[]> {
+  const allCategories = await getAllCategories();
+  const filteredCategories = allCategories.filter(cat => cat.parentId === parentId);
+  // Sort by name to match original behavior
+  return filteredCategories.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export async function getCategoryBreadcrumbs(categoryId: number | null): Promise<Category[]> {
+  if (categoryId === null) return [];
+  
+  const allCategories = await getAllCategories();
+  const breadcrumbs: Category[] = [];
+  let currentCategoryId: number | null = categoryId;
+
+  while (currentCategoryId !== null) {
+    const categoryItem = allCategories.find(cat => cat.id === currentCategoryId);
+
+    if (categoryItem) {
+      breadcrumbs.unshift(categoryItem);
+      currentCategoryId = categoryItem.parentId;
+    } else {
+      currentCategoryId = null;
     }
-    return db.select().from(categoriesTable).where(eq(categoriesTable.parentId, parentId)).orderBy(asc(categoriesTable.name));
-  },
-  ['categories', 'parent'],
-  {
-    tags: ['categories', 'categories-by-parent-id'],
-    revalidate: 86400,
   }
-);
+  return breadcrumbs;
+}
 
-export const getCategoryBreadcrumbs = customUnstableCache(
-  async (categoryId: number | null): Promise<Category[]> => {
-    if (categoryId === null) return [];
-    console.log(`Executing DB query for getCategoryBreadcrumbs: ${categoryId}`);
-    const breadcrumbs: Category[] = [];
-    let currentCategoryId: number | null = categoryId;
-
-    while (currentCategoryId !== null) {
-      const categoryItem: Category | undefined = await db.query.categoriesTable.findFirst({
-        where: eq(categoriesTable.id, currentCategoryId),
-      });
-
-      if (categoryItem) {
-        breadcrumbs.unshift(categoryItem);
-        currentCategoryId = categoryItem.parentId;
-      } else {
-        currentCategoryId = null;
-      }
-    }
-    return breadcrumbs;
-  },
-  ['categories', 'breadcrumbs'],
-  {
-    tags: ['categories', 'category-breadcrumbs'],
-    revalidate: 86400,
-  }
-);
-
-export const getTopLevelCategories = customUnstableCache(
-  async (): Promise<Category[]> => {
-    console.log(`Executing DB query for getTopLevelCategories`);
-    return getCategoriesByParentId(null);
-  },
-  ['categories', 'top-level'],
-  {
-    tags: ['categories', 'categories:top-level'],
-    revalidate: 86400,
-  }
-);
+export async function getTopLevelCategories(): Promise<Category[]> {
+  return getCategoriesByParentId(null);
+}
 
 type CategoryWithCount = Omit<Category, 'createdAt' | 'updatedAt'> & { articleCount: number };
 
@@ -218,26 +180,13 @@ export const getAllCategoriesWithArticleCounts = customUnstableCache(
   }
 );
 
-export const getCategoriesForSitemap = customUnstableCache(
-  async (): Promise<{ path: string; }[]> => {
-    console.log(`Executing DB query for getCategoriesForSitemap`);
-    const categories = await db
-      .select({
-        path: categoriesTable.path,
-      })
-      .from(categoriesTable)
-      .orderBy(asc(categoriesTable.path));
-    
-    return categories.filter(c => c.path !== null).map(c => ({
-        path: c.path!,
-    }));
-  },
-  ['categories', 'sitemap'],
-  {
-    tags: ['categories', 'categories:sitemap'],
-    revalidate: 86400,
-  }
-);
+export async function getCategoriesForSitemap(): Promise<{ path: string; }[]> {
+  const allCategories = await getAllCategories();
+  return allCategories
+    .filter(cat => cat.path !== null)
+    .map(cat => ({ path: cat.path! }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+}
 
 export const getCategories = getAllCategories;
 
