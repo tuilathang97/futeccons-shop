@@ -143,7 +143,7 @@ export default function MobileMenuToggle() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" onClick={() => setOpen(!open)}>
+        <Button aria-label="Menu" variant="outline" onClick={() => setOpen(!open)}>
           <AlignJustify strokeWidth={1.5} size={24} />
         </Button>
       </SheetTrigger>

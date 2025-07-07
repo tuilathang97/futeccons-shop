@@ -63,28 +63,28 @@ export default async function RootLayout({
       <body
         className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 pt-16`}
       >
-          <SessionProvider session={session} user={user}>
-            <CategoriesProvider initialCategories={categories}>
-              <Header />
-              <PageWrapper className="flex-1">
-                  <main>
+        <SessionProvider session={session} user={user}>
+          <CategoriesProvider initialCategories={categories}>
+            <Header />
+            <PageWrapper className="flex-1">
+              <main>
                 <ProgressProviderComponent>
-                    {children}
+                  {children}
                 </ProgressProviderComponent>
-                  </main>
-              </PageWrapper>
-              <Footer />
-            </CategoriesProvider>
-          </SessionProvider>
-          <Toaster />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c'),
-            }}
-          />
-          <SpeedInsights />
-          <Analytics />
+              </main>
+            </PageWrapper>
+            <Footer />
+          </CategoriesProvider>
+        </SessionProvider>
+        <Toaster />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c'),
+          }}
+        />
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );

@@ -64,7 +64,7 @@ export default async function ProvincesCard({ className }: ProvincesCardProps) {
           {ProvincesRender(filteredProvinces, PROVINCE_IMAGES)}
           <Link
             href={`/tim-kiem-theo-tu-khoa/`}
-            className="group col-span-2 hover:shadow-lg min-w-full min-h-full flex flex-col items-center gap-2 rounded-md transition-colors hover:bg-slate-50"
+            className="group col-span-2 sm:col-span-1 md:col-span-2 hover:shadow-lg min-w-full min-h-full flex flex-col items-center gap-2 rounded-md transition-colors hover:bg-slate-50"
           >
             <div className='relative min-w-full hover:shadow-md transition-shadow duration-300'>
               <div className="flex flex-col-reverse items-center gap-2">

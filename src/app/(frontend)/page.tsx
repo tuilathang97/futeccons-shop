@@ -39,11 +39,11 @@ export default async function Home() {
               </span> không gian lý tưởng</p>
           </div>
         </div>
-        <div className="w-full mb-8 container xl:px-0">
+        <div className="w-full mb-8 container 2xl:px-0">
           <SearchBar />
         </div>
         <HomeImage href="/tim-kiem-theo-tu-khoa" imgUrl="/categoryImages/saigon.webp" />
-        <div className="container xl:px-0">
+        <div className="container 2xl:px-0">
           <ProvincesCardWithSuspense />
           <ProductsContainer title="Tin nổi bật" posts={homepageData.featuredPosts} />
         </div>
@@ -53,7 +53,7 @@ export default async function Home() {
           <ReviewsCarousel />
         </div>
         <ProvincesLinks />
-        <section className="container xl:px-0">
+        <section className="container 2xl:px-0">
           <RealEstateSEOSection />
         </section>
       </div>

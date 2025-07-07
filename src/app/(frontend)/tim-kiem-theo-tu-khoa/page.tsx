@@ -64,7 +64,7 @@ export default async function BaiViet({searchParams }: PageProps) {
         level1Slug: "tim-kiem-theo-tu-khoa"
     });
     return (
-        <section className="flex flex-col gap-4 container xl:px-0">
+        <section className="flex flex-col gap-4 container 2xl:px-0">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <FilterBar
                     level1Slug={"tim-kiem-theo-tu-khoa"}

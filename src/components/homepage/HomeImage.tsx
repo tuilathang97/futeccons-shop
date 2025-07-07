@@ -33,6 +33,7 @@ export default function HomeImage({
           placeholder="blur"
           blurDataURL={IMAGE_PLACEHOLDER}
           priority
+          fetchPriority='high'
           quality={60}
           className="object-cover w-full h-full"
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1200px"

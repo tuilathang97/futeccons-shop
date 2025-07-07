@@ -6,7 +6,6 @@ export default function ProgressProviderComponent({ children }: { children: Reac
     return <ProgressProvider
     color="#FBDB93"
     height='3px'
-    options={{ showSpinner: true }}
     shallowRouting
 >{children}</ProgressProvider>;
 }

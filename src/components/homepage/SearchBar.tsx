@@ -66,15 +66,17 @@ const SearchBar = () => {
 
   return (
     <form onSubmit={handleSubmit} className="relative w-full max-w-3xl mx-auto">
-      <div className="relative flex">
+      <div className="relative flex items-center">
         <button
+          name="search-button"
           aria-label="search-button"
           type="submit"
-          className="absolute text-[24px] right-3 top-1/2 transform -translate-y-1/2"
+          className="absolute flex items-center justify-center text-[24px] w-4 h-4 right-5 top-1/2 transform -translate-y-1/2"
         >
-          <Search size={24} className=" text-[24px] text-gray-400 w-5 h-5" />
+          <Search size={24} className=" text-gray-400 w-5 h-5" />
         </button>
         <Input
+          name="search-input"
           aria-label="search-input"
           type="text"
           placeholder="Tìm kiếm bài viết, địa chỉ, khu vực..."

@@ -28,7 +28,7 @@ const RealEstateSEOSection = () => {
   ];
 
   return (
-    <section className="container xl:px-0 py-12 md:py-16 lg:py-20">
+    <section className="container 2xl:px-0 py-12 md:py-16 lg:py-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="text-center mb-12 md:mb-16">
