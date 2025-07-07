@@ -22,7 +22,7 @@ interface PostDetailProps {
 }
 
 async function PostDetail({ post, images, article: initialArticle, fetchArticle = true }: PostDetailProps) {
-    const { giaTien, duong, phuong, quan, thanhPho, createdAt } = post;
+    const { giaTien, duong, phuong, quan, thanhPho, createdAt,id } = post;
     const article = (!initialArticle && fetchArticle) 
         ? await getPublishedArticleByParams({
             level1Slug: post.level1Category.toString()
@@ -111,8 +111,8 @@ async function PostDetail({ post, images, article: initialArticle, fetchArticle 
                         </div>
                     </PostSectionWrapper>
                     <PostSectionWrapper className='flex flex-col  gap-2'>
-                        <h2 className='font-semibold text-lg'>Chức năng khác </h2>
-                        <PostDetailClientActions />
+                        <h2 className='font-semibold text-lg'>Chức năng khác</h2>
+                        <PostDetailClientActions postId={id} />
                     </PostSectionWrapper>
                 </div>
             </div>
