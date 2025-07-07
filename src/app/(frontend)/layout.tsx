@@ -4,7 +4,6 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header/Header";
 import Footer from "@/components/layout/Footer";
-// Removed auth and headers imports for static generation
 import { getCategories } from "@/lib/queries/categoryQueries";
 import { SessionProvider } from "@/contexts/SessionContext";
 import { CategoriesProvider } from "@/contexts/CategoriesContext";
@@ -61,7 +60,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 pt-16`}
+        className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 !pt-16 `}
       >
         <SessionProvider session={session} user={user}>
           <CategoriesProvider initialCategories={categories}>
