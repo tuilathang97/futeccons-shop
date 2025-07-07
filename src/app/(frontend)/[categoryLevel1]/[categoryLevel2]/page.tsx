@@ -1,6 +1,6 @@
 import ProductsContainer from "@/components/post/ProductsContainer";
 import { getPostByCategoryPath } from "@/lib/queries";
-import { getCategories, validateCategoryPath, getCategoriesByParentId } from "@/lib/queries/categoryQueries";
+import { validateCategoryPath, getCategoriesByParentId } from "@/lib/queries/categoryQueries";
 import { notFound } from "next/navigation";
 import { getPublishedArticleByParams } from "@/actions/articleActions";
 import ArticleContent from "@/components/articles/ArticleContent";
