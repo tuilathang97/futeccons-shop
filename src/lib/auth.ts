@@ -8,6 +8,17 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  trustedOrigins: [
+    'https://fuland.vn',
+    'https://www.fuland.vn',
+  ],
+  advanced: {
+    useSecureCookies: true,
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: ".fuland.vn",
+    },
+  },
   socialProviders: {
     google: { 
       prompt: "select_account", 

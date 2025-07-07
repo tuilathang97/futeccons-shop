@@ -14,7 +14,7 @@ import { getServerSession } from '@/lib/auth-utils';
 import { db } from "@/db/drizzle";
 import { articlesTable } from "@/db/schema";
 import { and, eq, isNull } from "drizzle-orm";
-import { getCategoryByPath } from "@/lib/queries/categoryQueries";
+import { getCategoriesByPathsBulk } from "@/lib/queries/categoryQueries";
 import { getCategories } from '@/lib/queries/categoryQueries';
 
 const ArticleSchema = z.object({
@@ -152,17 +152,26 @@ export async function createArticleAction(formData: FormData): Promise<ActionRes
     revalidatePath('/');
     
     if (articleData.level1CategoryId) {
-      const category1 = await getCategoryByPath(`/${articleData.slug?.split('/')[1] || ''}`);
+      const slugParts = articleData.slug?.split('/') || [];
+      const paths = [
+        `/${slugParts[1] || ''}`,
+        `/${slugParts[1] || ''}/${slugParts[2] || ''}`,
+        `/${slugParts[1] || ''}/${slugParts[2] || ''}/${slugParts[3] || ''}`
+      ].filter(path => path !== '/' && path !== '//');
+      
+      const categoriesMap = await getCategoriesByPathsBulk(paths);
+      const category1 = categoriesMap[paths[0]];
+      
       if (category1?.slug) {
         revalidatePath(`/${category1.slug}`);
         
-        if (articleData.level2CategoryId) {
-          const category2 = await getCategoryByPath(`/${category1.slug}/${articleData.slug?.split('/')[2] || ''}`);
+        if (articleData.level2CategoryId && paths[1]) {
+          const category2 = categoriesMap[paths[1]];
           if (category2?.slug) {
             revalidatePath(`/${category1.slug}/${category2.slug}`);
             
-            if (articleData.level3CategoryId) {
-              const category3 = await getCategoryByPath(`/${category1.slug}/${category2.slug}/${articleData.slug?.split('/')[3] || ''}`);
+            if (articleData.level3CategoryId && paths[2]) {
+              const category3 = categoriesMap[paths[2]];
               if (category3?.slug) {
                 revalidatePath(`/${category1.slug}/${category2.slug}/${category3.slug}`);
               }
@@ -282,17 +291,26 @@ export async function updateArticleAction(formData: FormData): Promise<ActionRes
     revalidatePath('/');
     
     if (validationResult.data.level1CategoryId) {
-      const category1 = await getCategoryByPath(`/${validationResult.data.slug?.split('/')[1] || ''}`);
+      const slugParts = validationResult.data.slug?.split('/') || [];
+      const paths = [
+        `/${slugParts[1] || ''}`,
+        `/${slugParts[1] || ''}/${slugParts[2] || ''}`,
+        `/${slugParts[1] || ''}/${slugParts[2] || ''}/${slugParts[3] || ''}`
+      ].filter(path => path !== '/' && path !== '//');
+      
+      const categoriesMap = await getCategoriesByPathsBulk(paths);
+      const category1 = categoriesMap[paths[0]];
+      
       if (category1?.slug) {
         revalidatePath(`/${category1.slug}`);
         
-        if (validationResult.data.level2CategoryId) {
-          const category2 = await getCategoryByPath(`/${category1.slug}/${validationResult.data.slug?.split('/')[2] || ''}`);
+        if (validationResult.data.level2CategoryId && paths[1]) {
+          const category2 = categoriesMap[paths[1]];
           if (category2?.slug) {
             revalidatePath(`/${category1.slug}/${category2.slug}`);
             
-            if (validationResult.data.level3CategoryId) {
-              const category3 = await getCategoryByPath(`/${category1.slug}/${category2.slug}/${validationResult.data.slug?.split('/')[3] || ''}`);
+            if (validationResult.data.level3CategoryId && paths[2]) {
+              const category3 = categoriesMap[paths[2]];
               if (category3?.slug) {
                 revalidatePath(`/${category1.slug}/${category2.slug}/${category3.slug}`);
               }
@@ -440,31 +458,58 @@ export async function getPublishedArticleByParams({
     let level2Category = null;
     let level3Category = null;
 
+    const paths: string[] = [];
+    
     if (level1Slug) {
-      level1Category = await getCategoryByPath(`/${level1Slug}`);
-      if (!level1Category) return null;
+      paths.push(`/${level1Slug}`);
     }
 
     if (level2Slug) {
       if (level2Slug.startsWith('/')) {
-        level2Category = await getCategoryByPath(level2Slug);
+        paths.push(level2Slug);
       } else {
-        level2Category = await getCategoryByPath(`/${level1Slug}/${level2Slug}`);
+        paths.push(`/${level1Slug}/${level2Slug}`);
       }
-      if (!level2Category) return null;
     }
 
     if (level3Slug) {
       if (level3Slug.startsWith('/')) {
-        level3Category = await getCategoryByPath(level3Slug);
+        paths.push(level3Slug);
       } else if (level2Slug && !level2Slug.startsWith('/')) {
-        level3Category = await getCategoryByPath(`/${level1Slug}/${level2Slug}/${level3Slug}`);
+        paths.push(`/${level1Slug}/${level2Slug}/${level3Slug}`);
       } else {
         // If level2Slug contains full path, extract just the slug part
         const level2Parts = level2Slug?.split('/') || [];
         const level2SlugOnly = level2Parts[level2Parts.length - 1];
-        level3Category = await getCategoryByPath(`/${level1Slug}/${level2SlugOnly}/${level3Slug}`);
+        paths.push(`/${level1Slug}/${level2SlugOnly}/${level3Slug}`);
       }
+    }
+
+    const categoriesMap = await getCategoriesByPathsBulk(paths);
+    
+    if (level1Slug) {
+      level1Category = categoriesMap[`/${level1Slug}`];
+      if (!level1Category) return null;
+    }
+
+    if (level2Slug) {
+      const level2Path = level2Slug.startsWith('/') ? level2Slug : `/${level1Slug}/${level2Slug}`;
+      level2Category = categoriesMap[level2Path];
+      if (!level2Category) return null;
+    }
+
+    if (level3Slug) {
+      let level3Path: string;
+      if (level3Slug.startsWith('/')) {
+        level3Path = level3Slug;
+      } else if (level2Slug && !level2Slug.startsWith('/')) {
+        level3Path = `/${level1Slug}/${level2Slug}/${level3Slug}`;
+      } else {
+        const level2Parts = level2Slug?.split('/') || [];
+        const level2SlugOnly = level2Parts[level2Parts.length - 1];
+        level3Path = `/${level1Slug}/${level2SlugOnly}/${level3Slug}`;
+      }
+      level3Category = categoriesMap[level3Path];
       if (!level3Category) return null;
     }
 

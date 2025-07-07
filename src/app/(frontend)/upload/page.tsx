@@ -1,5 +1,8 @@
 import { UploadForm } from "@/components/image-upload-form";
 
+// Force dynamic rendering for upload page
+export const dynamic = 'force-dynamic';
+
 export default function Upload() {
   return (
     <main className="container mx-auto p-4">

@@ -1,0 +1,41 @@
+# Robots.txt for Futeccons Shop - Real Estate Platform
+
+# Allow all search engines to crawl public content
+User-agent: *
+
+# Allow crawling of main content areas
+Allow: /
+Allow: /gioi-thieu
+Allow: /lien-he
+Allow: /faq
+Allow: /huong-dan
+Allow: /doi-tac
+Allow: /post/*
+Allow: /tim-kiem-theo-tu-khoa
+
+# Disallow admin and dashboard areas
+Disallow: /admin/
+Disallow: /(dashboard)/
+
+# Disallow user account pages (private content)
+Disallow: /account/
+Disallow: /dang-nhap
+Disallow: /dang-ky
+Disallow: /dang-tin
+
+# Disallow API endpoints
+Disallow: /api/
+
+# Disallow upload areas
+Disallow: /upload/
+
+# Disallow error and report pages
+Disallow: /bao-cao-loi
+
+# Allow legal pages
+Allow: /privacy
+Allow: /terms
+Allow: /quy-dinh
+
+# Sitemap location
+Sitemap: https://futeccons.com/sitemap.xml 

@@ -711,7 +711,7 @@ export const searchPosts = customUnstableCache(
   ['posts', 'search'],
   {
     tags: ['posts', 'posts:search'],
-    revalidate: 600, // 10 minutes
+    revalidate: 3600, // 1 hour
   }
 );
 
@@ -774,7 +774,7 @@ export const getPostsByCategory = customUnstableCache(
   ['posts', 'category'],
   {
     tags: ['posts', 'posts:category'],
-    revalidate: 900, // 15 minutes
+    revalidate: 3600, // 1 hour
   }
 );
 

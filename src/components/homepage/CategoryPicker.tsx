@@ -30,6 +30,7 @@ function CategoriesRender(categories: Category[], imagesUrl: string[]) {
                             className="object-cover rounded-md group-hover:brightness-[75%] transition-all duration-300 brightness-50"
                             placeholder="blur"
                             blurDataURL={IMAGE_PLACEHOLDER}
+                            loading="lazy"
                         />
                     </div>
                     <p className="text-2xl flex justify-center w-full text-center flex text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 font-bold">{category.name}</p>
