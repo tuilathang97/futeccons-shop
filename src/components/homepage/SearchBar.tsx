@@ -71,7 +71,7 @@ const SearchBar = () => {
           name="search-button"
           aria-label="search-button"
           type="submit"
-          className="absolute flex items-center justify-center text-[24px] w-4 h-4 right-5 top-1/2 transform -translate-y-1/2"
+          className="absolute flex items-center justify-center w-6 h-6 right-5 top-1/2 transform -translate-y-1/2"
         >
           <Search size={24} className=" text-gray-400 w-5 h-5" />
         </button>
