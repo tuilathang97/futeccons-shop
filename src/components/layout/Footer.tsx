@@ -10,8 +10,6 @@ const footerSections = [
     items: [
       { title: "Bán nhà", href: "/ban-nha" },
       { title: "Cho thuê", href: "/cho-thue" },
-      { title: "Dự án", href: "/du-an" },
-      { title: "Tin tức", href: "/tin-tuc" },
       { title: "Đăng tin", href: "/dang-tin" },
     ],
   },

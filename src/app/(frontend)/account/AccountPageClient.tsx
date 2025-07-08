@@ -33,7 +33,7 @@ export default function AccountPageClient({
   const userImage = typeof user.image === 'string' ? user.image : undefined;
   return (
     <CategoriesProvider initialCategories={categories}>
-      <div className="space-y-6 px-0 container">
+      <div className="space-y-6 2xl:px-0 container">
         {showPhoneNumberBanner && <MissingPhoneNumberBanner callbackUrl={callbackUrl} />}
         <Card className="border-none shadow-none">
           <CardHeader className="flex flex-col gap-4 ">
