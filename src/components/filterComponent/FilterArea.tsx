@@ -57,8 +57,6 @@ function FilterArea() {
             const [minStr, maxStr] = areaParam.split('-');
             const min = minStr ? parseAreaFromUrl(minStr) : 0;
             const max = maxStr ? parseAreaFromUrl(maxStr) : null;
-
-            // Kiểm tra xem có phải là khoảng diện tích được định nghĩa sẵn không
             const predefinedRange = areaRanges.find(range => {
                 const rangeMin = range.area.min;
                 const rangeMax = range.area.max;
@@ -73,12 +71,17 @@ function FilterArea() {
             if (predefinedRange) {
                 setDisplayValue(predefinedRange.label);
             } else {
-                // Đây là giá trị tùy chỉnh
                 setDisplayValue(formatAreaForDisplay(min, max));
                 setCustomMinArea(min.toString());
                 setCustomMaxArea(max ? max.toString() : '');
             }
+            return
         }
+        setCustomMinArea('');
+        setCustomMaxArea('');
+        setSelectedArea('');
+        setDisplayValue('');
+        return
     }, [searchParams]);
 
     // Xử lý khi chọn khoảng diện tích
@@ -130,9 +133,8 @@ function FilterArea() {
         }
     };
 
-    // Xử lý khi đặt lại toàn bộ
     const handleReset = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Ngăn sự kiện lan tỏa
+        e.stopPropagation();
         
         // Reset các state
         setCustomMinArea('');

@@ -21,8 +21,7 @@ export default function ProductLoveIcon({postId}:{postId:number}) {
   }, [postId]);
 
 
-  const toggleLike = (e: React.MouseEvent) => {
-
+  const toggleLike = () => {
     if (!isMounted) return;
 
     try {

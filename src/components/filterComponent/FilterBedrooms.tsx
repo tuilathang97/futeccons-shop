@@ -33,14 +33,15 @@ function FilterBedrooms() {
             if (option) {
                 setDisplayValue(option.label);
             }
+            return
         }
+        setSelectedBedrooms('');
+        setDisplayValue('');
+        return
     }, [searchParams]);
 
-    // Xử lý khi chọn số phòng ngủ
     const handleBedroomsChange = (value: string) => {
         setSelectedBedrooms(value);
-
-        // Tìm và cập nhật giá trị hiển thị
         const option = bedroomOptions.find(opt => opt.value.toString() === value);
         if (option) {
             setDisplayValue(option.label);
