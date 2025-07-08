@@ -48,7 +48,17 @@ const SearchBar = () => {
   }, [query, searchPosts])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
+    const newQuery = e.target.value
+    setQuery(newQuery)
+    
+    if (newQuery.trim() !== '') {
+      setIsLoading(true)
+      setShowResults(true)
+    } else {
+      setIsLoading(false)
+      setResults([])
+      setShowResults(false)
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {

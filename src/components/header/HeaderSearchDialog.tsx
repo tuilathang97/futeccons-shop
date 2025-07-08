@@ -50,7 +50,18 @@ const HeaderSearchDialog = () => {
   }, [query, searchPosts])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
+    const newQuery = e.target.value
+    setQuery(newQuery)
+    
+    // Set loading immediately if user is typing something
+    if (newQuery.trim() !== '') {
+      setIsLoading(true)
+      setShowResults(true)
+    } else {
+      setIsLoading(false)
+      setResults([])
+      setShowResults(false)
+    }
   }
   const handleSearchRedirect = () => {
     if (!query.trim()) return

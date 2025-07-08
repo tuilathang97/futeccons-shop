@@ -2,10 +2,11 @@
 import { Heart } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
+
 export default function ProductLoveIcon({postId}:{postId:number}) {
   const [isLiked, setIsLiked] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-    
+  
   useEffect(() => {
       setIsMounted(true);
       try {
@@ -21,8 +22,6 @@ export default function ProductLoveIcon({postId}:{postId:number}) {
 
 
   const toggleLike = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
 
     if (!isMounted) return;
 
@@ -49,12 +48,13 @@ export default function ProductLoveIcon({postId}:{postId:number}) {
   };
 
   return (
-    <Heart 
-      strokeWidth={1.5}
-      size={22}
-      className={`absolute top-2 right-2 cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 z-10
-      ${isLiked ? 'fill-red-500 stroke-red-600' : 'fill-white/80 stroke-gray-500 hover:fill-red-200 hover:stroke-red-400'}`}
-      onClick={toggleLike}
-    />
+    <button className='absolute top-2 right-2 transition-all z-10 ' onClick={toggleLike}>
+      <Heart 
+        strokeWidth={1.5}
+        size={22}
+        className={` duration-200 hover:scale-110 active:scale-95 z-10
+        ${isLiked ? 'fill-red-500 stroke-red-600' : 'fill-white/80 stroke-gray-500 hover:fill-red-200 hover:stroke-red-400'}`}
+      />
+    </button>
   )
 }
