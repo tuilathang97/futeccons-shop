@@ -40,12 +40,14 @@ function UserDropdown() {
             <DropdownMenuTrigger asChild>
                 <div className="relative">
                     {!user.image ? (
-                        <p className="object-cover" >{user.name?.charAt(0).toUpperCase()}</p>
-                    ) : 
-                    <Avatar aria-label="user-avatar" className="h-10 w-10 rounded-full cursor-pointer">
-                        <AvatarImage className="object-cover" src={user?.image} alt={user.name || "User avatar"} />
-                        <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
-                    </Avatar>}
+                        <div className='p-4 rounded-full bg-brand-light text-white cursor-pointer'>
+                            <p className='cursor-none'>{user.name?.charAt(0).toUpperCase()}</p>
+                        </div>
+                    ) :
+                        <Avatar aria-label="user-avatar" className="h-10 w-10 rounded-full cursor-pointer">
+                            <AvatarImage className="object-cover" src={user?.image} alt={user.name || "User avatar"} />
+                            <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
+                        </Avatar>}
                     {hasNotifications && (
                         <div className="absolute -top-1 -right-1 h-4 w-4 bg-brand-medium border-2 border-white rounded-full flex items-center justify-center">
                             <div className="h-2 w-2 bg-white rounded-full animate-pulse"></div>
