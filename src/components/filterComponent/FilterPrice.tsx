@@ -101,7 +101,7 @@ function FilterPrice({ priceType }: FilterPriceProps) {
             }
         }
         setSelectedPrice("Chọn giá")
-    }, [searchParams, priceType, priceRanges,price])
+    }, [searchParams, priceType, priceRanges, price])
 
     const handlePriceChange = (value: string) => {
         setSelectedPrice(value)
@@ -131,17 +131,17 @@ function FilterPrice({ priceType }: FilterPriceProps) {
     }
     const handleReset = (e: React.MouseEvent) => {
         e.stopPropagation();
-        
+
         setCustomMinPrice('');
         setCustomMaxPrice('');
         setSelectedPrice('');
         setDisplayValue('');
-        
+
         const params = new URLSearchParams(searchParams.toString());
         params.delete('gia');
         router.push(`?${params.toString()}`, { scroll: false });
     }
-    
+
 
     const handleCustomPriceApply = () => {
         if (customMinPrice || customMaxPrice) {
@@ -184,7 +184,7 @@ function FilterPrice({ priceType }: FilterPriceProps) {
                         </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                        <div className='grid grid-cols-2 gap-4 p-4'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-4'>
                             <Input
                                 type="number"
                                 placeholder="Giá thấp nhất"
@@ -197,20 +197,6 @@ function FilterPrice({ priceType }: FilterPriceProps) {
                                 value={customMaxPrice}
                                 onChange={(e) => setCustomMaxPrice(e.target.value)}
                             />
-                            <div className='flex gap-4'>
-                                <Button
-                                className='min-w-full'
-                                    onClick={handleCustomPriceApply}
-                                >
-                                    Áp dụng
-                                </Button>
-                                <Button
-                                    onClick={(e) => handleReset(e)}
-                                    className='min-w-full'
-                                >
-                                    Đặt lại
-                                </Button>
-                            </div>
                         </div>
                         {priceRanges.map((price: PriceI, index: number) => {
                             const min = price.value.min || 0
@@ -228,6 +214,21 @@ function FilterPrice({ priceType }: FilterPriceProps) {
                                 </SelectItem>
                             )
                         })}
+                        <div className='flex gap-4 flex-col md:flex-row'>
+                            <Button
+                                className='min-w-full'
+                                onClick={handleCustomPriceApply}
+                            >
+                                Áp dụng
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={(e) => handleReset(e)}
+                                className='min-w-full'
+                            >
+                                Đặt lại
+                            </Button>
+                        </div>
                     </SelectContent>
                 </Select>
             </div>

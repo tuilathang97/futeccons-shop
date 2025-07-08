@@ -174,7 +174,7 @@ function FilterArea() {
                         </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                        <div className='grid grid-cols-2 p-4 gap-4'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 p-4 gap-4'>
                             <Input
                                 type="number"
                                 placeholder="Diện tích nhỏ nhất"
@@ -187,7 +187,7 @@ function FilterArea() {
                                 value={customMaxArea}
                                 onChange={(e) => setCustomMaxArea(e.target.value)}
                             />
-                            <div className='flex gap-4'>
+                            <div className='flex gap-4 flex-col md:flex-row'>
                                 <Button
                                     className="min-w-full"
                                     onClick={handleCustomAreaApply}
