@@ -173,7 +173,7 @@ function FilterArea() {
                             {displayValue}
                         </SelectValue>
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className='max-h-[300px] md:max-h-full overflow-y-auto pb-4'>
                         <div className='grid grid-cols-1 md:grid-cols-2 p-4 gap-4'>
                             <Input
                                 type="number"
@@ -187,7 +187,7 @@ function FilterArea() {
                                 value={customMaxArea}
                                 onChange={(e) => setCustomMaxArea(e.target.value)}
                             />
-                            <div className='flex gap-4 flex-col md:flex-row'>
+                            <div className='flex mt-4 gap-4 flex-col md:flex-row'>
                                 <Button
                                     className="min-w-full"
                                     onClick={handleCustomAreaApply}
