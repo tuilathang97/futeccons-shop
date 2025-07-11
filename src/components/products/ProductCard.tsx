@@ -36,7 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
                             />
                         ) : (
                             <div className="absolute inset-0 bg-gray-200 flex items-center justify-center rounded-t-lg">
-                                <span className="text-gray-500 text-sm">No Image</span>
+                                <span className="text-gray-500 text-sm">Không có hình ảnh</span>
                             </div>
                         )}
                         <Badge className="absolute top-2 left-2 text-white bg-brand-medium shadow-md z-10 px-2 py-0.5 text-xs font-semibold">
