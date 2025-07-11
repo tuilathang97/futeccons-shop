@@ -23,7 +23,7 @@ function UserProfileForm({ user }: { user: User }) {
   const { toast } = useToast()
   const router = useRouter()
   const { setUser } = useSession()
-
+  
   const defaultUserInfo = {
     name: user?.name,
     number: user?.number || "",
@@ -51,8 +51,7 @@ function UserProfileForm({ user }: { user: User }) {
       reader.readAsDataURL(file);
     }
   };
-
-  if (!name || !number) {
+  if (!name && !number) {
     return <div>No user info</div>
   }
 
@@ -65,7 +64,7 @@ function UserProfileForm({ user }: { user: User }) {
       })
       return
     }
-    if (name.length > 15 || number.length !== 10 || !number.startsWith("0") || name.length < 2) {
+    if (name.length > 15 || number?.length !== 10 || !number.startsWith("0") || name.length < 2) {
       toast({
         title: "Không thể thay đổi",
         description: "Tên và số điện thoại không hợp lệ",
