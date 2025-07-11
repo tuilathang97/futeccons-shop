@@ -23,7 +23,9 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
     dienTichDat,
     soTang,
     soPhongNgu,
-    soPhongVeSinh
+    soPhongVeSinh,
+    chieuNgang,
+    chieuDai
   ] = form.watch([
     "thanhPho",
     "quan",
@@ -35,7 +37,9 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
     "dienTichDat",
     "soTang",
     "soPhongNgu",
-    "soPhongVeSinh"
+    "soPhongVeSinh",
+    "chieuNgang",
+    "chieuDai"
   ]);
 
   const districts = provinces.find(province => province.name === selectedProvince)?.districts || [];
@@ -71,12 +75,17 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
       typeof soPhongVeSinh === 'number' &&
       soPhongVeSinh >= 1;
 
+    const isChieuNgangValid = Boolean(chieuNgang);
+    const isChieuDaiValid = Boolean(chieuDai);
+
     // Return true only if all validations pass
     return isStringFieldsValid &&
       isDienTichDatValid &&
       isSoTangValid &&
       isSoPhongNguValid &&
-      isSoPhongVeSinhValid;
+      isSoPhongVeSinhValid &&
+      isChieuNgangValid &&
+      isChieuDaiValid;
   }, [
     selectedProvince,
     selectedDistrict,
@@ -88,7 +97,9 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
     dienTichDat,
     soTang,
     soPhongNgu,
-    soPhongVeSinh
+    soPhongVeSinh,
+    chieuNgang,
+    chieuDai
   ]);
 
   // Handle currency conversion for display and storage
@@ -413,6 +424,48 @@ const BasicInfo = ({ provinces, userId }: { provinces: Province[], userId: strin
                       type="number"
                       value={value ?? ''}
                       onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="chieuNgang"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Chiều ngang (m) <span className="text-red-500">*</span></FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Nhập chiều ngang"
+                      type="number"
+                      onChange={(e) => {
+                        field.onChange(e.target.value === '' ? '' : Number(e.target.value))
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="chieuDai"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Chiều dài (m) <span className="text-red-500">*</span></FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Nhập chiều dài"
+                      type="number"
+                      onChange={(e) => {
+                        field.onChange(e.target.value === '' ? '' : Number(e.target.value))
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
