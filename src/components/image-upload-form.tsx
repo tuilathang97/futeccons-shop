@@ -79,7 +79,7 @@ export function UploadForm() {
                 fill
                 className="object-cover rounded-lg"
               />
-              <Button onClick={() => removePreviews(index)} className="absolute top-0 rounded-full bg-black text-gray-300 w-8 h-8 top-[-10px] right-[-10px]">X</Button>
+              <Button onClick={() => removePreviews(index)} className="absolute top-0 rounded-full bg-black text-gray-300 w-8 h-8 right-[-10px]">X</Button>
             </div>
           ))}
         </div>

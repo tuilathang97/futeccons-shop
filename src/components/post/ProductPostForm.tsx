@@ -9,19 +9,19 @@ import { FaqSection } from "../blocks/faq";
 import { Post, PostSchema } from "./postSchema";
 import React from "react";
 import { useImageUpload } from "@/contexts/ImageUploadContext";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { createPost } from "@/actions/postActions";
 
 export function ProductPostForm({ children }: { children: React.ReactNode }) {
-  const [state, formAction, isPending] = useActionState(createPost, { 
-    success: false, 
-    message: "", 
-    postId: undefined 
+  const [state, formAction, isPending] = useActionState(createPost, {
+    success: false,
+    message: "",
+    postId: undefined
   });
   const formRef = useRef<HTMLFormElement>(null);
   const { previewsFiles, clearPreviews } = useImageUpload();
-  
+  const { toast } = useToast()
   const form = useForm<Post>({
     resolver: zodResolver(PostSchema),
     defaultValues: {
@@ -52,25 +52,29 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
       toast({
         description: state.message,
       });
-      
-      if (state.success) { 
+
+      if (state.success) {
         form.reset();
-        clearPreviews(); 
+        clearPreviews();
       }
     }
-  }, [state?.message, clearPreviews, form, state?.success]);
-
+  }, [state?.message, clearPreviews, form, state?.success, toast]);
   const handleSubmit = form.handleSubmit(async () => {
     const formElement = formRef?.current;
     if (formElement) {
       const formData = new FormData(formElement);
-
-      if (previewsFiles.length > 0) {
-        previewsFiles.forEach((file, index) => {
-          formData.append(`image${index}`, file);
-        });
-        formData.append('imagesCount', previewsFiles?.length?.toString());
+      if (previewsFiles.length === 0) {
+        toast({
+          title: "Bắt buộc cung cấp hình ảnh bất động sản",
+          description: "Không được để trống phần hình ảnh ( ở đề mục đăng tải hình ảnh ) ",
+          variant:"destructive"
+        })
+        return;
       }
+      previewsFiles.forEach((file, index) => {
+        formData.append(`image${index}`, file);
+      });
+      formData.append('imagesCount', previewsFiles?.length?.toString());
       startTransition(() => formAction(formData));
     }
   });
@@ -91,9 +95,9 @@ export function ProductPostForm({ children }: { children: React.ReactNode }) {
           </div>
         </FaqSection>
         <div className="w-full max-w-2xl py-6 mx-auto">
-          <Button 
-            className="w-full flex items-center justify-center" 
-            type="submit" 
+          <Button
+            className="w-full flex items-center justify-center"
+            type="submit"
             disabled={isPending}
           >
             {isPending ? (
