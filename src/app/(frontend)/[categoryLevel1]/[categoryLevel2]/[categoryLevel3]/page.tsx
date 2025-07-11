@@ -33,7 +33,7 @@ export default async function ProductListing3LevelDeep({ params,searchParams }: 
 
 
     return (
-        <section className="flex container flex-col 2xl:px-0 w-full gap-4 pt-4 md:pt-8">
+        <section className="flex flex-col gap-4 pt-4 md:pt-8">
             <div className="grid items-center grid-cols-1 gap-4 sm:flex sm:flex-wrap sm:justify-center md:justify-normal">
                 <FilterBar 
                     level1Slug={categoryLevel1}

@@ -103,7 +103,7 @@ export default function PostDetailClientActions({ postId }: { postId: number }) 
               quote={`Xem tin tức tại Fuland`}
               hashtag={`#fuland`}
             >
-              <div className='flex flex-col items-center gap-2 cursor-pointer'>
+              <div className='flex flex-col items-center gap-2 cursor-pointer p-2 hover:bg-gray-100 rounded-lg transition-colors'>
                 <FacebookIcon size={32} round />
                 <p className='text-sm font-montserrat'>Facebook</p>
               </div>
@@ -112,7 +112,7 @@ export default function PostDetailClientActions({ postId }: { postId: number }) 
               url={`https://www.fuland.vn/`}
               title={'Fuland - nơi tìm kiếm,mua bán,cho thuê nhà với giá ưu đãi. Truy cập ngay'}
             >
-              <div className='flex flex-col items-center gap-2 cursor-pointer'>
+              <div className='flex flex-col items-center gap-2 cursor-pointer p-2 hover:bg-gray-100 rounded-lg transition-colors'>
                 <Twitter size={32} />
                 <p className='text-sm font-montserrat'>Twitter</p>
               </div>

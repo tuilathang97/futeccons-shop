@@ -28,7 +28,7 @@ function ProductsContainer({ title, posts, linkTitle }: Container) {
             </div>
             <div className='
                 grid
-                gap-4
+                gap-12 md:gap-4
                 md:grid-cols-2
                 lg:grid-cols-3
                 xl:grid-cols-4
