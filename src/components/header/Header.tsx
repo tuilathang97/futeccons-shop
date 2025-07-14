@@ -9,6 +9,7 @@ import MobileMenuToggle from "./MobileMenuToggle"
 import HeaderNavigation from "./HeaderNavigation"   
 import HeaderSearchDialog from "./HeaderSearchDialog"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 export default function Header() {
     const { user, session } = useSession()
@@ -27,7 +28,7 @@ export default function Header() {
                 <nav className="items-center gap-2 flex justify-between py-2 w-full ml-auto mr-auto">
                     <div className="flex items-center gap-4">
                         <Link href="/" className="mr-6 hidden md:flex" prefetch={false}>
-                            <Home aria-label="Trang chủ" className="h-6 w-6" />
+                            <Image src="/logo.svg" alt="logo" width={50} height={50} priority />
                         </Link>
                         <HeaderNavigation />
                     </div>
@@ -41,11 +42,16 @@ export default function Header() {
                                     <UserDropDown />
                                 ) : <UserActionGroup />
                             }
+                            
                             </div>
+                            
                             <div className="flex md:hidden">
                                 <MobileMenuToggle />
                             </div>
                         </div>
+                        <Link href="/" prefetch={false} className="md:hidden">
+                            <Image src="/logo.svg" alt="logo" width={50} height={50} priority />
+                        </Link>
                         <Button className="flex gap-2 bg-brand-medium text-white" onClick={handleDirect}>
                             <p>Đăng tin</p>
                             <SquarePen size={16} />
