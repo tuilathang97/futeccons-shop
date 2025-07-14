@@ -1,7 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Home, SquarePen } from "lucide-react"
+import { SquarePen } from "lucide-react"
 import UserActionGroup from "./userActionGroup"
 import UserDropDown from "./UserDropDown"
 import { useSession } from "@/contexts/SessionContext"

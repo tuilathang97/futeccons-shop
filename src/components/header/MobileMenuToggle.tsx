@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { AlignJustify, LogOut, Home, User, ChevronRight } from 'lucide-react'
+import { AlignJustify, LogOut,User, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCategories } from '@/contexts/CategoriesContext'
@@ -17,6 +17,7 @@ import { useSession } from '@/contexts/SessionContext'
 import { useRouter } from 'next/navigation'
 import UserActionGroup from './userActionGroup'
 import { signOut } from '@/lib/auth-client'
+import Image from 'next/image'
 
 export default function MobileMenuToggle() {
   const width = useWindowWidth()
@@ -175,7 +176,7 @@ export default function MobileMenuToggle() {
           <SheetClose asChild>
             <Button variant="ghost" className="w-full justify-start gap-2" asChild>
               <Link href="/">
-                <Home className="w-4 h-4" />
+                <Image src="/logo.svg" alt="logo" width={40} height={50} priority />
                 Trang chủ
               </Link>
             </Button>
