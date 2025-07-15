@@ -308,6 +308,7 @@ const TiptapEditor = ({ content, onChange, onBlur, minHeight = '300px' }: Tiptap
           <Button
             variant="ghost"
             size="icon"
+            type="button"
             onClick={toggleBold}
             className={editor.isActive('bold') ? 'bg-muted' : ''}
             title="Đậm"
@@ -317,6 +318,7 @@ const TiptapEditor = ({ content, onChange, onBlur, minHeight = '300px' }: Tiptap
           <Button
             variant="ghost"
             size="icon"
+            type="button"
             onClick={toggleItalic}
             className={editor.isActive('italic') ? 'bg-muted' : ''}
             title="Nghiêng"
@@ -326,6 +328,7 @@ const TiptapEditor = ({ content, onChange, onBlur, minHeight = '300px' }: Tiptap
           <Button
             variant="ghost"
             size="icon"
+            type="button"
             onClick={toggleBulletList}
             className={editor.isActive('bulletList') ? 'bg-muted' : ''}
             title="Danh sách"
@@ -335,6 +338,7 @@ const TiptapEditor = ({ content, onChange, onBlur, minHeight = '300px' }: Tiptap
           <Button
             variant="ghost"
             size="icon"
+            type="button"
             onClick={toggleOrderedList}
             className={editor.isActive('orderedList') ? 'bg-muted' : ''}
             title="Danh sách số"
@@ -344,6 +348,7 @@ const TiptapEditor = ({ content, onChange, onBlur, minHeight = '300px' }: Tiptap
           <Button
             variant="ghost"
             size="icon"
+            type="button"
             onClick={addLink}
             className={editor.isActive('link') ? 'bg-muted' : ''}
             title="Liên kết"
