@@ -50,7 +50,7 @@ export default async function RootLayout({
         <meta name="og:image" content="/images/logo.png" />
         <meta name="og:type" content="website" />
         <meta name="og:site_name" content="Fuland Shop" />
-        <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"} />
+        <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn/"} />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
@@ -93,6 +93,29 @@ const organizationSchema = {
   "name": "Futeccons Shop",
   "description": "Nền tảng bất động sản hàng đầu Việt Nam",
   "url": "http://localhost:3000",
+  "hasPart": [
+    {
+      "@type": "WebPage",
+      "name": "Đăng tin",
+      "url": "https://fuland.vn/dang-tin"
+    },
+    {
+      "@type": "WebPage",
+      "name": "Bán nhà",
+      "url": "https://fuland.vn/ban-nha"
+    },
+    {
+      "@type": "WebPage",
+      "name": "Cho thuê",
+      "url": "https://fuland.vn/cho-thue"
+    },
+    {
+      "@type": "WebPage",
+      "name": "Tìm kiếm theo khu vực Hà Nội",
+      "url": "https://fuland.vn/tim-kiem-theo-tu-khoa?thanhPho=thanh_pho_ha_noi"
+    },
+
+  ],
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "0765563567",
