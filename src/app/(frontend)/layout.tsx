@@ -92,7 +92,12 @@ const organizationSchema = {
   "@type": "Organization",
   "name": "Futeccons Shop",
   "description": "Nền tảng bất động sản hàng đầu Việt Nam",
-  "url": "http://localhost:3000",
+  "url": "https://fuland.vn",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://fuland.vn/tim-kiem-theo-tu-khoa?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
   "hasPart": [
     {
       "@type": "WebPage",
