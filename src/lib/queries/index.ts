@@ -53,11 +53,11 @@ export const getPostByCategoryPath = customUnstableCache(
         if (categoryIds[3]) {
             postConditions.push(eq(postsTable.level3Category, categoryIds[3]));
         }
-
-        return await db.select()
-            .from(postsTable)
-            .where(and(...postConditions))
-            .orderBy(postsTable.createdAt);
+        const result = await db.select()
+        .from(postsTable)
+        .where(and(...postConditions))
+        .orderBy(postsTable.createdAt)
+        return result;
     },
     ['posts', 'category', 'path'],
     {

@@ -58,7 +58,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 !pt-16 `}
+        className={`${arimo.variable} ${montserrat.variable} flex min-h-svh flex-col font-arimo min-w-full antialiased mx-0 !pt-20 `}
       >
         <SessionProvider session={session} user={user}>
           <CategoriesProvider initialCategories={categories}>
