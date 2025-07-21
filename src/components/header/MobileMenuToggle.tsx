@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation'
 import UserActionGroup from './userActionGroup'
 import { signOut } from '@/lib/auth-client'
 import Image from 'next/image'
+import MobileAccountLinks from './MobileAccountLinks'
+import { Separator } from '../ui/separator'
 
 export default function MobileMenuToggle() {
   const width = useWindowWidth()
@@ -151,7 +153,7 @@ export default function MobileMenuToggle() {
       <SheetContent side="left" className=" min-w-[100%] flex overflow-auto flex-col gap-4">
         <SheetHeader>
           <SheetTitle className="flex flex-col items-center gap-2">
-            {user?.id ? (
+            {user?.id && (
               <>
                 <Link 
                   href="/account" 
@@ -167,8 +169,6 @@ export default function MobileMenuToggle() {
                   </div>
                 </Link>
               </>
-            ) : (
-              <UserActionGroup />
             )}
           </SheetTitle>
         </SheetHeader>
@@ -176,32 +176,26 @@ export default function MobileMenuToggle() {
           <SheetClose asChild>
             <Button variant="ghost" className="w-full justify-start gap-2" asChild>
               <Link href="/">
-                <Image src="/logo.svg" alt="logo" width={40} height={50} priority />
+                <Image src="/logo.svg" alt="logo" width={24} height={24} priority />
                 Trang chủ
               </Link>
             </Button>
           </SheetClose>
-          {user?.id && (
-            <SheetClose asChild>
-              <Button variant="ghost" className="w-full justify-start gap-2" asChild>
-                <Link href="/account">
-                  <User className="w-4 h-4" />
-                  Trang cá nhân
-                </Link>
-              </Button>
-            </SheetClose>
-          )}
-          {user?.id && (
-            <Button className="w-full justify-start gap-2" onClick={handleLogout}>
-              <LogOut className="w-4 h-4" />
-              Đăng xuất
-            </Button>
-          )}
         </div>
         <div className="border-t pt-4 mt-2">
           <div className="font-semibold mb-2 px-4">Danh mục</div>
           <nav className='px-1'>{renderCategories()}</nav>
         </div>
+        <Separator className='min-w-full '/>
+        {!user?.id && (
+          <MobileAccountLinks />
+        )}
+        {user?.id && (
+            <Button className="w-full justify-start gap-2" onClick={handleLogout}>
+              <LogOut className="w-4 h-4" />
+              Đăng xuất
+            </Button>
+          )}
       </SheetContent>
     </Sheet>
   )
