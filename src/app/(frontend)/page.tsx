@@ -57,12 +57,6 @@ export default async function Home() {
           <RealEstateSEOSection />
         </section>
       </div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c'),
-        }}
-      />
     </CategoriesProvider>
   );
 }
@@ -78,18 +72,3 @@ export const metadata: Metadata = {
     shortcut: '/favicon.svg',
   },
 }
-
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization", 
-  "name": "Fuland Shop",
-  "description": "Nền tảng bất động sản hàng đầu Việt Nam",
-  "url": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "telephone": "0765563567", 
-    "contactType": "customer service",
-    "availableLanguage": "Vietnamese"
-  },
-  
-};

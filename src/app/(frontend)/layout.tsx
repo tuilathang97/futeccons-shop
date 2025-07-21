@@ -89,6 +89,10 @@ const organizationSchema = {
   "@type": "Organization",
   "name": "Fuland Shop",
   "description": "Nền tảng bất động sản hàng đầu Việt Nam",
+  "logo": "https://fuland.vn/logo.svg",
+  "telephone": "0765563567",
+  "email": "thanhlb1990@gmail.com",
+  "image": "https://fuland.vn/logo.svg",
   "url": "https://fuland.vn",
   "potentialAction": {
     "@type": "SearchAction",
@@ -121,7 +125,8 @@ const organizationSchema = {
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "0765563567",
-    "contactType": "customer service"
+    "contactType": "customer service",
+    "availableLanguage": "Vietnamese"
   },
   "address": {
     "@type": "PostalAddress",
