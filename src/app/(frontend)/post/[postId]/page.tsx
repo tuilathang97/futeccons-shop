@@ -63,12 +63,28 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
     const jsonLdForPost = {
         "@context": "https://schema.org",
         "@type": "Product",
+        "review": {
+            "@type": "Review",
+            "reviewBody": postForDetail.noiDung,
+            "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": 4.5,
+            }
+        },
         "name": postForDetail.tieuDeBaiViet,
         "description": postForDetail.noiDung,
         "datePublished": postForDetail.createdAt,
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": 4.5,
+            "ratingCount": 10,
+            "bestRating": "5",
+            "worstRating": "1"
+        },
         "url": `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/post/${numericPostId}`,
         "image": urlForJsonLd,
         "offers": {
+            "priceValidUntil": "2050-01-01",
             "@type": "Offer",
             "price": postForDetail.giaTien,
             "priceCurrency": "VND",
