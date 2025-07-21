@@ -211,7 +211,6 @@ export const getAllPostsWithUser = customUnstableCache(
 // Get a specific post by ID with user and images
 export const getPostByIdWithUserAndImages = customUnstableCache(
   async (postId: number): Promise<PostWithUserAndImages | null> => {
-    console.log(`Executing DB query for getPostByIdWithUserAndImages: ${postId}`);
     if (isNaN(postId)) {
       return null;
     }
