@@ -65,6 +65,13 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
         "@type": "Product",
         "review": {
             "@type": "Review",
+            "author": {
+                "@type": "Person",
+                "name": postForDetail.user.name,
+                "email": postForDetail.user.email,
+                "telephone": postForDetail.user.number,
+                "image": postForDetail.user.image
+            },
             "reviewBody": postForDetail.noiDung,
             "reviewRating": {
                 "@type": "Rating",
