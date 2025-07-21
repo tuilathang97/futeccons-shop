@@ -174,7 +174,7 @@ export default function MobileMenuToggle() {
         </SheetHeader>
         <div className="flex flex-col gap-2 mt-2">
           <SheetClose asChild>
-            <Button variant="secondary" className="w-full justify-start gap-2" asChild>
+            <Button variant="secondary" className="w-full justify-start h-12 gap-2" asChild>
               <Link href="/" className='flex items-center'>
                 <p className='text-base font-semibold'>                Trang chủ                </p>
               </Link>

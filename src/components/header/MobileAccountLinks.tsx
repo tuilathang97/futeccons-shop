@@ -22,13 +22,13 @@ function MobileAccountLinks({ onNavigate }: MobileAccountLinksProps) {
         <h3 className="text-lg font-semibold text-gray-800">Tham gia cùng chúng tôi</h3>
         <p className="text-sm text-gray-600">Khám phá thế giới bất động sản</p>
       </div>
-      <div className='flex flex-col h-10 sm:flex-row gap-2'>
+      <div className='flex flex-col h-12 sm:flex-row gap-2'>
         <Button variant="secondary" className='w-full' asChild>
           <Link href="/dang-nhap" onClick={handleLoginClick}>
             Đăng nhập
           </Link>
         </Button>
-        <Button variant="secondary" className='w-full' asChild>
+        <Button variant="secondary" className='w-full h-12' asChild>
           <Link href="/dang-ky" onClick={handleRegisterClick}>
             Đăng ký
           </Link>
