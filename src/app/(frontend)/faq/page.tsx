@@ -37,39 +37,61 @@ export default function FAQPage() {
     }
   ];
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-light/30 to-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 bg-brand-medium rounded-full shadow-lg">
-              <HelpCircle className="h-8 w-8 text-white" />
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold text-brand-darkest mb-2">
-            Câu hỏi thường gặp
-          </h1>
-          <p className="text-brand-dark">
-            Tìm câu trả lời cho những thắc mắc phổ biến
-          </p>
-        </div>
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
 
-        {/* FAQ Section */}
-        <FaqSection title="" description="">
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <FaqItem
-                key={index}
-                question={faq.question}
-                index={index}
-              >
-                <p>{faq.answer}</p>
-              </FaqItem>
-            ))}
+  return (
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-brand-light/30 to-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-brand-medium rounded-full shadow-lg">
+                <HelpCircle className="h-8 w-8 text-white" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold text-brand-darkest mb-2">
+              Câu hỏi thường gặp
+            </h1>
+            <p className="text-brand-dark">
+              Tìm câu trả lời cho những thắc mắc phổ biến
+            </p>
           </div>
-        </FaqSection>
+
+          {/* FAQ Section */}
+          <FaqSection title="" description="">
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <FaqItem
+                  key={index}
+                  question={faq.question}
+                  index={index}
+                >
+                  <p>{faq.answer}</p>
+                </FaqItem>
+              ))}
+            </div>
+          </FaqSection>
+        </div>
       </div>
-    </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c'),
+        }}
+      />
+    </>
   );
 } 
