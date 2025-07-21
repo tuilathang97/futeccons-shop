@@ -21,33 +21,7 @@ const RealEstateSEOSection = () => {
         Bạn có thể dễ dàng tìm kiếm bất động sản phù hợp bằng cách sử dụng bộ lọc theo loại hình (nhà phố, căn hộ, đất nền...), mức giá, diện tích và khu vực. Để đăng tin miễn phí, hãy đăng ký tài khoản và làm theo hướng dẫn chi tiết trên trang &quot;Đăng tin&quot;.
       </p>
 
-      <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Câu hỏi thường gặp</h3>
-      <div className="space-y-4 mb-8">
-        <details className="border border-gray-200 dark:border-gray-700 rounded-lg">
-          <summary className="cursor-pointer p-4 font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
-            Làm thế nào để đăng tin miễn phí?
-          </summary>
-          <p className="p-4 pt-0 text-gray-700 dark:text-gray-300">
-            Bạn chỉ cần tạo tài khoản, sau đó vào mục &quot;Đăng tin&quot; và điền đầy đủ thông tin về bất động sản của bạn. Tin đăng sẽ được duyệt trong vòng 24 giờ.
-          </p>
-        </details>
-        <details className="border border-gray-200 dark:border-gray-700 rounded-lg">
-          <summary className="cursor-pointer p-4 font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
-            Có cần trả phí để xem thông tin liên hệ?
-          </summary>
-          <p className="p-4 pt-0 text-gray-700 dark:text-gray-300">
-            Không. Tất cả người dùng đều có thể xem thông tin liên hệ của người đăng tin hoàn toàn miễn phí.
-          </p>
-        </details>
-        <details className="border border-gray-200 dark:border-gray-700 rounded-lg">
-          <summary className="cursor-pointer p-4 font-medium text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg">
-            Làm sao để tìm nhà đất theo khu vực cụ thể?
-          </summary>
-          <p className="p-4 pt-0 text-gray-700 dark:text-gray-300">
-            Bạn có thể sử dụng bộ lọc hoặc truy cập trực tiếp vào các danh mục khu vực như Quận 1, Quận 7, Thủ Đức... để xem danh sách bất động sản tương ứng.
-          </p>
-        </details>
-      </div>
+      
     </section>
   );
 };

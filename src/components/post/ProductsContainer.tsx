@@ -31,7 +31,7 @@ function ProductsContainer({ data, searchParam }: { data: Post[], searchParam: {
     phuong?: string,
 }  }) {  
     if (!data || data.length === 0) {
-        return <div>Không có bài viết phù hợp với yêu cầu </div>
+        return <p className='text-monserrat text-lg'>Không có bài viết phù hợp với yêu cầu </p>
     }
 
     const { gia, area, bedrooms,thanhPho,quan,phuong } = searchParam

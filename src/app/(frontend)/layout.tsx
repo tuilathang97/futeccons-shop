@@ -44,16 +44,13 @@ export default async function RootLayout({
         <meta name="keywords" content="Mua bán bất động sản, bất động sản, đất đai, nhà đất, đầu tư bất động sản" />
         <meta name="author" content="Fuland Shop" />
         <meta name="robots" content="index, follow" />
-        <meta name="google-site-verification" content="your-google-site-verification-code" />
         <meta name="og:title" content="Fuland Shop" />
         <meta name="og:description" content="Mua bán bất động sản" />
-        <meta name="og:image" content="/images/logo.png" />
+        <meta name="og:image" content="/logo.webp" />
         <meta name="og:type" content="website" />
         <meta name="og:site_name" content="Fuland Shop" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn/"} />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <link rel="icon" href="/logo.webp" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </head>
