@@ -27,7 +27,7 @@ const montserrat = Montserrat({
 
 
 export const metadata: Metadata = {
-  title: "Futeccons Shop",
+  title: "Futeccons Land",
   description: "Mua bán bất động sản",
 };
 
@@ -44,7 +44,7 @@ export default async function RootLayout({
         <meta name="keywords" content="Mua bán bất động sản, bất động sản, đất đai, nhà đất, đầu tư bất động sản" />
         <meta name="author" content="Fuland Shop" />
         <meta name="robots" content="index, follow" />
-        <meta name="og:title" content="Fuland Shop" />
+        <meta name="og:title" content="Futeccons Land" />
         <meta name="og:description" content="Mua bán bất động sản" />
         <meta name="og:image" content="/logo.webp" />
         <meta name="og:type" content="website" />
@@ -87,7 +87,7 @@ export default async function RootLayout({
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Futeccons Shop",
+  "name": "Fuland Shop",
   "description": "Nền tảng bất động sản hàng đầu Việt Nam",
   "url": "https://fuland.vn",
   "potentialAction": {

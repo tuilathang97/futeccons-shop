@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
+import createMDX from '@next/mdx';
+
 
 const nextConfig: NextConfig = {
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   images: { 
     remotePatterns: [
       {
@@ -28,6 +31,16 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '1900mb',
     },
+    turbo:{
+      resolveExtensions:['.mdx', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
+      rules:{
+        '*.mdx':{
+          loaders:['@mdx-js/loader'],
+          as: '*.tsx',
+        }
+      }
+    },
+    mdxRs: true,
   },
   // ISR configuration
   cacheMaxMemorySize: 0, // Use default cache size for ISR
@@ -68,4 +81,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({});
+
+export default withMDX(nextConfig);
