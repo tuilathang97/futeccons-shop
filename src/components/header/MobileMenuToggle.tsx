@@ -188,7 +188,7 @@ export default function MobileMenuToggle() {
         </div>
         <Separator className='min-w-full '/>
         {!user?.id && (
-          <MobileAccountLinks />
+          <MobileAccountLinks onNavigate={handleNavigation} />
         )}
         {user?.id && (
             <Button className="w-full justify-start gap-2" onClick={handleLogout}>
