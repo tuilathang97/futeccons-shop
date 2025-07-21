@@ -50,7 +50,7 @@ export default async function RootLayout({
         <meta name="og:type" content="website" />
         <meta name="og:site_name" content="Fuland Shop" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn/"} />
-        <link rel="icon" href="/logo.webp" />
+        <link rel="icon" href="/logo.svg" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
       </head>
