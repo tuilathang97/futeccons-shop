@@ -16,7 +16,7 @@ const FaqSection = React.forwardRef<HTMLElement, FaqSectionProps>(
       <section
         ref={ref}
         className={cn(
-          "animate-in fade-in-0 py-16 w-full bg-gradient-to-b from-transparent via-muted/50 to-transparent",
+          "animate-in fade-in-0 py-16 w-full ",
           className
         )}
         {...props}
