@@ -38,4 +38,4 @@ Allow: /terms
 Allow: /quy-dinh
 
 # Sitemap location
-Sitemap: https://futeccons.com/sitemap.xml 
+Sitemap: https://fuland.vn/sitemap.xml 

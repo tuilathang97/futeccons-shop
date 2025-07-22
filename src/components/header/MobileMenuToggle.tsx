@@ -9,15 +9,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { AlignJustify, LogOut,User, ChevronRight } from 'lucide-react'
+import { AlignJustify, LogOut, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCategories } from '@/contexts/CategoriesContext'
 import { useSession } from '@/contexts/SessionContext'
 import { useRouter } from 'next/navigation'
-import UserActionGroup from './userActionGroup'
 import { signOut } from '@/lib/auth-client'
-import Image from 'next/image'
 import MobileAccountLinks from './MobileAccountLinks'
 import { Separator } from '../ui/separator'
 

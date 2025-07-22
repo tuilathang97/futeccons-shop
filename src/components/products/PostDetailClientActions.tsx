@@ -77,7 +77,7 @@ export default function PostDetailClientActions({ postId }: { postId: number }) 
     setIsReportDialogOpen(true);
   };
 
-  const onReportSubmit = (data: ReportFormData) => {
+  const onReportSubmit = () => {
     toast({
       title: "Thành công",
       description: "Đã gửi báo cáo thành công. Chúng tôi sẽ xem xét và xử lý.",

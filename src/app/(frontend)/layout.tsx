@@ -11,6 +11,8 @@ import PageWrapper from "@/components/PageWrapper";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from "@vercel/analytics/react";
 import ProgressProviderComponent from "@/components/provider/ProgressProvider";
+import LocalBusinessSchema from '@/components/seo/LocalBusinessSchema';
+import { CriticalResourcePreloader } from '@/components/seo/WebVitalsOptimizer';
 
 
 const arimo = Arimo({
@@ -40,6 +42,7 @@ export default async function RootLayout({
   return (
     <html lang="vi" className="h-svh">
       <head>
+        <CriticalResourcePreloader />
         <meta name="description" content="Mua bán bất động sản" />
         <meta name="keywords" content="Mua bán bất động sản, bất động sản, đất đai, nhà đất, đầu tư bất động sản" />
         <meta name="author" content="Fuland Shop" />
@@ -71,6 +74,7 @@ export default async function RootLayout({
           </CategoriesProvider>
         </SessionProvider>
         <Toaster />
+        <LocalBusinessSchema />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
