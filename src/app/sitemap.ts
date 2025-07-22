@@ -5,7 +5,7 @@ import { postsTable, articlesTable } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://fuland.com'
+  const baseUrl = 'https://fuland.com'
   
   // Static pages với priority cao
   const staticPages: MetadataRoute.Sitemap = [
