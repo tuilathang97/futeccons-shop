@@ -60,9 +60,7 @@ export default async function NewsPage({ params }: NewsPageProps) {
       {/* Article Header */}
       <header className="mb-8">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-        <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-          <span>Tác giả: {post.author}</span>
-          <span>•</span>
+        <div className="text-sm text-gray-600 mb-4">
           <time dateTime={post.date}>
             {new Date(post.date).toLocaleDateString('vi-VN', {
               year: 'numeric',

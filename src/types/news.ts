@@ -5,7 +5,6 @@ export interface NewsMetadata {
   image: string;
   url: string;
   date: string;
-  author: string;
   slug: string;
 }
 

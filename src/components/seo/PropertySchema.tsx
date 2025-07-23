@@ -28,6 +28,10 @@ export default function PropertySchema({ post }: PropertySchemaProps) {
     "name": post.tieuDeBaiViet,
     "description": post.noiDung.substring(0, 160),
     "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn"}/post/${post.id}`,
+    "author": {
+      "@type": "Person",
+      "name": post.user.name
+    },
     "price": {
       "@type": "PriceSpecification",
       "price": post.giaTien,
@@ -47,14 +51,21 @@ export default function PropertySchema({ post }: PropertySchemaProps) {
       "addressRegion": post.quan,
       "addressCountry": "VN"
     },
-    "datePosted": post.createdAt ? post.createdAt.toISOString() : new Date().toISOString(),
+    "datePosted": new Date().toISOString(),
     "availability": "https://schema.org/InStock",
     "category": "RealEstate",
     "agent": {
       "@type": "RealEstateAgent",
       "name": post.user.name,
       "telephone": post.user.number,
-      "email": post.user.email
+      "email": post.user.email,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": post.duong,
+        "addressLocality": post.phuong,
+        "addressRegion": post.quan,
+        "addressCountry": "VN"
+      }
     },
     "image": post.images || [],
     "potentialAction": {

@@ -29,6 +29,7 @@ const montserrat = Montserrat({
 
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://fuland.vn"),
   title: "Futeccons Land",
   description: "Mua bán bất động sản",
 };

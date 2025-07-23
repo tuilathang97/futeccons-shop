@@ -39,8 +39,7 @@ export default async function TinTucPage() {
                 <p className="text-gray-600 mb-4 line-clamp-3">
                   {news.description}
                 </p>
-                <div className="flex justify-between items-center text-sm text-gray-500">
-                  <span>{news.author}</span>
+                <div className="text-sm text-gray-500">
                   <time dateTime={news.date}>
                     {new Date(news.date).toLocaleDateString('vi-VN')}
                   </time>
