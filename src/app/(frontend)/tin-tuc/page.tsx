@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { getAllNews } from '@/lib/news';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Tin tức bất động sản - Cập nhật thông tin thị trường mới nhất',
@@ -11,7 +12,7 @@ export default async function TinTucPage() {
   const allNews = await getAllNews();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="  py-8">
       {/* Header */}
       <header className="mb-12 text-center">
         <h1 className="text-4xl font-bold mb-4">Tin tức bất động sản</h1>
@@ -28,12 +29,12 @@ export default async function TinTucPage() {
             <article key={news.slug} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-3 line-clamp-2">
-                  <a 
+                  <Link 
                     href={`/tin-tuc/${news.slug}`}
-                    className="hover:text-blue-600 transition-colors"
+                    className="hover:underline transition-colors"
                   >
                     {news.title}
-                  </a>
+                  </Link>
                 </h3>
                 <p className="text-gray-600 mb-4 line-clamp-3">
                   {news.description}

@@ -23,10 +23,10 @@ export async function getAllNews(): Promise<NewsMetadata[]> {
   
   for (const [slug, importFn] of Object.entries(newsModules)) {
     try {
-      const module = await importFn();
-      if (module.metadata) {
+      const functionImport = await importFn();
+      if (functionImport.metadata) {
         newsList.push({
-          ...module.metadata,
+          ...functionImport.metadata,
           slug
         });
       }
@@ -48,11 +48,11 @@ export async function getNewsBySlug(slug: string): Promise<NewsPost | null> {
   }
   
   try {
-    const module = await importFn();
+    const functionImport = await importFn();
     return {
-      ...module.metadata,
+      ...functionImport.metadata,
       slug,
-      content: module.default
+      content: functionImport.default
     };
   } catch (error) {
     console.error(`Error loading news ${slug}:`, error);

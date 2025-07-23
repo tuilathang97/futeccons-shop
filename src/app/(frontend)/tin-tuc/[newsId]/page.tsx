@@ -1,12 +1,11 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { getNewsBySlug, getRelatedNews, getAllNews } from '@/lib/news';
+import Link from 'next/link';
 
 interface NewsPageProps {
   params: Promise<{ newsId: string }>;
 }
-
-// Generate static params cho tất cả bài viết
 export async function generateStaticParams() {
   const allNews = await getAllNews();
   return allNews.map((news) => ({
@@ -53,7 +52,7 @@ export default async function NewsPage({ params }: NewsPageProps) {
     <div className="py-4">
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-gray-600">
-        <a href="/tin-tuc" className="hover:text-blue-600">Tin tức</a>
+        <Link href="/tin-tuc" className="hover:text-blue-600">Tin tức</Link>
         <span className="mx-2">/</span>
         <span>{post.title}</span>
       </nav>
@@ -88,12 +87,12 @@ export default async function NewsPage({ params }: NewsPageProps) {
               <article key={news.slug} className="bg-gray-50 rounded-lg overflow-hidden">
                 <div className="p-4">
                   <h3 className="font-semibold mb-2 line-clamp-2">
-                    <a 
+                    <Link 
                       href={`/tin-tuc/${news.slug}`}
                       className="hover:text-blue-600"
                     >
                       {news.title}
-                    </a>
+                    </Link>
                   </h3>
                   <p className="text-sm text-gray-600 line-clamp-2">
                     {news.description}
