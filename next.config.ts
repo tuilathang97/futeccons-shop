@@ -36,7 +36,6 @@ const nextConfig: NextConfig = {
       rules:{
         '*.mdx':{
           loaders:['@mdx-js/loader'],
-          as: '*.tsx',
         }
       }
     },

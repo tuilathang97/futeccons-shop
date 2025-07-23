@@ -26,24 +26,24 @@ const components = {
     }
   },
   h1: (props: HeadingProps) => (
-    <h1 className="font-semibold md:text-2xl text-xl" {...props} />
+    <h1 className="font-semibold md:text-2xl text-xl leading-8" {...props} />
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="text-gray-800 dark:text-zinc-200 font-medium "
+      className="text-gray-800 leading-8 dark:text-zinc-200 font-medium "
       {...props}
     />
   ),
   h3: (props: HeadingProps) => (
     <h3
-      className="text-gray-800 dark:text-zinc-200 font-medium "
+      className="text-gray-800 leading-8 dark:text-zinc-200 font-medium "
       {...props}
     />
   ),
   h4: (props: HeadingProps) => <h4 className="font-medium" {...props} />,
   p: (props: ParagraphProps) =>  {
     return (
-      <p className="text-gray-800 dark:text-zinc-300 leading-snug font-montserrat " {...props} />
+      <p className="text-gray-800 dark:text-zinc-300 leading-8 font-montserrat " {...props} />
     )
   },
   ol: (props: ListProps) => (

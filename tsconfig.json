@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(frontend)/typesense/page.js", "src/script/seed.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(frontend)/typesense/page.js", "src/script/seed.js", "src/app/(frontend)/tin-tuc/news.mdx", "src/app/(frontend)/tin-tuc/[newsId]/page.mdx", "src/app/(frontend)/test/page.mdx"],
   "exclude": ["node_modules"]
 }

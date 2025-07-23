@@ -28,6 +28,7 @@ const footerSections = [
     items: [
       { title: "Giới thiệu", href: "/gioi-thieu" },
       { title: "Đối tác", href: "/doi-tac" },
+      { title: "Tin tức", href: "/tin-tuc" },
     ],
   },
 ];

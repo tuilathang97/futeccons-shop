@@ -1,5 +1,4 @@
 import { CategoryPathBreadcrumbs, RelatedLinks } from './InternalLinks'
-import { generateCategoryMetadata } from '@/lib/seo/metadata'
 
 interface CategorySEOWrapperProps {
   children: React.ReactNode
@@ -38,19 +37,3 @@ export default function CategorySEOWrapper({
     </div>
   )
 }
-
-// Usage example in category pages:
-/*
-<CategorySEOWrapper
-  level1={{ name: "Bán nhà", path: "/ban-nha" }}
-  level2={{ name: "Nhà đất", path: "/ban-nha/nha-dat" }}
-  level3={{ name: "Biệt thự", path: "/ban-nha/nha-dat/biet-thu" }}
-  relatedCategories={[
-    { name: "Nhà phố", href: "/ban-nha/nha-dat/nha-pho" },
-    { name: "Chung cư", href: "/ban-nha/chung-cu" },
-    { name: "Đất nền", href: "/ban-nha/nha-dat/dat-nen" }
-  ]}
->
-  <YourCategoryContent />
-</CategorySEOWrapper>
-*/ 

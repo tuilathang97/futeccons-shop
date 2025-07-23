@@ -10,6 +10,7 @@ import { type User as DbUser, type Image as DbImage } from '@/db/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import RevealPhoneNumberButton from '@/components/post/RevealPhoneNumberButton'
+import PropertySchema from '@/components/seo/PropertySchema'
 
 export default async function Page({ params }: { params: Promise<{ postId: string[] }> }) {
     if (!params) return <div>Không tìm thấy bài viết</div>
@@ -60,53 +61,16 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
     };
     const urlForJsonLd = postImagesForDetail.map((image) => image.secureUrl);
 
-    const jsonLdForPost = {
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "review": {
-            "@type": "Review",
-            "author": {
-                "@type": "Person",
-                "name": postForDetail.user.name,
-                "email": postForDetail.user.email,
-                "telephone": postForDetail.user.number,
-                "image": postForDetail.user.image
-            },
-            "reviewBody": postForDetail.noiDung,
-            "reviewRating": {
-                "@type": "Rating",
-                "ratingValue": 4.5,
-            }
-        },
-        "name": postForDetail.tieuDeBaiViet,
-        "description": postForDetail.noiDung,
-        "datePublished": postForDetail.createdAt,
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": 4.5,
-            "ratingCount": 10,
-            "bestRating": "5",
-            "worstRating": "1"
-        },
-        "url": `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/post/${numericPostId}`,
-        "image": urlForJsonLd,
-        "offers": {
-            "priceValidUntil": "2050-01-01",
-            "@type": "Offer",
-            "price": postForDetail.giaTien,
-            "priceCurrency": "VND",
-            "availability": "https://schema.org/InStock"
-        },
-        "brand": {
-            "@type": "Organization",
-            "name": "Fuland Shop"
-        },
-        "seller": {
-            "@type": "Person",
-            "name": postForDetail.user.name,
-            "email": postForDetail.user.email,
-            "telephone": postForDetail.user.number,
-            "image": postForDetail.user.image
+    // Prepare post data for PropertySchema
+    const postWithImages = {
+        ...postForDetail,
+        images: urlForJsonLd,
+        createdAt: postForDetail.createdAt,
+        giaTien: Number(postForDetail.giaTien),
+        dienTichDat: Number(postForDetail.dienTichDat),
+        user: {
+            ...postForDetail.user,
+            number: postForDetail.user.number || 'N/A'
         }
     };
 
@@ -147,12 +111,7 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
                     </div>
                 </div>
             </div>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(jsonLdForPost).replace(/</g, '\\u003c'),
-                }}
-            />
+            <PropertySchema post={postWithImages} />
         </div>
     )
 }

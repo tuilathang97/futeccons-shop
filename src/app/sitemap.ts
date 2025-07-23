@@ -7,7 +7,6 @@ import { eq } from 'drizzle-orm'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://fuland.com'
   
-  // Static pages với priority cao
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -35,7 +34,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   ]
 
-  // Dynamic category pages
   const categories = await getCategories()
   const categoryPages = categories
     .filter(cat => cat.path && cat.path !== '/tim-kiem-theo-tu-khoa')
@@ -46,12 +44,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: category.level === 1 ? 0.9 : category.level === 2 ? 0.8 : 0.7,
     }))
 
-  // Active posts với high priority
   const activePosts = await db
     .select({ id: postsTable.id, updatedAt: postsTable.updatedAt })
     .from(postsTable)
     .where(eq(postsTable.active, true))
-    .limit(10000) // Limit để tránh sitemap quá lớn
+    .limit(10000)
 
   const postPages = activePosts.map(post => ({
     url: `${baseUrl}/post/${post.id}`,
@@ -60,7 +57,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // Published articles
   const publishedArticles = await db
     .select({ slug: articlesTable.slug, updatedAt: articlesTable.updatedAt })
     .from(articlesTable)

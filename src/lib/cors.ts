@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 const allowedOrigins = [
   'https://fuland.vn',
   'https://www.fuland.vn',
-  'http://localhost:3000'
 ]
 
 export function setCORSHeaders(response: Response, origin: string | null) {
