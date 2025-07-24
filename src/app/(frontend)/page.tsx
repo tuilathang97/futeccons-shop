@@ -68,7 +68,7 @@ export const metadata: Metadata = {
   title: 'Futeccons Land',
   description: 'Fuland Shop - Real Estate Platform',
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
+    icon: '/logo.svg',
+    shortcut: '/logo.svg',
   },
 }

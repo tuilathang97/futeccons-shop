@@ -1,6 +1,10 @@
 
 # hãy dùng thông tin nhà đất ở trên để viết 1 bài follow theo 2 điều kiện sau đây : 1 \#2
 
+# title , heading 1 , slug Phải chứa từ khoá hoặc cụm từ khoá được nổi bật ( 3 thằng này nên giống nhau, ). Ở đoạn văn chứa nội dung của bài viết cũng sẽ chứa từ khoá này ( nên thêm rải rác những highlight keyword )
+
+dùng metaData import của nextjs để next tự động tạo ra thẻ meta chứa title cho chúng ta 
+
 be succinct ( ngắn gọn ) - làm sao để lược bỏ nhiều từ nhất càng tốt nhưng vẫn giữ được ý nghĩa cốt lõi
 \#3
 inverted pyramid ( kim tự tháp ngược )
@@ -11,9 +15,6 @@ b. Phần 2: Chi tiết quan trọng
 Giải thích thêm về sự kiện, trích dẫn nguồn tin, bối cảnh.
 c. Phần 3: Thông tin bổ sung
 Chi tiết phụ, bối cảnh lịch sử, hoặc thông tin liên quan ít quan trọng hơn.
-\#4
-improve yo rankings
-tối ưu ảnh, url thân thiện -  Inverted Pyramid. Hãy viết 1 cái promt cho tin tức thật là chuẩn xác ( và ví dụ )  = file md
 
 ```md
 ---
@@ -22,8 +23,7 @@ description: Hướng dẫn chuẩn, ngắn gọn tăng thứ hạng SEO bất �
 keywords: SEO bất động sản, từ khóa địa phương, tối ưu ảnh, bài viết chuẩn, url thân thiện, local seo, real estate seo, 2025
 image: /images/seo-bat-dong-san-tphcm.jpg
 url: /seo-bat-dong-san-tu-khoa-dia-phuong-url-than-thien
-date: 2025-07-23
-author: quản trị viên
+date: current day 
 ---
 
 # SEO bất động sản: Làm gì để lên top Google năm 2025?
