@@ -1,12 +1,13 @@
+
 export default function LocalBusinessSchema() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     "name": "Futeccons Land",
     "description": "Nền tảng bất động sản hàng đầu Việt Nam",
-    "url": "https://fuland.com",
-    "logo": "https://fuland.com/logo.svg",
-    "image": "https://fuland.com/logo.svg",
+    "url": process.env.NEXT_PUBLIC_APP_URL,
+    "logo": `${process.env.NEXT_PUBLIC_APP_URL}/logo.svg`,
+    "image": `${process.env.NEXT_PUBLIC_APP_URL}/logo.svg`,
     "telephone": "0765563567",
     "email": "thanhlb1990@gmail.com",
     "priceRange": "$$",

@@ -32,6 +32,20 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://fuland.vn"),
   title: "Futeccons Land",
   description: "Mua bán bất động sản",
+  keywords: ["Mua bán bất động sản", "bất động sản", "đất đai", "nhà đất", "đầu tư bất động sản"],
+  authors: [{ name: "Futeccons Land", url: "https://fuland.vn" }],
+  creator: "Futeccons Land",
+  openGraph: {
+    title: "Futeccons Land",
+    description: "Mua bán bất động sản",
+    images: ["/logo.svg"],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Futeccons Land',
+    description: 'Mua bán bất động sản',
+    images: ['/logo.svg'],
+  },
 };
 
 export default async function RootLayout({
