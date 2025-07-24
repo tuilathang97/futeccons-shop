@@ -30,14 +30,14 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fuland.vn"),
-  title: "Fuland",
-  description: "Mua bán bất động sản",
+  title: "Fuland - Mua Bán Cho Thuê Bất Động Sản Uy Tín",
+  description: "Mua bán bất động sản, cho thuê bất động sản, đất đai, nhà đất, đầu tư bất động sản",
   keywords: ["Mua bán bất động sản", "bất động sản", "đất đai", "nhà đất", "đầu tư bất động sản"],
   authors: [{ name: "Fuland", url: "https://fuland.vn" }],
   creator: "Fuland",
   openGraph: {
-    title: "Fuland",
-    description: "Mua bán bất động sản",
+    title: "Fuland - bất động sản Việt Nam, cho người Việt Nam",
+    description: "Mua bán bất động sản, cho thuê bất động sản, đất đai, nhà đất, đầu tư bất động sản",
     images: ["/logo.svg"],
   },
   twitter: {
