@@ -67,7 +67,7 @@ export default function HuongDanPage() {
             Hướng dẫn sử dụng
           </h1>
           <p className="text-brand-dark">
-            Tìm hiểu cách sử dụng Fuland Shop hiệu quả
+            Tìm hiểu cách sử dụng Fuland hiệu quả
           </p>
         </div>
 

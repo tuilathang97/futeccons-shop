@@ -85,7 +85,7 @@ export default function BaoCaoLoiPage() {
                 <Label htmlFor="url">URL trang gặp lỗi</Label>
                 <Input 
                   id="url"
-                  placeholder="https://futeccons.com/..."
+                  placeholder="https://fuland.vn/..."
                 />
               </div>
 

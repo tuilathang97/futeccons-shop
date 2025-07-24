@@ -41,7 +41,7 @@ export default function SignInViewPage() {
         <div className='relative z-20 mt-auto'>
           <blockquote className='space-y-2'>
             <p className='text-lg'>
-              &ldquo;Mua bán bất động sản dễ dàng hơn với Futeccons&rdquo;
+              &ldquo;Mua bán bất động sản dễ dàng hơn với Fuland&rdquo;
             </p>
             <footer className='text-sm'>Anh Thành</footer>
           </blockquote>

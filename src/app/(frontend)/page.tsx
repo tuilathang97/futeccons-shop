@@ -65,8 +65,8 @@ export default async function Home() {
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
-  title: 'Futeccons Land',
-  description: 'Fuland Shop - Real Estate Platform',
+  title: 'Fuland',
+  description: 'Fuland - Real Estate Platform',
   icons: {
     icon: '/logo.svg',
     shortcut: '/logo.svg',

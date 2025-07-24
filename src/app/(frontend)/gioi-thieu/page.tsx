@@ -39,7 +39,7 @@ export default function GioiThieuPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-brand-darkest mb-4">
-            Về Fuland Shop
+            Về Fuland
           </h1>
           <p className="text-lg text-brand-dark max-w-2xl mx-auto">
             Nền tảng bất động sản hàng đầu Việt Nam, kết nối những cơ hội đầu tư và an cư tốt nhất
@@ -55,7 +55,7 @@ export default function GioiThieuPage() {
           </CardHeader>
           <CardContent className="space-y-4 text-gray-700">
             <p>
-              Fuland Shop được thành lập với sứ mệnh tạo ra một nền tảng bất động sản 
+              Fuland được thành lập với sứ mệnh tạo ra một nền tảng bất động sản 
               minh bạch, hiệu quả và đáng tin cậy tại Việt Nam. Chúng tôi hiểu rằng việc 
               mua bán, cho thuê bất động sản là một quyết định quan trọng trong cuộc sống 
               của mỗi người.
@@ -149,7 +149,7 @@ export default function GioiThieuPage() {
             Tham gia cùng chúng tôi
           </h3>
           <p className="text-brand-dark mb-6">
-            Khám phá những cơ hội bất động sản tuyệt vời và trở thành một phần của cộng đồng Fuland Shop
+            Khám phá những cơ hội bất động sản tuyệt vời và trở thành một phần của cộng đồng Fuland
           </p>
           <div className="flex justify-center gap-4">
             <Link 

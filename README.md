@@ -1,5 +1,5 @@
-# futeccons-shop
-A real-estate E-commerce site for Futeccons.
+# Fuland
+A real-estate E-commerce site for Fuland.
 
 ## Typesense Setup Guide
 

@@ -3,7 +3,7 @@ export default function LocalBusinessSchema() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    "name": "Futeccons Land",
+    "name": "Fuland",
     "description": "Nền tảng bất động sản hàng đầu Việt Nam",
     "url": process.env.NEXT_PUBLIC_APP_URL,
     "logo": `${process.env.NEXT_PUBLIC_APP_URL}/logo.svg`,

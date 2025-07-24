@@ -35,12 +35,12 @@ export function generateSEOMetadata({
   ]
 
   return {
-    title: `${title} | Futeccons Land`,
+    title: `${title} | Fuland`,
     description,
     keywords: [...defaultKeywords, ...keywords].join(', '),
-    authors: [{ name: 'Futeccons Land' }],
-    creator: 'Futeccons Land',
-    publisher: 'Futeccons Land',
+    authors: [{ name: 'Fuland' }],
+    creator: 'Fuland',
+    publisher: 'Fuland',
     formatDetection: {
       email: false,
       address: false,
@@ -50,7 +50,7 @@ export function generateSEOMetadata({
       title,
       description,
       url,
-      siteName: 'Futeccons Land',
+      siteName: 'Fuland',
       images: [
         {
           url: image,
@@ -69,7 +69,7 @@ export function generateSEOMetadata({
       title,
       description,
       images: [image],
-      creator: '@futeccons',
+      creator: '@fuland',
     },
     robots: {
       index: true,
@@ -99,7 +99,7 @@ export function generateCategoryMetadata(
   
   return generateSEOMetadata({
     title: `${breadcrumbPath} - Mua bán & cho thuê`,
-    description: `Khám phá ${categoryName.toLowerCase()} tại Futeccons Land. Tìm kiếm ${categoryName.toLowerCase()} phù hợp với nhu cầu của bạn.`,
+    description: `Khám phá ${categoryName.toLowerCase()} tại Fuland. Tìm kiếm ${categoryName.toLowerCase()} phù hợp với nhu cầu của bạn.`,
     path,
     keywords: [categoryName, 'mua bán', 'cho thuê', ...parentCategories || []],
   })

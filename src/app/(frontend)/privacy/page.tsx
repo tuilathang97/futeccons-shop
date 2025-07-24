@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-brand-darkest mb-2">
-            Fuland Shop
+            Fuland
           </h1>
           <p className="text-brand-dark">
             Nền tảng bất động sản hàng đầu
@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-brand-darkest mb-4">1. Giới Thiệu</h2>
               <p className="text-brand-dark leading-relaxed">
-                Fuland Shop cam kết bảo vệ thông tin cá nhân của bạn. Chính sách bảo mật này 
+                Fuland cam kết bảo vệ thông tin cá nhân của bạn. Chính sách bảo mật này 
                 giải thích cách chúng tôi thu thập, sử dụng, chia sẻ và bảo vệ thông tin cá nhân 
                 khi bạn sử dụng nền tảng thương mại điện tử bất động sản của chúng tôi.
               </p>
@@ -280,7 +280,7 @@ export default function PrivacyPolicyPage() {
               <p className="text-brand-dark leading-relaxed mt-4">
                 Việc bảo vệ dữ liệu của bạn là ưu tiên hàng đầu của chúng tôi. Chúng tôi cam kết 
                 minh bạch và trách nhiệm trong việc xử lý thông tin cá nhân, đảm bảo quyền riêng 
-                tư và nghĩa vụ khi sử dụng dịch vụ Fuland Shop.
+                tư và nghĩa vụ khi sử dụng dịch vụ Fuland.
               </p>
             </section>
 
@@ -288,7 +288,7 @@ export default function PrivacyPolicyPage() {
 
             <div className="text-center text-brand-dark pt-8">
               <p>
-                Cảm ơn bạn đã tin tưởng Fuland Shop. Chúng tôi cam kết bảo vệ thông tin 
+                Cảm ơn bạn đã tin tưởng Fuland. Chúng tôi cam kết bảo vệ thông tin 
                 của bạn một cách tốt nhất.
               </p>
             </div>

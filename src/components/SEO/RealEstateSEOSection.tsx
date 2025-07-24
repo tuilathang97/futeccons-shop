@@ -9,7 +9,7 @@ const RealEstateSEOSection = () => {
       <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
         Chào mừng bạn đến với 
         <Link href="/" className="text-gray-900 dark:text-white hover:text-brand-medium hover:underline">
-          <strong className="text-gray-900 dark:text-white mx-2 "> Fuland Shop</strong>
+          <strong className="text-gray-900 dark:text-white mx-2 "> Fuland</strong>
         </Link> 
         – nền tảng giao dịch bất động sản uy tín tại TP.HCM và các tỉnh lân cận. Chúng tôi cung cấp thông tin chính xác, cập nhật về mua bán nhà đất, cho thuê căn hộ, nhà phố, đất nền và nhiều loại hình bất động sản khác.
       </p>

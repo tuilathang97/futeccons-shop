@@ -243,7 +243,7 @@ export default function SignUpPage() {
 						</div>
 					</div>
 					<h1 className="text-3xl font-bold text-brand-darkest mb-2">
-						Fuland Shop
+						Fuland
 					</h1>
 					<p className="text-brand-dark">
 						Nền tảng bất động sản hàng đầu

@@ -30,19 +30,19 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fuland.vn"),
-  title: "Futeccons Land",
+  title: "Fuland",
   description: "Mua bán bất động sản",
   keywords: ["Mua bán bất động sản", "bất động sản", "đất đai", "nhà đất", "đầu tư bất động sản"],
-  authors: [{ name: "Futeccons Land", url: "https://fuland.vn" }],
-  creator: "Futeccons Land",
+  authors: [{ name: "Fuland", url: "https://fuland.vn" }],
+  creator: "Fuland",
   openGraph: {
-    title: "Futeccons Land",
+    title: "Fuland",
     description: "Mua bán bất động sản",
     images: ["/logo.svg"],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Futeccons Land',
+    title: 'Fuland',
     description: 'Mua bán bất động sản',
     images: ['/logo.svg'],
   },
@@ -60,13 +60,13 @@ export default async function RootLayout({
         <CriticalResourcePreloader />
         <meta name="description" content="Mua bán bất động sản" />
         <meta name="keywords" content="Mua bán bất động sản, bất động sản, đất đai, nhà đất, đầu tư bất động sản" />
-        <meta name="author" content="Fuland Shop" />
+        <meta name="author" content="Fuland" />
         <meta name="robots" content="index, follow" />
-        <meta name="og:title" content="Futeccons Land" />
+        <meta name="og:title" content="Fuland" />
         <meta name="og:description" content="Mua bán bất động sản" />
         <meta name="og:image" content="/logo.webp" />
         <meta name="og:type" content="website" />
-        <meta name="og:site_name" content="Fuland Shop" />
+        <meta name="og:site_name" content="Fuland" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn/"} />
         <link rel="icon" href="/logo.svg" />
         <meta name="msapplication-TileColor" content="#da532c" />
@@ -106,7 +106,7 @@ export default async function RootLayout({
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Fuland Shop",
+  "name": "Fuland",
   "description": "Nền tảng bất động sản hàng đầu Việt Nam",
   "logo": "https://fuland.vn/logo.svg",
   "telephone": "0765563567",

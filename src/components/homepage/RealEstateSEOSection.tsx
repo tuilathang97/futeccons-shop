@@ -59,7 +59,7 @@ const RealEstateSEOSection = () => {
               {/* Main Content */}
               <article className="prose prose-gray max-w-none">
                 <p className="text-sm md:text-base lg:text-lg leading-relaxed text-gray-700 mb-4 md:mb-6">
-                  <strong className="text-brand-darkest">Fuland Shop</strong> tự hào là nền tảng bất động sản trực tuyến uy tín, 
+                  <strong className="text-brand-darkest">Fuland</strong> tự hào là nền tảng bất động sản trực tuyến uy tín, 
                   cung cấp thông tin về hàng chục nghìn dự án <em>nhà đất, chung cư, biệt thự</em> trên toàn quốc. 
                   Với hơn 10 năm kinh nghiệm trong lĩnh vực <strong>môi giới bất động sản</strong>, chúng tôi cam kết 
                   mang đến dịch vụ tốt nhất cho khách hàng.
