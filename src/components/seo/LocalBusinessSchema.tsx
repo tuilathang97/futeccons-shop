@@ -3,7 +3,7 @@ export default function LocalBusinessSchema() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
-    "name": "Fuland",
+    "name": "Fuland - Mua Bán Cho Thuê Bất Động Sản Uy Tín",
     "description": "Nền tảng bất động sản hàng đầu Việt Nam",
     "url": process.env.NEXT_PUBLIC_APP_URL,
     "logo": `${process.env.NEXT_PUBLIC_APP_URL}/logo.svg`,
@@ -37,7 +37,7 @@ export default function LocalBusinessSchema() {
       "streetAddress": "12/66/3 đường ấp 4, Đông Thạnh",
       "addressLocality": "Hóc Môn",
       "addressRegion": "Hồ Chí Minh",
-      "postalCode": "10000",
+      "postalCode": "70000",
       "addressCountry": "VN"
     },
     "geo": {

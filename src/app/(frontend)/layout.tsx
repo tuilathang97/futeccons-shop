@@ -66,7 +66,7 @@ export default async function RootLayout({
         <meta name="og:description" content="Mua bán bất động sản" />
         <meta name="og:image" content="/logo.webp" />
         <meta name="og:type" content="website" />
-        <meta name="og:site_name" content="Fuland" />
+        <meta name="og:site_name" content="Fuland - Mua Bán Cho Thuê Bất Động Sản Uy Tín" />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn/"} />
         <link rel="icon" href="/logo.svg" />
         <meta name="msapplication-TileColor" content="#da532c" />
@@ -150,7 +150,7 @@ const organizationSchema = {
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "VN",
-    "postalCode": "10000",
+    "postalCode": "70000 ",
     "addressLocality": "Hồ Chí Minh",
     "addressRegion": "Hồ Chí Minh",
     "streetAddress": "12/66/3 đường ấp 4, Đông Thạnh, Hóc Môn, Hồ Chí Minh"
