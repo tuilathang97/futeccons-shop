@@ -87,6 +87,7 @@ const HeaderSearchDialog = () => {
         <DialogTitle className='font-montserrat'>Tìm kiếm</DialogTitle>
         <div className='min-h-[400px]'>
         <div className="flex relative items-center gap-2">
+
           <Search onClick={handleSearchRedirect} className=" absolute right-3 w-5 h-5 cursor-pointer" />
           <Input
             onKeyDown={(e) => {
@@ -102,7 +103,7 @@ const HeaderSearchDialog = () => {
           />
         </div>
         <Separator />
-        {showResults && (query.trim() || isLoading) && (
+        {showResults && (query.trim() || isLoading) ? (
           <div className=" mt-2 max-h-96 overflow-y-auto">
             {isLoading && (
               <div className="p-4 text-center text-gray-500">
@@ -147,11 +148,22 @@ const HeaderSearchDialog = () => {
                 ))}
                 {
                   results.length > 4 && (
-                    <p className='text-sm w-full text-center text-gray-500'>xem thêm <Link href={`/tim-kiem-theo-tu-khoa?query=${query}`} className='text-brand-medium'> {results.length - 4} bài viết với từ khoá <strong>{query}</strong></Link></p>
+                    <p className='text-sm w-full text-center text-gray-500'>xem thêm 
+                     <Link
+                      onClick={() => clearSearch()}
+                      href={`/tim-kiem-theo-tu-khoa?query=${query}`} 
+                      className='text-brand-medium px-1'> 
+                      {results.length - 4}  bài viết với từ khoá 
+                      <strong>{query}</strong></Link>
+                    </p>
                   )
                 }
               </>
             )}
+          </div>
+        ) : (
+          <div className='flex justify-center items-center absolute top-0 z-[-10] left-0 w-full h-full'>
+            <p className='text-sm text-gray-500'>Nhập từ khoá để tìm kiếm</p>
           </div>
         )}
         </div>
