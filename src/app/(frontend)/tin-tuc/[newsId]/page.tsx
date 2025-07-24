@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { getNewsBySlug, getRelatedNews, getAllNews } from '@/lib/news';
 import Link from 'next/link';
+import NewsArticleSchema from '@/components/seo/NewsArticleSchema';
 
 interface NewsPageProps {
   params: Promise<{ newsId: string }>;
@@ -50,6 +51,16 @@ export default async function NewsPage({ params }: NewsPageProps) {
 
   return (
     <div className="py-4">
+      {/* JSON-LD Schema for NewsArticle */}
+      <NewsArticleSchema
+        title={post.title}
+        description={post.description}
+        date={post.date}
+        url={post.url}
+        image={post.image}
+        keywords={post.keywords}
+      />
+      
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-gray-600">
         <Link href="/tin-tuc" className="hover:text-blue-600">Tin tức</Link>

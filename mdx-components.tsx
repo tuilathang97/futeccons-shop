@@ -2,6 +2,7 @@ import React, { ComponentPropsWithoutRef } from 'react';
 import Link from 'next/link';
 import "./src/app/(frontend)/globals.css";
 import Image, { ImageProps } from 'next/image';
+import MDXNewsSchema from '@/components/seo/MDXNewsSchema';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
 type ParagraphProps = ComponentPropsWithoutRef<'p'>;
@@ -120,6 +121,7 @@ const components = {
       {...props}
     />
   ),
+  MDXNewsSchema,
 };
 
 declare global {
