@@ -154,7 +154,7 @@ const HeaderSearchDialog = () => {
                       href={`/tim-kiem-theo-tu-khoa?query=${query}`} 
                       className='text-brand-medium px-1'> 
                       {results.length - 4}  bài viết với từ khoá 
-                      <strong>{query}</strong></Link>
+                      <strong className='px-1'>{query}</strong></Link>
                     </p>
                   )
                 }
