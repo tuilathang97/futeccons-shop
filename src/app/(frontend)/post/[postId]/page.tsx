@@ -97,9 +97,6 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
                             <Separator className='w-full' />
                             <RevealPhoneNumberButton
                                 phoneNumber={ownerUserForButton.number}
-                                isCurrentUserLoggedIn={!!currentUser}
-                                loginUrl="/dang-nhap"
-                                pageCallbackUrl={currentPath}
                             />
                             <ContactOwnerButton
                                 post={postForDetail}

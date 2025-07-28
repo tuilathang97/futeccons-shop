@@ -1,15 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Phone } from 'lucide-react';
+import Link from 'next/link';
 
 interface RevealPhoneNumberButtonProps {
   phoneNumber: string | null | undefined;
-  isCurrentUserLoggedIn: boolean;
-  loginUrl: string; 
-  pageCallbackUrl: string; 
 }
 
 const maskPhoneNumber = (num: string | null | undefined): string => {
@@ -20,29 +17,21 @@ const maskPhoneNumber = (num: string | null | undefined): string => {
 };
 
 export default function RevealPhoneNumberButton({ 
-  phoneNumber,
-  isCurrentUserLoggedIn,
-  loginUrl,
-  pageCallbackUrl 
+  phoneNumber
 }: RevealPhoneNumberButtonProps) {
   const [isRevealed, setIsRevealed] = useState(false);
-  const router = useRouter();
 
   const handleClick = () => {
-    if (!isCurrentUserLoggedIn) {
-      router.push(`${loginUrl}?callbackUrl=${encodeURIComponent(pageCallbackUrl)}`);
-      return;
-    }
     setIsRevealed(true);
   };
 
-  if (isRevealed && isCurrentUserLoggedIn && phoneNumber) {
+  if (isRevealed && phoneNumber) {
     return (
       <Button variant={"destructive"} asChild className="w-full">
-        <a href={`tel:${phoneNumber}`}>
+        <Link href={`tel:${phoneNumber}`}>
           {phoneNumber} 
           <Phone className="ml-2" size={16} />
-        </a>
+        </Link>
       </Button>
     );
   }
