@@ -15,6 +15,8 @@ const newsModules = {
   'ma-bat-dong-san-soi-dong-2025': () => import('@/news/posts/ma-bat-dong-san-soi-dong-2025.mdx') as Promise<MDXModule>,
   'goi-145000-ty-nha-o-xa-hoi': () => import('@/news/posts/goi-145000-ty-nha-o-xa-hoi.mdx') as Promise<MDXModule>,
   'bong-bong-bat-dong-san-2025': () => import('@/news/posts/bong-bong-bat-dong-san-2025.mdx') as Promise<MDXModule>,
+  'bat-dong-san-2025':() => import('@/news/posts/bat-dong-san-2025.mdx') as Promise<MDXModule>,
+  'chung-cu-gia-re-duoi-2-5-ty-tphcm-thang-8-2025':() => import('@/news/posts/chung-cu-gia-re-duoi-2-5-ty-tphcm-thang-8-2025.mdx') as Promise<MDXModule>,
 };
 
 // Lấy tất cả metadata của các bài viết
