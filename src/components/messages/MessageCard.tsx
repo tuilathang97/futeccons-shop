@@ -21,7 +21,7 @@ export default function MessageCard({ message, messageType }: MessageCardProps) 
 
   // Fallback for post title if post data is not fully populated (should be)
   const postTitle = post?.tieuDeBaiViet || 'Bài đăng không xác định';
-  const postLink = post?.id ? `/post/${post.id}` : '#'; // Updated to use post.id directly
+  const postLink = post?.path ? `/bai-viet/${post.path}` : '#'; // Updated to use post.path
 
   return (
     <Card className={cn(

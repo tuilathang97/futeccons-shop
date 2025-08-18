@@ -113,7 +113,7 @@ const HeaderSearchDialog = () => {
                 {results.slice(0, 4).map((result: Post) => (
                   <Link
                     key={result.id}
-                    href={`/post/${result.id}`}
+                    href={`/bai-viet/${result.path}`}
                     onClick={clearSearch}
                     className="block w-full min-h-12 p-4 hover:bg-gray-50 border-b border-gray-100 transition-colors"
                   >

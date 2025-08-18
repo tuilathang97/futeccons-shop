@@ -99,7 +99,7 @@ export async function sendMessage(data: SendMessageData): Promise<ActionResult> 
     }
 
     revalidatePath('/account/messages');
-    revalidatePath(`/post/${postId}`);
+    revalidatePath(`/bai-viet/${postId}`);
     if (parentMessageId) {
         revalidatePath(`/account/messages/received`);
         revalidatePath(`/account/messages/sent`);

@@ -117,7 +117,7 @@ export default function MessageThreadClientUI({ messageDetails, currentUser }: M
             <Home className="mr-1.5 h-4 w-4 text-brand-medium dark:text-brand-dark" />
             <span>Liên quan đến bài đăng: </span>
             <Link
-              href={`/post/${post.id}/${post.path || ''}`}
+              href={`/bai-viet/${post.path || post.id}`}
               className="ml-1 text-brand-medium hover:text-brand-dark dark:text-brand-dark dark:hover:text-brand-light font-semibold flex items-center underline hover:no-underline"
               target="_blank"
               rel="noopener noreferrer"
