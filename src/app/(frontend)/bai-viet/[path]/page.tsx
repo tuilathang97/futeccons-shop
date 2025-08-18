@@ -10,7 +10,6 @@ import { type User as DbUser, type Image as DbImage } from '@/db/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import RevealPhoneNumberButton from '@/components/post/RevealPhoneNumberButton'
-import PropertySchema from '@/components/seo/PropertySchema'
 import { getPostByPath } from '@/actions/postActions'
 
 export default async function Page({ params }: { params: Promise<{ path: string }> }) {
