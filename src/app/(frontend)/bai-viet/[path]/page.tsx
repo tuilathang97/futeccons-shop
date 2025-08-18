@@ -43,8 +43,6 @@ export default async function Page({ params }: { params: Promise<{ path: string 
             banned: sUser.banned ?? null,
             banReason: sUser.banReason ?? null,
             banExpires: sUser.banExpires ?? null,
-            username: sUser.username ?? null,
-            displayUsername: sUser.displayUsername ?? null,
         };
     }
 
@@ -62,16 +60,30 @@ export default async function Page({ params }: { params: Promise<{ path: string 
     };
     const urlForJsonLd = postImagesForDetail.map((image) => image.secureUrl);
 
-    // Prepare post data for PropertySchema
-    const postWithImages = {
-        ...postForDetail,
-        images: urlForJsonLd,
-        createdAt: postForDetail.createdAt,
-        giaTien: Number(postForDetail.giaTien),
-        dienTichDat: Number(postForDetail.dienTichDat),
-        user: {
-            ...postForDetail.user,
-            number: postForDetail.user.number || 'N/A'
+    const jsonLdForPost = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": postForDetail.tieuDeBaiViet,
+        "description": postForDetail.noiDung,
+        "datePublished": postForDetail.createdAt,
+        "url": `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/post/${numericPostId}`,
+        "image": urlForJsonLd,
+        "offers": {
+            "@type": "Offer",
+            "price": postForDetail.giaTien,
+            "priceCurrency": "VND",
+            "availability": "https://schema.org/InStock"
+        },
+        "brand": {
+            "@type": "Organization",
+            "name": "Futeccons Shop"
+        },
+        "seller": {
+            "@type": "Person",
+            "name": postForDetail.user.name,
+            "email": postForDetail.user.email,
+            "telephone": postForDetail.user.number,
+            "image": postForDetail.user.image
         }
     };
 
@@ -98,6 +110,9 @@ export default async function Page({ params }: { params: Promise<{ path: string 
                             <Separator className='w-full' />
                             <RevealPhoneNumberButton
                                 phoneNumber={ownerUserForButton.number}
+                                isCurrentUserLoggedIn={!!currentUser}
+                                loginUrl="/dang-nhap"
+                                pageCallbackUrl={currentPath}
                             />
                             <ContactOwnerButton
                                 post={postForDetail}
@@ -109,7 +124,12 @@ export default async function Page({ params }: { params: Promise<{ path: string 
                     </div>
                 </div>
             </div>
-            <PropertySchema post={postWithImages} />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(jsonLdForPost).replace(/</g, '\\u003c'),
+                }}
+            />
         </div>
     )
 }
