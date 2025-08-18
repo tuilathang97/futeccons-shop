@@ -118,7 +118,7 @@ const SearchBar = () => {
               {results.slice(0, 5).map((result: Post) => (
                 <Link
                   key={result.id}
-                  href={`/post/${result.id}`}
+                  href={`/bai-viet/${result.path}`}
                   onClick={clearSearch}
                   className="block p-4 hover:bg-gray-50 border-b border-gray-100 transition-colors"
                 >

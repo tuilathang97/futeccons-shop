@@ -1,6 +1,7 @@
 interface PropertySchemaProps {
   post: {
     id: number
+    path: string
     tieuDeBaiViet: string
     noiDung: string
     giaTien: number
@@ -27,7 +28,7 @@ export default function PropertySchema({ post }: PropertySchemaProps) {
     "@type": "RealEstateListing",
     "name": post.tieuDeBaiViet,
     "description": post.noiDung.substring(0, 160),
-    "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn"}/post/${post.id}`,
+    "url": `${process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn"}/bai-viet/${post.path}`,
     "author": {
       "@type": "Person",
       "name": post.user.name
@@ -70,7 +71,7 @@ export default function PropertySchema({ post }: PropertySchemaProps) {
     "image": post.images || [],
     "potentialAction": {
       "@type": "ViewAction",
-      "target": `${process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn"}/post/${post.id}`
+      "target": `${process.env.NEXT_PUBLIC_APP_URL || "https://fuland.vn"}/bai-viet/${post.path}`
     }
   }
 

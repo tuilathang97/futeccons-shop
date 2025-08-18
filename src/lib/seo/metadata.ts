@@ -109,7 +109,7 @@ export function generateCategoryMetadata(
 export function generatePostMetadata(
   title: string,
   description: string,
-  postId: number,
+  postPath: string,
   price?: number,
   location?: string,
   image?: string
@@ -120,7 +120,7 @@ export function generatePostMetadata(
   return generateSEOMetadata({
     title: `${title}${priceText}${locationText}`,
     description: description.substring(0, 160),
-    path: `/post/${postId}`,
+    path: `/bai-viet/${postPath}`,
     image,
     keywords: ['bán nhà', 'cho thuê', location || '', title].filter(Boolean),
   })

@@ -10,7 +10,7 @@ Allow: /lien-he
 Allow: /faq
 Allow: /huong-dan
 Allow: /doi-tac
-Allow: /post/*
+Allow: /bai-viet/*
 Allow: /tim-kiem-theo-tu-khoa
 
 # Disallow admin and dashboard areas

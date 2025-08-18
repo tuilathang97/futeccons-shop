@@ -10,16 +10,17 @@ import { type User as DbUser, type Image as DbImage } from '@/db/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import RevealPhoneNumberButton from '@/components/post/RevealPhoneNumberButton'
-import PropertySchema from '@/components/seo/PropertySchema'
+import { getPostByPath } from '@/actions/postActions'
 
-export default async function Page({ params }: { params: Promise<{ postId: string[] }> }) {
+export default async function Page({ params }: { params: Promise<{ path: string }> }) {
     if (!params) return <div>Không tìm thấy bài viết</div>
-    const { postId } = await params
-    const numericPostId = Number(Array.isArray(postId) ? postId[0] : postId);
-
-    if (isNaN(numericPostId)) {
-        return <div>ID bài viết không hợp lệ</div>;
+    const { path } = await params
+    const post = await getPostByPath(path)
+    const {data, success} = post
+    if(!success) {
+        return <div className='container'>Không tìm thấy bài viết, <Link href={"/"} className='text-red-500'>Quay về trang chủ</Link></div>
     }
+    const numericPostId = Number(data?.id)
 
     const [postResult, postImagesResult, session] = await Promise.all([
         getPostDetailsById(numericPostId),
@@ -76,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ postId: strin
 
 
     const ownerUserForButton = postForDetail.user;
-    const currentPath = `/post/${numericPostId}`;
+    const currentPath = `/bai-viet/${path}`;
 
     return (
         <div className='container 2xl:px-0'>

@@ -58,7 +58,7 @@ export default function ProductCardSection({ post }: { post: Post }) {
   return (
     <div className="flex flex-col flex-grow pt-[4px] pr-[20px] gap-[6px] ">
       <div className='flex flex-col mt-4 gap-2'>
-        <Link href={`/post/${post.id}`} className='hover:underline'>
+        <Link href={`/bai-viet/${post.path}`} className='hover:underline'>
           <CardTitle className="text-base font-semibold dark:text-gray-200 hover:text-brand-primary transition-colors duration-200" title={post.tieuDeBaiViet || undefined}>
             {post.tieuDeBaiViet || "Không có tiêu đề"}
           </CardTitle>

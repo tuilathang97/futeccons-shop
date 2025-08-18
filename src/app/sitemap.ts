@@ -45,13 +45,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
   const activePosts = await db
-    .select({ id: postsTable.id, updatedAt: postsTable.updatedAt })
+    .select({ id: postsTable.id, path: postsTable.path, updatedAt: postsTable.updatedAt })
     .from(postsTable)
     .where(eq(postsTable.active, true))
     .limit(10000)
 
   const postPages = activePosts.map(post => ({
-    url: `${baseUrl}/post/${post.id}`,
+    url: `${baseUrl}/bai-viet/${post.path}`,
     lastModified: post.updatedAt,
     changeFrequency: 'weekly' as const,
     priority: 0.6,

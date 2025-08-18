@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = async ({ post, badge = "Hot" }) 
         <div className="min-w-full border-none shadow-none bg-transparent group flex flex-col overflow-hidden">
             <div className="flex bg-transparent flex-col h-full">
                 <div className="relative aspect-16/9 w-full overflow-hidden min-h-[15rem] rounded-2xl">
-                    <Link href={`/post/${post.id}`} className="absolute inset-0">
+                    <Link href={`/bai-viet/${post.path}`} className="absolute inset-0">
                         {thumbnailImg?.secureUrl ? (
                             <Image
                                 src={thumbnailImg.secureUrl}
